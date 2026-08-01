@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Menu, LayoutGrid, Lightbulb, Share2, Plus } from "lucide-react";
 import clsx from "clsx";
 import { useState } from "react";
+import { ThemeToggle } from "../../components/theme-toggle";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -40,6 +41,7 @@ export function AppShell({ children }: AppShellProps) {
           </div>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <Link href="/ideas/new" className="btn-primary px-3.5 py-1.5 text-xs">
               <Plus size={14} />
               New idea

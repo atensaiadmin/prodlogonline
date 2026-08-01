@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ThemeToggle } from "../components/theme-toggle";
 
 export const metadata: Metadata = {
   title: "prodlog — shared portfolio",
@@ -22,6 +23,7 @@ export default function ShareLayout({ children }: { children: React.ReactNode })
               shared portfolio
             </span>
           </div>
+          <ThemeToggle />
         </div>
       </header>
       <main className="mx-auto max-w-3xl px-4 py-8 sm:px-6 sm:py-10">

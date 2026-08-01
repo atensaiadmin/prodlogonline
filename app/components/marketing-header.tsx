@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Menu } from "lucide-react";
+import { ThemeToggle } from "./theme-toggle";
 
 export function MarketingHeader() {
   const [open, setOpen] = useState(false);
@@ -60,6 +61,7 @@ export function MarketingHeader() {
           <a href="#use-cases" className={linkCls("use-cases")} aria-current={active === "use-cases" ? "page" : undefined}>
             Use cases
           </a>
+          <ThemeToggle />
           <Link href="/dashboard" className="text-sm font-medium text-text-secondary transition-colors hover:text-text">
             Sign in
           </Link>
@@ -104,6 +106,10 @@ export function MarketingHeader() {
               <Link href="/dashboard" className="btn-primary mt-2 w-full justify-center" onClick={() => setOpen(false)}>
                 Get started
               </Link>
+              <div className="mt-3 flex items-center gap-2 border-t border-border pt-3">
+                <ThemeToggle />
+                <span className="text-xs text-text-muted">Toggle theme</span>
+              </div>
             </nav>
           </div>
         </div>
