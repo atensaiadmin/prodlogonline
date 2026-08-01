@@ -1,0 +1,123 @@
+{
+  "ideas": [
+    {
+      "id": "107fa368-1d86-48fa-95d4-236e056ffe28",
+      "title": "AI-powered recipe generator",
+      "one_liner": "Generate recipes from photos of ingredients in your fridge",
+      "stage": "inbox",
+      "conviction": 6,
+      "tags": [
+        "ai",
+        "consumer",
+        "food"
+      ],
+      "links": {},
+      "visibility": "private",
+      "created_at": "2026-08-01T07:08:50.250Z",
+      "updated_at": "2026-08-01T07:41:43.044Z",
+      "idea_type": "app"
+    },
+    {
+      "id": "a214dc6c-6c1e-4d29-a1db-42a7a3225848",
+      "title": "Freelancer contract template marketplace",
+      "one_liner": "Buy/sell legally-reviewed contract templates for freelancers",
+      "stage": "validating",
+      "conviction": 7,
+      "tags": [
+        "marketplace",
+        "legal",
+        "freelance"
+      ],
+      "links": {},
+      "visibility": "private",
+      "created_at": "2026-08-01T07:08:50.250Z",
+      "updated_at": "2026-08-01T07:27:00.569Z",
+      "idea_type": "app"
+    },
+    {
+      "id": "71397d7d-7915-43aa-b413-f65b06363ee5",
+      "title": "SaaS usage analytics dashboard",
+      "one_liner": "Simple dashboard that shows MRR, churn, and feature usage",
+      "stage": "building",
+      "conviction": 9,
+      "tags": [
+        "saas",
+        "analytics"
+      ],
+      "links": {},
+      "visibility": "private",
+      "created_at": "2026-08-01T07:08:50.250Z",
+      "updated_at": "2026-08-01T07:08:50.250Z",
+      "idea_type": "app"
+    },
+    {
+      "id": "cd8fb9ee-01c5-4d8a-9f00-db811896da9e",
+      "title": "Product hunt for indie makers",
+      "one_liner": "Daily curated list of indie maker products",
+      "stage": "launched",
+      "conviction": 6,
+      "tags": [
+        "community",
+        "curation"
+      ],
+      "links": {},
+      "visibility": "private",
+      "created_at": "2026-08-01T07:08:50.250Z",
+      "updated_at": "2026-08-01T07:08:50.250Z",
+      "idea_type": "app"
+    },
+    {
+      "id": "87ebc694-b605-4d67-9b41-fa7df4a7e97c",
+      "title": "Blockchain for supply chain tracking",
+      "one_liner": "Track goods through supply chain on a public ledger",
+      "stage": "dead",
+      "conviction": 2,
+      "tags": [
+        "blockchain",
+        "enterprise"
+      ],
+      "links": {},
+      "visibility": "private",
+      "created_at": "2026-08-01T07:08:50.250Z",
+      "updated_at": "2026-08-01T07:08:50.250Z",
+      "idea_type": "app"
+    }
+  ],
+  "entries": [
+    {
+      "id": "cc80ede4-ee85-4a92-8857-3b68d6da0521",
+      "idea_id": "71397d7d-7915-43aa-b413-f65b06363ee5",
+      "body": "Set up Next.js project with Tailwind. Basic dashboard layout working with mock data.",
+      "mood": "excited",
+      "action_taken": "scaffolded project",
+      "created_at": "2026-08-01T07:08:50.250Z"
+    },
+    {
+      "id": "7fd89b01-7840-4a5a-a81d-f858eb593509",
+      "idea_id": "71397d7d-7915-43aa-b413-f65b06363ee5",
+      "body": "Integrated Stripe for subscriptions. Webhook handling is more complex than expected.",
+      "mood": "frustrated",
+      "action_taken": "integrated Stripe",
+      "created_at": "2026-08-01T07:08:50.250Z"
+    },
+    {
+      "id": "f87ca835-974a-444e-8081-706958557b3d",
+      "idea_id": "71397d7d-7915-43aa-b413-f65b06363ee5",
+      "body": "Stripe webhooks now working. Got first beta user to sign up. Need to prioritize the chart components next.",
+      "mood": "hopeful",
+      "action_taken": "fixed webhooks, got beta user",
+      "created_at": "2026-08-01T07:08:50.250Z"
+    }
+  ],
+  "addons": [],
+  "share_profiles": [
+    {
+      "id": "d5d2b932-eadc-44ab-85b4-c63227ce20f8",
+      "name": "topampam",
+      "slug": "topampam",
+      "created_at": "2026-08-01T07:41:02.697Z",
+      "updated_at": "2026-08-01T07:41:02.697Z"
+    }
+  ],
+  "share_profile_ideas": []
+}

@@ -1,0 +1,32 @@
+{
+  "name": "prodlog",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "seed": "tsx lib/seed.ts"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.17.4",
+    "@supabase/supabase-js": "^2.111.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.476.0",
+    "next": "^15.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/uuid": "^10.0.0",
+    "autoprefixer": "^10.5.4",
+    "postcss": "^8.5.23",
+    "tailwindcss": "3",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

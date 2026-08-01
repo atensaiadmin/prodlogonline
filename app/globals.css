@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    background-color: theme("colors.bg");
+    color: theme("colors.text");
+  }
+
+  ::selection {
+    background-color: theme("colors.accent.DEFAULT");
+    color: #fff;
+  }
+
+  *:focus-visible {
+    outline: 2px solid theme("colors.accent.DEFAULT");
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm text-text shadow-card outline-none transition-all placeholder:text-text-muted hover:border-border-strong focus:border-accent focus:shadow-focus;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-sm font-medium text-white shadow-card transition-all hover:bg-accent-hover active:scale-[0.98];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-xl border border-border bg-surface px-4 py-2 text-sm font-medium text-text-secondary transition-all hover:border-border-strong hover:text-text active:scale-[0.98];
+  }
+
+  .card {
+    @apply rounded-xl border border-border bg-surface shadow-card;
+  }
+}
