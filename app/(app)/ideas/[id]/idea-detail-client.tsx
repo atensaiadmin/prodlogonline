@@ -107,7 +107,7 @@ export default function IdeaDetailPage({
                 {currentStage.label}
               </span>
               <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-0.5 text-[11px] font-medium text-text-secondary">
-                {typeDef.icon} {typeDef.label}
+                {typeDef.label}
               </span>
               {idea.tags.slice(0, 3).map((tag) => (
                 <span

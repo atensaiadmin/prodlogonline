@@ -140,7 +140,6 @@ export function DashboardClient({
                         className="group block rounded-xl border border-border bg-surface p-3.5 shadow-card transition-all hover:-translate-y-px hover:border-border-strong hover:shadow-card-hover"
                       >
                         <p className="text-sm font-medium leading-snug text-text">
-                          <span className="mr-1.5" title={typeDef?.label}>{typeDef?.icon}</span>
                           {idea.title}
                         </p>
                         {idea.one_liner && (

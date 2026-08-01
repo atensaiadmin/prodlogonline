@@ -101,7 +101,7 @@ export default function NewIdeaPage() {
                       : "border border-border bg-surface text-text-secondary hover:border-border-strong"
                   }`}
                 >
-                  {t.icon} {t.label}
+                  {t.label}
                 </button>
               ))}
             </div>

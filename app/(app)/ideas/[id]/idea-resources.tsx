@@ -252,7 +252,7 @@ function AddonsSection({
             >
               {ADDON_CATEGORIES.map((cat) => (
                 <option key={cat.key} value={cat.key}>
-                  {cat.icon} {cat.label}
+                  {cat.label}
                 </option>
               ))}
             </select>
@@ -311,9 +311,7 @@ function AddonsSection({
                   addon.visible ? "border-border bg-surface-2/50" : "border-dashed border-border/50 opacity-60"
                 }`}
               >
-                <span className="mt-0.5 shrink-0 text-sm" title={cat?.label}>
-                  {cat?.icon}
-                </span>
+                {/* Removed emoji icon; using label chip only */}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-medium text-text">{addon.name}</span>

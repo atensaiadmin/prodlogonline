@@ -100,18 +100,18 @@ export const MOODS: { key: Mood; label: string }[] = [
 ];
 
 export const ADDON_CATEGORIES: { key: AddonCategory; label: string; icon: string }[] = [
-  { key: "hosting", label: "Hosting", icon: "🖥" },
-  { key: "database", label: "Database", icon: "🗄" },
-  { key: "auth", label: "Auth", icon: "🔐" },
-  { key: "storage", label: "Storage", icon: "📦" },
-  { key: "analytics", label: "Analytics", icon: "📊" },
-  { key: "email", label: "Email", icon: "✉️" },
-  { key: "payments", label: "Payments", icon: "💳" },
-  { key: "monitoring", label: "Monitoring", icon: "📡" },
-  { key: "ci_cd", label: "CI/CD", icon: "🔄" },
-  { key: "domains", label: "Domains", icon: "🌐" },
-  { key: "ai", label: "AI / LLM", icon: "🤖" },
-  { key: "other", label: "Other", icon: "⚙️" },
+  { key: "hosting", label: "Hosting", icon: "" },
+  { key: "database", label: "Database", icon: "" },
+  { key: "auth", label: "Auth", icon: "" },
+  { key: "storage", label: "Storage", icon: "" },
+  { key: "analytics", label: "Analytics", icon: "" },
+  { key: "email", label: "Email", icon: "" },
+  { key: "payments", label: "Payments", icon: "" },
+  { key: "monitoring", label: "Monitoring", icon: "" },
+  { key: "ci_cd", label: "CI/CD", icon: "" },
+  { key: "domains", label: "Domains", icon: "" },
+  { key: "ai", label: "AI / LLM", icon: "" },
+  { key: "other", label: "Other", icon: "" },
 ];
 
 export const VISIBILITY_LEVELS: {
@@ -137,31 +137,31 @@ export const IDEA_TYPES: IdeaTypeDef[] = [
   {
     key: "app",
     label: "App",
-    icon: "🚀",
+    icon: "",
     links: { repo: "Repo", deploy: "Deploy", docs: "Docs" },
   },
   {
     key: "paper",
     label: "Paper",
-    icon: "📄",
+    icon: "",
     links: { repo: "DOI", deploy: "Preprint", docs: "Journal" },
   },
   {
     key: "research",
     label: "Research",
-    icon: "🔬",
+    icon: "",
     links: { repo: "Data", deploy: "Site", docs: "Paper" },
   },
   {
     key: "writing",
     label: "Writing",
-    icon: "✍️",
+    icon: "",
     links: { repo: "Source", deploy: "Published", docs: "Notes" },
   },
   {
     key: "other",
     label: "Other",
-    icon: "📌",
+    icon: "",
     links: { repo: "Link 1", deploy: "Link 2", docs: "Link 3" },
   },
 ];

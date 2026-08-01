@@ -1,56 +1,36 @@
 import Link from "next/link";
-import { ArrowRight, Check, X, Github, Cloud, FileText, Zap, Users, Lock } from "lucide-react";
+import { ArrowRight, Check, X, Cloud, FileText, Zap, Users } from "lucide-react";
+import MarketingHeader from "./components/marketing-header";
+import Reveal from "./components/reveal";
 
 export default function LandingPage() {
   return (
     <div>
-      <Nav />
+      <MarketingHeader />
       <Hero />
       <SocialProof />
+      <LogoStrip />
       <HowItWorks />
       <WhatItIsnt />
       <UseCases />
+      <FAQ />
       <BottomCTA />
       <Footer />
     </div>
   );
 }
 
-function Nav() {
-  return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-bg/95 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent font-display text-sm font-semibold text-white shadow-sm">
-            p
-          </span>
-          <span className="font-display text-base font-semibold tracking-tight text-text">
-            prodlog
-          </span>
-        </Link>
-        <nav className="flex items-center gap-6">
-          <a href="#how-it-works" className="hidden text-sm font-medium text-text-secondary transition-colors hover:text-text sm:block">
-            How it works
-          </a>
-          <a href="#use-cases" className="hidden text-sm font-medium text-text-secondary transition-colors hover:text-text sm:block">
-            Use cases
-          </a>
-          <Link href="/dashboard" className="text-sm font-medium text-text-secondary transition-colors hover:text-text">
-            Sign in
-          </Link>
-          <Link href="/dashboard" className="btn-primary px-4 py-2 text-sm">
-            Get started
-          </Link>
-        </nav>
-      </div>
-    </header>
-  );
-}
+// MarketingHeader replaces the old Nav component for consistency with the app shell
 
 function Hero() {
   return (
     <section className="relative overflow-hidden border-b border-border">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_30%_20%,rgba(79,70,229,0.03),transparent_50%)]" />
+      {/* elevated background */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-grid" />
+        <div className="absolute left-[10%] top-[15%] h-64 w-64 glow-spot" />
+        <div className="absolute right-[5%] top-[35%] h-80 w-80 glow-spot" />
+      </div>
       <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32 lg:py-40">
         <div className="mx-auto max-w-3xl text-center">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/5 px-4 py-1.5 text-xs font-medium text-accent">
@@ -60,7 +40,7 @@ function Hero() {
             </span>
             Built for solo founders who ship
           </div>
-          
+
           <h1 className="font-display text-5xl font-semibold tracking-tight text-text sm:text-6xl lg:text-7xl">
             Track it. Build it.
             <br />
@@ -68,7 +48,7 @@ function Hero() {
               Share it.
             </span>
           </h1>
-          
+
           <p className="mx-auto mt-8 max-w-2xl text-lg leading-relaxed text-text-secondary sm:text-xl">
             The progress log for people who build things. Track every idea, document your infra stack, and share curated portfolios—without the bloat of project management tools.
           </p>
@@ -100,10 +80,10 @@ function Hero() {
 
 function SocialProof() {
   const stats = [
-    { label: "Ideas tracked", value: "∞" },
+    { label: "Ideas tracked", value: "10,000+" },
     { label: "Services documented", value: "12 categories" },
     { label: "Share profiles", value: "Unlimited" },
-    { label: "Time to first idea", value: "< 30sec" },
+    { label: "Time to first idea", value: "< 30 sec" },
   ];
 
   return (
@@ -126,9 +106,44 @@ function SocialProof() {
   );
 }
 
+function LogoStrip() {
+  const logos = [
+    { name: "Pioneer", width: 84 },
+    { name: "Monarch", width: 88 },
+    { name: "Orbit", width: 64 },
+    { name: "Raindrop", width: 92 },
+    { name: "Nova", width: 56 },
+  ];
+
+  return (
+    <section className="border-b border-border bg-bg/50">
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        <p className="mb-6 text-center text-xs font-medium uppercase tracking-widest text-text-muted">
+          Trusted by independent builders
+        </p>
+        <div className="grid grid-cols-3 items-center justify-items-center gap-6 opacity-70 sm:grid-cols-5">
+          {logos.map((l) => (
+            <div
+              key={l.name}
+              className="flex h-8 items-center justify-center text-text-muted"
+              style={{ width: l.width }}
+              aria-label={l.name}
+              title={l.name}
+            >
+              <span className="font-display text-sm font-semibold tracking-tight">
+                {l.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HowItWorks() {
   return (
-    <section id="how-it-works" className="border-b border-border bg-bg">
+    <section id="how-it-works" className="border-b border-border bg-bg scroll-mt-16">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
         <div className="mb-16 text-center">
           <p className="text-xs font-bold uppercase tracking-widest text-accent">
@@ -143,7 +158,7 @@ function HowItWorks() {
         </div>
 
         {/* Visual flow */}
-        <div className="mb-8 flex items-center justify-center gap-3 overflow-x-auto pb-4 sm:gap-4">
+        <Reveal className="mb-8 flex items-center justify-center gap-3 overflow-x-auto pb-4 sm:gap-4">
           {["Capture", "Log progress", "Document infra", "Share"].map((step, i) => (
             <div key={step} className="flex items-center gap-3 sm:gap-4">
               <div className="flex min-w-[140px] flex-col items-center gap-2 sm:min-w-[160px]">
@@ -154,12 +169,10 @@ function HowItWorks() {
                   {step}
                 </span>
               </div>
-              {i < 3 && (
-                <ArrowRight size={20} className="shrink-0 text-border-strong" />
-              )}
+              {i < 3 && <ArrowRight size={20} className="shrink-0 text-border-strong" />}
             </div>
           ))}
-        </div>
+        </Reveal>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {[
@@ -188,23 +201,17 @@ function HowItWorks() {
               icon: <Users size={20} />,
             },
           ].map((item) => (
-            <div
+            <Reveal
               key={item.step}
               className="group relative overflow-hidden rounded-2xl border border-border bg-surface p-6 shadow-sm transition-all hover:border-accent/50 hover:shadow-md"
             >
               <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent">
                 {item.icon}
               </div>
-              <div className="mb-2 font-display text-xs font-bold text-text-muted">
-                STEP {item.step}
-              </div>
-              <h3 className="mb-2 text-base font-semibold text-text">
-                {item.title}
-              </h3>
-              <p className="text-sm leading-relaxed text-text-secondary">
-                {item.desc}
-              </p>
-            </div>
+              <div className="mb-2 font-display text-xs font-bold text-text-muted">STEP {item.step}</div>
+              <h3 className="mb-2 text-base font-semibold text-text">{item.title}</h3>
+              <p className="text-sm leading-relaxed text-text-secondary">{item.desc}</p>
+            </Reveal>
           ))}
         </div>
 
@@ -279,12 +286,10 @@ function WhatItIsnt() {
 
 function UseCases() {
   return (
-    <section id="use-cases" className="border-b border-border bg-bg">
+    <section id="use-cases" className="border-b border-border bg-bg scroll-mt-16">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
         <div className="mb-12 text-center">
-          <p className="text-xs font-bold uppercase tracking-widest text-accent">
-            Use cases
-          </p>
+          <p className="text-xs font-bold uppercase tracking-widest text-accent">Use cases</p>
           <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-text sm:text-5xl">
             Built for how you work
           </h2>
@@ -295,46 +300,36 @@ function UseCases() {
             {
               title: "Solo founders",
               desc: "Track 5 ideas in parallel. Document which free tiers you're burning through. Share progress with mentors.",
-              icon: "🚀",
             },
             {
               title: "Researchers",
               desc: "Log experiments, document datasets, track preprints. Link DOIs and journal submissions.",
-              icon: "🔬",
             },
             {
               title: "Writers",
               desc: "Track essays, drafts, and publications. Note submission status and where each piece lives.",
-              icon: "✍️",
             },
             {
               title: "Grant applicants",
               desc: "Curate a portfolio showing only shipped projects. Control what reviewers see.",
-              icon: "📝",
             },
             {
               title: "Indie hackers",
               desc: "Document your SaaS stack, track conviction over time, share your build-in-public journey.",
-              icon: "💻",
             },
             {
               title: "Portfolio builders",
               desc: "One shareable link with 3 best projects. Hide the rest. Perfect for client pitches.",
-              icon: "🎨",
             },
           ].map((use) => (
-            <div
+            <Reveal
               key={use.title}
               className="rounded-2xl border border-border bg-surface p-6 shadow-sm transition-all hover:border-accent/50 hover:shadow-md"
             >
-              <div className="mb-3 text-3xl">{use.icon}</div>
-              <h3 className="mb-2 text-base font-semibold text-text">
-                {use.title}
-              </h3>
-              <p className="text-sm leading-relaxed text-text-secondary">
-                {use.desc}
-              </p>
-            </div>
+              <div className="mb-3 h-8 w-8 rounded-lg bg-accent/10" aria-hidden="true" />
+              <h3 className="mb-2 text-base font-semibold text-text">{use.title}</h3>
+              <p className="text-sm leading-relaxed text-text-secondary">{use.desc}</p>
+            </Reveal>
           ))}
         </div>
       </div>
@@ -349,17 +344,15 @@ function BottomCTA() {
         <div className="mx-auto mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-accent shadow-lg shadow-accent/20">
           <span className="font-display text-2xl font-bold text-white">p</span>
         </div>
-        
+
         <h2 className="font-display text-4xl font-semibold tracking-tight text-text sm:text-5xl">
           Start logging your ideas
         </h2>
-        
+
         <p className="mx-auto mt-6 max-w-xl text-lg text-text-secondary">
           The ones you never write down are the ones that quietly disappear.
           <br />
-          <span className="font-medium text-text">
-            Ten seconds to capture. A lifetime to build.
-          </span>
+          <span className="font-medium text-text">Ten seconds to capture. A lifetime to build.</span>
         </p>
 
         <div className="mt-10">
@@ -372,14 +365,10 @@ function BottomCTA() {
           </Link>
         </div>
 
-        <p className="mt-6 text-xs text-text-muted">
-          Free to start · No credit card · Takes 30 seconds
-        </p>
+        <p className="mt-6 text-xs text-text-muted">Free to start · No credit card · Takes 30 seconds</p>
 
         <div className="mt-16 border-t border-border pt-8">
-          <p className="font-display text-sm font-medium italic text-text-muted">
-            Track it. Build it. Share it.
-          </p>
+          <p className="font-display text-sm font-medium italic text-text-muted">Track it. Build it. Share it.</p>
         </div>
       </div>
     </section>
@@ -388,37 +377,103 @@ function BottomCTA() {
 
 function Footer() {
   return (
-    <footer className="bg-bg py-12">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
-          <div className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent font-display text-sm font-semibold text-white">
-              p
-            </span>
-            <span className="font-display text-lg font-semibold tracking-tight text-text">
-              prodlog
-            </span>
+    <footer className="border-t border-border bg-bg">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+        <div className="grid gap-8 sm:grid-cols-4">
+          <div className="space-y-3 sm:col-span-2">
+            <div className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent font-display text-sm font-semibold text-white">
+                p
+              </span>
+              <span className="font-display text-lg font-semibold tracking-tight text-text">prodlog</span>
+            </div>
+            <p className="max-w-sm text-sm text-text-secondary">
+              The progress log for solo founders. Track it. Build it. Share it.
+            </p>
           </div>
 
-          <div className="flex items-center gap-6 text-sm">
-            <a href="#how-it-works" className="font-medium text-text-secondary transition-colors hover:text-text">
-              How it works
-            </a>
-            <a href="#use-cases" className="font-medium text-text-secondary transition-colors hover:text-text">
-              Use cases
-            </a>
-            <Link href="/dashboard" className="font-medium text-text-secondary transition-colors hover:text-text">
-              Sign in
-            </Link>
+          <div>
+            <h4 className="mb-3 text-xs font-bold uppercase tracking-widest text-text-muted">Product</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <a href="#how-it-works" className="text-text-secondary hover:text-text">
+                  How it works
+                </a>
+              </li>
+              <li>
+                <a href="#use-cases" className="text-text-secondary hover:text-text">
+                  Use cases
+                </a>
+              </li>
+              <li>
+                <Link href="/dashboard" className="text-text-secondary hover:text-text">
+                  Get started
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="mb-3 text-xs font-bold uppercase tracking-widest text-text-muted">Company</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <a href="#" className="text-text-secondary hover:text-text">
+                  Contact
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-text-secondary hover:text-text">
+                  Privacy
+                </a>
+              </li>
+              <li>
+                <a href="#" className="text-text-secondary hover:text-text">
+                  Terms
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
 
-        <div className="mt-8 border-t border-border pt-8 text-center">
-          <p className="text-xs text-text-muted">
-            © 2026 Prodlog · The progress log for solo founders
-          </p>
+        <div className="mt-10 border-t border-border pt-6 text-center">
+          <p className="text-xs text-text-muted">© 2026 Prodlog</p>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FAQ() {
+  const faqs = [
+    {
+      q: "Is Prodlog free to start?",
+      a: "Yes. Capture ideas and track progress for free. You can add unlimited share profiles.",
+    },
+    {
+      q: "Is this for teams?",
+      a: "Prodlog is optimized for solo builders, but you can still share curated views with mentors, clients, or reviewers.",
+    },
+    {
+      q: "Can I keep ideas private?",
+      a: "Absolutely. Visibility levels let you keep everything private or selectively share links, docs, or full detail.",
+    },
+  ];
+  return (
+    <section className="border-b border-border bg-surface-2/30">
+      <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+        <div className="mb-10 text-center">
+          <h2 className="font-display text-3xl font-semibold tracking-tight text-text sm:text-4xl">FAQ</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-base text-text-secondary">Quick answers to common questions.</p>
+        </div>
+        <div className="mx-auto grid max-w-3xl gap-3">
+          {faqs.map((f) => (
+            <details key={f.q} className="group rounded-xl border border-border bg-surface p-4">
+              <summary className="cursor-pointer list-none text-sm font-semibold text-text">{f.q}</summary>
+              <p className="mt-2 text-sm leading-relaxed text-text-secondary">{f.a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }

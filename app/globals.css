@@ -5,6 +5,32 @@
 @layer base {
   :root {
     color-scheme: light;
+    --bg: 250 249 247;
+    --surface: 255 255 255;
+    --surface-2: 244 242 239;
+    --border: 233 230 225;
+    --border-strong: 220 216 209;
+    --text: 27 24 19;
+    --text-secondary: 125 121 114;
+    --text-muted: 163 159 152;
+    --accent: 79 70 229;
+    --accent-hover: 67 56 202;
+    --accent-subtle: 238 241 254;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --bg: 17 18 20;           /* near-neutral dark background */
+    --surface: 24 25 28;      /* elevated surface */
+    --surface-2: 30 32 36;    /* subdued surface */
+    --border: 48 50 54;       /* subtle borders */
+    --border-strong: 62 65 70;
+    --text: 232 232 234;      /* primary text */
+    --text-secondary: 169 171 176;
+    --text-muted: 126 129 135;
+    --accent: 99 102 241;     /* slightly brighter indigo for dark */
+    --accent-hover: 79 70 229;
+    --accent-subtle: 44 46 58; /* subtle indigo-tinted surface */
   }
 
   html {
@@ -44,5 +70,26 @@
 
   .card {
     @apply rounded-xl border border-border bg-surface shadow-card;
+  }
+
+  /* App shell helpers */
+  .sidebar-link {
+    @apply flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-text-secondary hover:bg-surface hover:text-text transition-colors;
+  }
+  .sidebar-link-active {
+    @apply bg-accent/10 text-accent;
+  }
+
+  /* Landing page decorative backgrounds */
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(20,18,15,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(20,18,15,0.03) 1px, transparent 1px);
+    background-size: 24px 24px, 24px 24px;
+    background-position: center;
+  }
+  .glow-spot {
+    background: radial-gradient(closest-side, rgba(79,70,229,0.18), transparent);
+    filter: blur(30px);
   }
 }

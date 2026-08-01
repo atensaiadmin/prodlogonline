@@ -1,19 +1,25 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: ["./app/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        bg: "#faf9f7",
-        surface: "#ffffff",
-        "surface-2": "#f4f2ef",
-        border: "#e9e6e1",
-        "border-strong": "#dcd8d1",
-        text: { DEFAULT: "#1b1813", secondary: "#7d7972", muted: "#a39f98" },
+        // Use CSS variables so themes can switch without changing classes
+        bg: "rgb(var(--bg) / <alpha-value>)",
+        surface: "rgb(var(--surface) / <alpha-value>)",
+        "surface-2": "rgb(var(--surface-2) / <alpha-value>)",
+        border: "rgb(var(--border) / <alpha-value>)",
+        "border-strong": "rgb(var(--border-strong) / <alpha-value>)",
+        text: {
+          DEFAULT: "rgb(var(--text) / <alpha-value>)",
+          secondary: "rgb(var(--text-secondary) / <alpha-value>)",
+          muted: "rgb(var(--text-muted) / <alpha-value>)",
+        },
         accent: {
-          DEFAULT: "#4f46e5",
-          hover: "#4338ca",
-          subtle: "#eef1fe",
+          DEFAULT: "rgb(var(--accent) / <alpha-value>)",
+          hover: "rgb(var(--accent-hover) / <alpha-value>)",
+          subtle: "rgb(var(--accent-subtle) / <alpha-value>)",
         },
         inbox: "#6366f1",
         validating: "#d97706",
