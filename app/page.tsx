@@ -8,7 +8,6 @@ export default function LandingPage() {
     <div>
       <MarketingHeader />
       <Hero />
-      <SocialProof />
       <HowItWorks />
       <WhatItIsnt />
       <UseCases />
@@ -78,34 +77,6 @@ function Hero() {
               No credit card required · 30 seconds to your first idea
             </p>
           </Reveal>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function SocialProof() {
-  const stats = [
-    { label: "Ideas tracked", value: "10,000+" },
-    { label: "Services documented", value: "12" },
-    { label: "Share profiles", value: "∞" },
-    { label: "Time to first idea", value: "<30s" },
-  ];
-
-  return (
-    <section className="border-b border-border bg-surface-2/40">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
-          {stats.map((stat) => (
-            <div key={stat.label} className="text-center">
-              <div className="font-display text-3xl font-semibold tracking-tight text-text sm:text-4xl">
-                {stat.value}
-              </div>
-              <div className="mt-1.5 font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
-                {stat.label}
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </section>
