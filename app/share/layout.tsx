@@ -13,9 +13,11 @@ export default function ShareLayout({ children }: { children: React.ReactNode })
       <header className="border-b border-border/60 bg-bg/80 backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent font-display text-sm font-semibold text-white">
-              p
-            </span>
+            <img
+              src="/image/iconalone.png"
+              alt="ProdLog"
+              className="h-7 w-7 object-contain"
+            />
             <span className="font-display text-base font-medium tracking-tight text-text">
               prodlog
             </span>

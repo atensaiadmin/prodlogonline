@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     images: ["/og"],
   },
   icons: {
-    icon: "/icon.svg",
+    icon: "/image/iconalone.png",
   },
 };
 

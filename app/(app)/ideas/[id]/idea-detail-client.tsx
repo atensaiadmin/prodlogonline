@@ -129,7 +129,7 @@ export default function IdeaDetailPage({
           </div>
           <button
             onClick={handleDelete}
-            className="shrink-0 rounded-lg p-1.5 text-text-muted transition-colors hover:bg-rose-50 hover:text-rose-500"
+            className="shrink-0 rounded-lg p-1.5 text-text-muted transition-colors hover:bg-rose-500/10 hover:text-rose-500"
             title="Delete idea"
           >
             <Trash2 size={16} />
@@ -180,7 +180,7 @@ export default function IdeaDetailPage({
       <IdeaResources idea={idea} addons={addons} />
 
       <section className="card p-4 sm:p-5">
-        <h2 className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+        <h2 className="mb-3 flex items-center gap-1.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
           <PenLine size={13} />
           Log progress
         </h2>
@@ -227,7 +227,7 @@ export default function IdeaDetailPage({
       </section>
 
       <section>
-        <h2 className="mb-4 flex items-baseline gap-2 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+        <h2 className="mb-4 flex items-baseline gap-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
           Progress log
           {entries.length > 0 && (
             <span className="font-normal text-text-muted">

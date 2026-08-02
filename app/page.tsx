@@ -168,10 +168,23 @@ function HowItWorks() {
 }
 
 function WhatItIsnt() {
+  const notList = [
+    "Sprint planning and velocity tracking",
+    "Team dashboards you need to keep updated",
+    "Gantt charts and dependency graphs",
+    "Feature request voting systems",
+  ];
+  const isList = [
+    "A lightweight log for solo builders",
+    "Progress notes you actually want to write",
+    "Infrastructure documentation you'll reference later",
+    "Shareable portfolios for mentors and clients",
+  ];
+
   return (
     <section className="border-b border-border bg-surface-2/40">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
-        <div className="mb-12 text-center">
+        <div className="mb-14 text-center">
           <Reveal>
             <p className="eyebrow justify-center">The pitch</p>
           </Reveal>
@@ -187,51 +200,57 @@ function WhatItIsnt() {
           </Reveal>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-2">
-          <Reveal>
-            <div className="h-full rounded-2xl border border-rose-500/20 bg-rose-500/[0.05] p-8 transition-colors hover:border-rose-500/40">
-              <div className="mb-6 inline-flex items-center gap-2.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-rose-600 dark:text-rose-400">
-                <X size={16} />
-                What it isn't
+        <Reveal>
+          <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-card">
+            <div className="grid lg:grid-cols-2">
+              <div className="border-b border-border p-8 sm:p-10 lg:border-b-0 lg:border-r">
+                <div className="flex items-center gap-2.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-rose-600 dark:text-rose-400">
+                  <X size={15} />
+                  What it isn't
+                </div>
+                <p className="mt-2.5 font-display text-base italic text-text-muted">
+                  Deadweight from tools built for teams of fifty.
+                </p>
+                <ul className="mt-7 space-y-1">
+                  {notList.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-center gap-4 rounded-xl px-3 py-3 transition-colors hover:bg-rose-500/[0.05]"
+                    >
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-rose-500/25 bg-rose-500/[0.07] text-rose-500 dark:text-rose-400">
+                        <X size={14} />
+                      </span>
+                      <span className="text-sm leading-relaxed text-text-secondary">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-3.5">
-                {[
-                  "Sprint planning and velocity tracking",
-                  "Team dashboards you need to keep updated",
-                  "Gantt charts and dependency graphs",
-                  "Feature request voting systems",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm text-text-secondary">
-                    <X size={16} className="mt-0.5 shrink-0 text-rose-500/80" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
 
-          <Reveal>
-            <div className="h-full rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.05] p-8 transition-colors hover:border-emerald-500/40">
-              <div className="mb-6 inline-flex items-center gap-2.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-400">
-                <Check size={16} />
-                What it is
+              <div className="p-8 sm:p-10">
+                <div className="flex items-center gap-2.5 font-mono text-xs font-semibold uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-400">
+                  <Check size={15} />
+                  What it is
+                </div>
+                <p className="mt-2.5 font-display text-base italic text-text-muted">
+                  Just enough structure to keep you moving.
+                </p>
+                <ul className="mt-7 space-y-1">
+                  {isList.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-center gap-4 rounded-xl px-3 py-3 transition-colors hover:bg-emerald-500/[0.05]"
+                    >
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-emerald-500/25 bg-emerald-500/[0.07] text-emerald-600 dark:text-emerald-400">
+                        <Check size={14} />
+                      </span>
+                      <span className="text-sm leading-relaxed text-text-secondary">{item}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <ul className="space-y-3.5">
-                {[
-                  "A lightweight log for solo builders",
-                  "Progress notes you actually want to write",
-                  "Infrastructure documentation you'll reference later",
-                  "Shareable portfolios for mentors and clients",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm text-text-secondary">
-                    <Check size={16} className="mt-0.5 shrink-0 text-emerald-500/80" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
             </div>
-          </Reveal>
-        </div>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -358,8 +377,12 @@ function BottomCTA() {
       </div>
       <div className="relative z-10 mx-auto max-w-4xl px-4 py-24 text-center sm:px-6 sm:py-32">
         <Reveal>
-          <div className="mx-auto mb-8 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-accent font-display text-xl font-semibold text-white shadow-glow">
-            p
+          <div className="mx-auto mb-8 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/10 shadow-glow">
+            <img
+              src="/image/iconalone.png"
+              alt="ProdLog"
+              className="h-10 w-10 object-contain"
+            />
           </div>
         </Reveal>
 
@@ -405,9 +428,11 @@ function Footer() {
         <div className="grid gap-8 sm:grid-cols-4">
           <div className="space-y-3 sm:col-span-2">
             <div className="flex items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent font-display text-sm font-semibold text-white">
-                p
-              </span>
+              <img
+                src="/image/iconalone.png"
+                alt="ProdLog"
+                className="h-8 w-8 object-contain"
+              />
               <span className="font-display text-lg font-semibold tracking-tight text-text">prodlog</span>
             </div>
             <p className="max-w-sm text-sm text-text-secondary">

@@ -41,7 +41,7 @@ export default function NewIdeaPage() {
       </Link>
 
       <div className="mb-6 space-y-1">
-        <p className="text-xs font-medium uppercase tracking-widest text-text-muted">
+        <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
           New idea
         </p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text">

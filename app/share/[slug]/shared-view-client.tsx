@@ -41,7 +41,7 @@ export default function SharedViewClient({
   return (
     <div className="space-y-8">
       <section className="space-y-1">
-        <p className="text-xs font-medium uppercase tracking-widest text-text-muted">
+        <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
           Shared portfolio
         </p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text sm:text-4xl">
@@ -173,7 +173,7 @@ export default function SharedViewClient({
 
                     {showFull && addons.filter((a) => a.visible).length > 0 && (
                       <div>
-                        <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                        <h4 className="mb-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
                           Services &amp; Add-ons
                         </h4>
                         <div className="space-y-1.5">
@@ -228,7 +228,7 @@ export default function SharedViewClient({
 
                     {showFull && entries.length > 0 && (
                       <div>
-                        <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                        <h4 className="mb-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
                           Progress log ({entries.length})
                         </h4>
                         <div className="space-y-3">

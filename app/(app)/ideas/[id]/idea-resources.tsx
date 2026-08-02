@@ -59,7 +59,7 @@ function LinksSection({ idea, router }: { idea: Idea; router: ReturnType<typeof 
     return (
       <div className="card p-4 sm:p-5 space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+          <h3 className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
             Links
           </h3>
           <div className="flex gap-1.5">
@@ -116,7 +116,7 @@ function LinksSection({ idea, router }: { idea: Idea; router: ReturnType<typeof 
   return (
     <div className="card p-4 sm:p-5 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+        <h3 className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
           Links
         </h3>
         <button
@@ -217,7 +217,7 @@ function AddonsSection({
   return (
     <div className="card p-4 sm:p-5 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+        <h3 className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
           Add-ons &amp; Services
           {addons.length > 0 && (
             <span className="ml-1.5 font-normal text-text-muted">
@@ -348,7 +348,7 @@ function AddonsSection({
                   </button>
                   <button
                     onClick={() => handleDelete(addon.id)}
-                    className="rounded-md p-1 text-text-muted transition-colors hover:bg-rose-50 hover:text-rose-500"
+                    className="rounded-md p-1 text-text-muted transition-colors hover:bg-rose-500/10 hover:text-rose-500"
                     title="Remove addon"
                   >
                     <Trash2 size={13} />
@@ -382,7 +382,7 @@ function VisibilitySection({
   return (
     <div className="card p-4 sm:p-5 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+        <h3 className="flex items-center gap-1.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
           <Shield size={12} />
           Sharing visibility
         </h3>

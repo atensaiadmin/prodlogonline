@@ -96,7 +96,7 @@ export default function ShareManagerClient({
       </Link>
 
       <section className="space-y-1">
-        <p className="text-xs font-medium uppercase tracking-widest text-text-muted">
+        <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
           Share profiles
         </p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text">
@@ -198,7 +198,7 @@ export default function ShareManagerClient({
                 )}
                 <button
                   onClick={() => handleDelete(selectedProfile.id)}
-                  className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-rose-50 hover:text-rose-500"
+                  className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-rose-500/10 hover:text-rose-500"
                   title="Delete profile"
                 >
                   <Trash2 size={14} />
@@ -228,7 +228,7 @@ export default function ShareManagerClient({
               </div>
 
               <div>
-                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                <h4 className="mb-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
                   Select ideas to share
                 </h4>
                 {shareableIdeas.length === 0 ? (
@@ -324,7 +324,7 @@ function RenameForm({
       />
       <button
         type="submit"
-        className="rounded p-1 text-emerald-600 hover:bg-emerald-50"
+        className="rounded p-1 text-emerald-600 hover:bg-emerald-500/10"
       >
         <Check size={14} />
       </button>

@@ -85,7 +85,7 @@ export function IdeasIndexClient({
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <p className="text-xs font-medium uppercase tracking-widest text-text-muted">All ideas</p>
+        <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-muted">All ideas</p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text">Ideas</h1>
       </div>
 

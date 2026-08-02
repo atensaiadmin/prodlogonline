@@ -31,9 +31,11 @@ export function AppShell({ children }: AppShellProps) {
               <Menu size={16} />
             </button>
             <Link href="/dashboard" className="group flex items-center gap-2.5">
-              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent font-display text-sm font-semibold text-white shadow-card transition-transform group-hover:-rotate-3">
-                p
-              </span>
+              <img
+                src="/image/iconalone.png"
+                alt="ProdLog"
+                className="h-7 w-7 object-contain transition-transform group-hover:-rotate-3"
+              />
               <span className="font-display text-lg font-medium tracking-tight text-text">
                 prodlog
               </span>
@@ -77,9 +79,11 @@ export function AppShell({ children }: AppShellProps) {
           <div className="absolute inset-y-0 left-0 w-72 max-w-[85%] border-r border-border bg-bg shadow-xl">
             <div className="px-4 pb-4 pt-3">
               <Link href="/dashboard" className="group flex items-center gap-2.5" onClick={() => setMobileOpen(false)}>
-                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-accent font-display text-sm font-semibold text-white shadow-card">
-                  p
-                </span>
+                <img
+                  src="/image/iconalone.png"
+                  alt="ProdLog"
+                  className="h-7 w-7 object-contain"
+                />
                 <span className="font-display text-lg font-medium tracking-tight text-text">
                   prodlog
                 </span>

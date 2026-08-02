@@ -74,7 +74,7 @@ export function DashboardClient({
   return (
     <div className="space-y-8">
       <section className="space-y-1">
-        <p className="text-xs font-medium uppercase tracking-widest text-text-muted">
+        <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
           Your progress log
         </p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text sm:text-4xl">
@@ -121,7 +121,7 @@ export function DashboardClient({
               <div key={stage.key}>
                 <div className="mb-2.5 flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${stage.color}`} />
-                  <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider">
+                  <span className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
                     {stage.label}
                   </span>
                   <span className="ml-auto rounded-full bg-surface-2 px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-text-secondary">
@@ -198,7 +198,7 @@ export function DashboardClient({
 function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div className="card p-3.5">
-      <p className="text-2xl font-semibold tabular-nums tracking-tight text-text">
+      <p className="font-display text-2xl font-semibold tabular-nums tracking-tight text-text">
         {value}
       </p>
       <p className="mt-0.5 text-xs text-text-secondary">{label}</p>
