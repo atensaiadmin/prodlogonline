@@ -1,9 +1,10 @@
-import { supabase } from "./supabase";
+import { createServerSupabase } from "./supabase-server";
 import type { Idea, Entry, Addon, ShareProfile, ShareProfileIdea } from "./schema";
 
 // ---- Ideas ----
 
 export async function getIdeas(): Promise<Idea[]> {
+  const supabase = await createServerSupabase();
   const { data, error } = await supabase
     .from("ideas")
     .select("*")
@@ -13,6 +14,7 @@ export async function getIdeas(): Promise<Idea[]> {
 }
 
 export async function getIdea(id: string): Promise<Idea | null> {
+  const supabase = await createServerSupabase();
   const { data, error } = await supabase
     .from("ideas")
     .select("*")
@@ -23,6 +25,7 @@ export async function getIdea(id: string): Promise<Idea | null> {
 }
 
 export async function insertIdea(idea: Idea) {
+  const supabase = await createServerSupabase();
   const { error } = await supabase.from("ideas").insert({
     id: idea.id,
     title: idea.title,
@@ -43,6 +46,7 @@ export async function updateIdea(
   id: string,
   updates: Partial<Omit<Idea, "id" | "created_at">>
 ) {
+  const supabase = await createServerSupabase();
   const { error } = await supabase
     .from("ideas")
     .update({ ...updates, updated_at: new Date().toISOString() })
@@ -52,6 +56,7 @@ export async function updateIdea(
 
 export async function deleteIdea(id: string) {
   // entries, addons, share_profile_ideas cascade on delete
+  const supabase = await createServerSupabase();
   const { error } = await supabase.from("ideas").delete().eq("id", id);
   if (error) throw new Error(error.message);
 }
@@ -59,6 +64,7 @@ export async function deleteIdea(id: string) {
 // ---- Entries ----
 
 export async function getEntries(ideaId: string): Promise<Entry[]> {
+  const supabase = await createServerSupabase();
   const { data, error } = await supabase
     .from("entries")
     .select("*")
@@ -69,6 +75,7 @@ export async function getEntries(ideaId: string): Promise<Entry[]> {
 }
 
 export async function insertEntry(entry: Entry) {
+  const supabase = await createServerSupabase();
   const { error } = await supabase.from("entries").insert({
     id: entry.id,
     idea_id: entry.idea_id,
@@ -83,6 +90,7 @@ export async function insertEntry(entry: Entry) {
 // ---- Addons ----
 
 export async function getAddons(ideaId?: string): Promise<Addon[]> {
+  const supabase = await createServerSupabase();
   let query = supabase
     .from("addons")
     .select("*")
@@ -94,6 +102,7 @@ export async function getAddons(ideaId?: string): Promise<Addon[]> {
 }
 
 export async function getAddon(id: string): Promise<Addon | null> {
+  const supabase = await createServerSupabase();
   const { data, error } = await supabase
     .from("addons")
     .select("*")
@@ -104,6 +113,7 @@ export async function getAddon(id: string): Promise<Addon | null> {
 }
 
 export async function insertAddon(addon: Addon) {
+  const supabase = await createServerSupabase();
   const { error } = await supabase.from("addons").insert({
     id: addon.id,
     idea_id: addon.idea_id,
@@ -122,11 +132,13 @@ export async function updateAddon(
   id: string,
   updates: Partial<Omit<Addon, "id" | "idea_id" | "created_at">>
 ) {
+  const supabase = await createServerSupabase();
   const { error } = await supabase.from("addons").update(updates).eq("id", id);
   if (error) throw new Error(error.message);
 }
 
 export async function deleteAddon(id: string) {
+  const supabase = await createServerSupabase();
   const { error } = await supabase.from("addons").delete().eq("id", id);
   if (error) throw new Error(error.message);
 }
@@ -134,6 +146,7 @@ export async function deleteAddon(id: string) {
 // ---- Share profiles ----
 
 export async function getShareProfiles(): Promise<ShareProfile[]> {
+  const supabase = await createServerSupabase();
   const { data, error } = await supabase
     .from("share_profiles")
     .select("*")
@@ -143,6 +156,7 @@ export async function getShareProfiles(): Promise<ShareProfile[]> {
 }
 
 export async function getShareProfileBySlug(slug: string): Promise<ShareProfile | null> {
+  const supabase = await createServerSupabase();
   const { data, error } = await supabase
     .from("share_profiles")
     .select("*")
@@ -153,6 +167,7 @@ export async function getShareProfileBySlug(slug: string): Promise<ShareProfile 
 }
 
 export async function getShareProfileIdeas(profileId: string): Promise<ShareProfileIdea[]> {
+  const supabase = await createServerSupabase();
   const { data, error } = await supabase
     .from("share_profile_ideas")
     .select("profile_id, idea_id")
@@ -170,6 +185,7 @@ function slugify(text: string): string {
 }
 
 export async function insertShareProfile(name: string): Promise<ShareProfile> {
+  const supabase = await createServerSupabase();
   const base = slugify(name) || "share";
   // ensure unique slug
   let slug = base;
@@ -194,6 +210,7 @@ export async function updateShareProfile(
   id: string,
   updates: Partial<Omit<ShareProfile, "id" | "created_at">>
 ) {
+  const supabase = await createServerSupabase();
   const { error } = await supabase
     .from("share_profiles")
     .update({ ...updates, updated_at: new Date().toISOString() })
@@ -203,11 +220,13 @@ export async function updateShareProfile(
 
 export async function deleteShareProfile(id: string) {
   // share_profile_ideas cascade
+  const supabase = await createServerSupabase();
   const { error } = await supabase.from("share_profiles").delete().eq("id", id);
   if (error) throw new Error(error.message);
 }
 
 export async function setProfileIdeas(profileId: string, ideaIds: string[]) {
+  const supabase = await createServerSupabase();
   // delete existing then insert new mappings
   const { error: delErr } = await supabase
     .from("share_profile_ideas")

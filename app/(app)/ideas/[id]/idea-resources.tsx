@@ -59,7 +59,7 @@ function LinksSection({ idea, router }: { idea: Idea; router: ReturnType<typeof 
     return (
       <div className="card p-4 sm:p-5 space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+          <h3 className="font-mono text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
             Links
           </h3>
           <div className="flex gap-1.5">
@@ -116,7 +116,7 @@ function LinksSection({ idea, router }: { idea: Idea; router: ReturnType<typeof 
   return (
     <div className="card p-4 sm:p-5 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+        <h3 className="font-mono text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
           Links
         </h3>
         <button
@@ -217,7 +217,7 @@ function AddonsSection({
   return (
     <div className="card p-4 sm:p-5 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+        <h3 className="font-mono text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
           Add-ons &amp; Services
           {addons.length > 0 && (
             <span className="ml-1.5 font-normal text-text-muted">
@@ -315,24 +315,24 @@ function AddonsSection({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-medium text-text">{addon.name}</span>
-                    <span className="rounded-full bg-surface-2 px-1.5 py-0.5 text-[10px] font-medium text-text-muted">
+                    <span className="rounded-full bg-surface-2 px-1.5 py-0.5 text-xs font-medium text-text-muted">
                       {cat?.label}
                     </span>
                     {addon.account_label && (
-                      <span className="text-[10px] text-text-muted">
+                      <span className="text-xs text-text-muted">
                         · {addon.account_label}
                       </span>
                     )}
                   </div>
                   {addon.notes && (
-                    <p className="mt-0.5 text-[11px] text-text-secondary">{addon.notes}</p>
+                    <p className="mt-0.5 text-xs text-text-secondary">{addon.notes}</p>
                   )}
                   {addon.url && (
                     <a
                       href={addon.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-0.5 inline-flex items-center gap-1 text-[10px] text-accent hover:underline"
+                      className="mt-0.5 inline-flex items-center gap-1 text-xs text-accent hover:underline"
                     >
                       Open dashboard <ExternalLink size={9} />
                     </a>
@@ -382,7 +382,7 @@ function VisibilitySection({
   return (
     <div className="card p-4 sm:p-5 space-y-3">
       <div className="flex items-center justify-between">
-        <h3 className="flex items-center gap-1.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+        <h3 className="flex items-center gap-1.5 font-mono text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
           <Shield size={12} />
           Sharing visibility
         </h3>
@@ -395,10 +395,10 @@ function VisibilitySection({
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="rounded-full border border-border bg-surface-2 px-2.5 py-0.5 text-[11px] font-medium text-text-secondary">
+        <span className="rounded-full border border-border bg-surface-2 px-2.5 py-0.5 text-xs font-medium text-text-secondary">
           {current?.label}
         </span>
-        <span className="text-[11px] text-text-muted">{current?.description}</span>
+        <span className="text-xs text-text-muted">{current?.description}</span>
       </div>
 
       {open && (
@@ -419,7 +419,7 @@ function VisibilitySection({
                   <span className="text-xs font-medium">{level.label}</span>
                   {active && <Check size={13} />}
                 </div>
-                <p className="mt-0.5 text-[11px] opacity-70">{level.description}</p>
+                <p className="mt-0.5 text-xs opacity-70">{level.description}</p>
               </button>
             );
           })}

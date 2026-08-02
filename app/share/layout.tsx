@@ -21,7 +21,7 @@ export default function ShareLayout({ children }: { children: React.ReactNode })
             <span className="font-display text-base font-medium tracking-tight text-text">
               prodlog
             </span>
-            <span className="rounded-full bg-surface-2 px-2 py-0.5 text-[10px] font-medium text-text-muted">
+            <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs font-medium text-text-muted">
               shared portfolio
             </span>
           </div>
@@ -32,7 +32,7 @@ export default function ShareLayout({ children }: { children: React.ReactNode })
         {children}
       </main>
       <footer className="border-t border-border/60 py-6 text-center">
-        <p className="text-[11px] text-text-muted">
+        <p className="text-xs text-text-muted">
           Built with{" "}
           <a
             href="/"

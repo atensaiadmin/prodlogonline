@@ -41,7 +41,7 @@ export default function NewIdeaPage() {
       </Link>
 
       <div className="mb-6 space-y-1">
-        <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
+        <p className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
           New idea
         </p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text">
@@ -224,7 +224,7 @@ export default function NewIdeaPage() {
                   className="sr-only"
                 />
                 <span className="text-xs font-medium">{level.label}</span>
-                <span className="text-[10px] opacity-60">{level.description}</span>
+                <span className="text-xs opacity-60">{level.description}</span>
               </label>
             ))}
           </div>

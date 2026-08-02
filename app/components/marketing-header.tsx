@@ -64,7 +64,7 @@ export function MarketingHeader() {
             Use cases
           </a>
           <ThemeToggle />
-          <Link href="/dashboard" className="text-sm font-medium text-text-secondary transition-colors hover:text-text">
+          <Link href="/login" className="text-sm font-medium text-text-secondary transition-colors hover:text-text">
             Sign in
           </Link>
           <Link href="/dashboard" className="btn-primary px-4 py-2 text-sm">
@@ -104,7 +104,7 @@ export function MarketingHeader() {
               >
                 Use cases
               </a>
-              <Link href="/dashboard" className="sidebar-link" onClick={() => setOpen(false)}>
+              <Link href="/login" className="sidebar-link" onClick={() => setOpen(false)}>
                 Sign in
               </Link>
               <Link href="/dashboard" className="btn-primary mt-2 w-full justify-center" onClick={() => setOpen(false)}>

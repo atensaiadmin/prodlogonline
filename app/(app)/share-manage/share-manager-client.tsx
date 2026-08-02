@@ -96,7 +96,7 @@ export default function ShareManagerClient({
       </Link>
 
       <section className="space-y-1">
-        <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
+        <p className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
           Share profiles
         </p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text">
@@ -163,7 +163,7 @@ export default function ShareManagerClient({
               >
                 <div className="flex items-center justify-between">
                   <span className="truncate">{profile.name}</span>
-                  <span className="shrink-0 text-[10px] text-text-muted">
+                  <span className="shrink-0 text-xs text-text-muted">
                     {new Date(profile.updated_at).toLocaleDateString(undefined, {
                       month: "short",
                       day: "numeric",
@@ -228,7 +228,7 @@ export default function ShareManagerClient({
               </div>
 
               <div>
-                <h4 className="mb-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+                <h4 className="mb-2 font-mono text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
                   Select ideas to share
                 </h4>
                 {shareableIdeas.length === 0 ? (
@@ -271,12 +271,12 @@ export default function ShareManagerClient({
                                 {typeDef.icon} {idea.title}
                               </span>
                               <span
-                                className={`shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-medium ${stage.color} text-white`}
+                                className={`shrink-0 rounded-full px-1.5 py-0.5 text-xs font-medium ${stage.color} text-white`}
                               >
                                 {stage.label}
                               </span>
                             </div>
-                            <div className="mt-0.5 flex items-center gap-2 text-[10px] text-text-muted">
+                            <div className="mt-0.5 flex items-center gap-2 text-xs text-text-muted">
                               <span>{vis?.label}</span>
                               {idea.links?.repo && <span>· Repo</span>}
                               {idea.links?.deploy && <span>· Deploy</span>}

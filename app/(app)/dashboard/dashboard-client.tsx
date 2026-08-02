@@ -74,7 +74,7 @@ export function DashboardClient({
   return (
     <div className="space-y-8">
       <section className="space-y-1">
-        <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
+        <p className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
           Your progress log
         </p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text sm:text-4xl">
@@ -121,10 +121,10 @@ export function DashboardClient({
               <div key={stage.key}>
                 <div className="mb-2.5 flex items-center gap-2">
                   <span className={`h-2 w-2 rounded-full ${stage.color}`} />
-                  <span className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+                  <span className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
                     {stage.label}
                   </span>
-                  <span className="ml-auto rounded-full bg-surface-2 px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-text-secondary">
+                  <span className="ml-auto rounded-full bg-surface-2 px-1.5 py-0.5 text-xs font-medium tabular-nums text-text-secondary">
                     {items.length}
                   </span>
                 </div>
@@ -139,11 +139,11 @@ export function DashboardClient({
                         href={`/ideas/${idea.id}`}
                         className="group block rounded-xl border border-border bg-surface p-3.5 shadow-card transition-all hover:-translate-y-px hover:border-border-strong hover:shadow-card-hover"
                       >
-                        <p className="text-sm font-medium leading-snug text-text">
+                        <p className="text-base font-medium leading-snug text-text">
                           {idea.title}
                         </p>
                         {idea.one_liner && (
-                          <p className="mt-1 text-xs leading-relaxed text-text-secondary line-clamp-2">
+                          <p className="mt-1 text-sm leading-relaxed text-text-secondary line-clamp-2">
                             {idea.one_liner}
                           </p>
                         )}
@@ -158,7 +158,7 @@ export function DashboardClient({
                               </span>
                             ))}
                             {addonCount > 0 && (
-                              <span className="inline-flex items-center gap-0.5 rounded border border-border/60 bg-surface-2 px-1.5 py-0.5 text-[9px] font-medium text-text-muted">
+                              <span className="inline-flex items-center gap-0.5 rounded border border-border/60 bg-surface-2 px-1.5 py-0.5 text-xs font-medium text-text-muted">
                                 <Package size={9} />
                                 {addonCount}
                               </span>
@@ -172,7 +172,7 @@ export function DashboardClient({
                               style={{ width: `${idea.conviction * 10}%` }}
                             />
                           </div>
-                          <div className="flex items-center justify-between text-[11px] text-text-muted">
+                          <div className="flex items-center justify-between text-xs text-text-muted">
                             <span>{convictionLabel(idea.conviction)}</span>
                             <span>{new Date(idea.updated_at).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
                           </div>
@@ -182,7 +182,7 @@ export function DashboardClient({
                   })}
                   {items.length === 0 && (
                     <div className="rounded-xl border border-dashed border-border p-4 text-center">
-                      <p className="text-[11px] text-text-muted">Empty</p>
+                      <p className="text-xs text-text-muted">Empty</p>
                     </div>
                   )}
                 </div>

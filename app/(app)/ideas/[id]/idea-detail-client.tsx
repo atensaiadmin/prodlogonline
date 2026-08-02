@@ -103,16 +103,16 @@ export default function IdeaDetailPage({
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
             <div className="mb-1.5 flex items-center gap-2">
-              <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-medium ${currentStage.color} text-white`}>
+              <span className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium ${currentStage.color} text-white`}>
                 {currentStage.label}
               </span>
-              <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-0.5 text-[11px] font-medium text-text-secondary">
+              <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-0.5 text-xs font-medium text-text-secondary">
                 {typeDef.label}
               </span>
               {idea.tags.slice(0, 3).map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-text-secondary"
+                  className="rounded-full bg-surface-2 px-2 py-0.5 text-xs font-medium text-text-secondary"
                 >
                   {tag}
                 </span>
@@ -180,7 +180,7 @@ export default function IdeaDetailPage({
       <IdeaResources idea={idea} addons={addons} />
 
       <section className="card p-4 sm:p-5">
-        <h2 className="mb-3 flex items-center gap-1.5 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+        <h2 className="mb-3 flex items-center gap-1.5 font-mono text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
           <PenLine size={13} />
           Log progress
         </h2>
@@ -227,7 +227,7 @@ export default function IdeaDetailPage({
       </section>
 
       <section>
-        <h2 className="mb-4 flex items-baseline gap-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+        <h2 className="mb-4 flex items-baseline gap-2 font-mono text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
           Progress log
           {entries.length > 0 && (
             <span className="font-normal text-text-muted">
@@ -273,7 +273,7 @@ export default function IdeaDetailPage({
                       })}
                     </span>
                     {entry.action_taken && (
-                      <span className="ml-auto rounded-md bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-text-secondary">
+                      <span className="ml-auto rounded-md bg-surface-2 px-2 py-0.5 text-xs font-medium text-text-secondary">
                         {entry.action_taken}
                       </span>
                     )}

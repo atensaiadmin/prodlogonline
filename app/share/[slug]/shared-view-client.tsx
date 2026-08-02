@@ -41,7 +41,7 @@ export default function SharedViewClient({
   return (
     <div className="space-y-8">
       <section className="space-y-1">
-        <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
+        <p className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
           Shared portfolio
         </p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text sm:text-4xl">
@@ -78,17 +78,17 @@ export default function SharedViewClient({
                   <div className="min-w-0">
                     <div className="mb-1 flex items-center gap-2">
                       <span
-                        className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${stage.color} text-white`}
+                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${stage.color} text-white`}
                       >
                         {stage.label}
                       </span>
-                      <span className="rounded-full border border-border/60 bg-surface px-2 py-0.5 text-[10px] font-medium text-text-secondary">
+                      <span className="rounded-full border border-border/60 bg-surface px-2 py-0.5 text-xs font-medium text-text-secondary">
                         {typeDef.icon} {typeDef.label}
                       </span>
                       {idea.tags.slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-full bg-surface-2 px-2 py-0.5 text-[10px] font-medium text-text-secondary"
+                          className="rounded-full bg-surface-2 px-2 py-0.5 text-xs font-medium text-text-secondary"
                         >
                           {tag}
                         </span>
@@ -103,7 +103,7 @@ export default function SharedViewClient({
                       </p>
                     )}
                     {showSummary && (
-                      <div className="mt-2 flex items-center gap-3 text-[11px] text-text-muted">
+                      <div className="mt-2 flex items-center gap-3 text-xs text-text-muted">
                         <span className="flex items-center gap-1">
                           <div className="h-1.5 w-16 overflow-hidden rounded-full bg-surface-2">
                             <div
@@ -173,7 +173,7 @@ export default function SharedViewClient({
 
                     {showFull && addons.filter((a) => a.visible).length > 0 && (
                       <div>
-                        <h4 className="mb-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+                        <h4 className="mb-2 font-mono text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
                           Services &amp; Add-ons
                         </h4>
                         <div className="space-y-1.5">
@@ -194,17 +194,17 @@ export default function SharedViewClient({
                                       <span className="text-xs font-medium text-text">
                                         {addon.name}
                                       </span>
-                                      <span className="rounded-full bg-surface-2 px-1.5 py-0.5 text-[9px] text-text-muted">
+                                      <span className="rounded-full bg-surface-2 px-1.5 py-0.5 text-xs text-text-muted">
                                         {cat?.label}
                                       </span>
                                       {addon.account_label && (
-                                        <span className="text-[10px] text-text-muted">
+                                        <span className="text-xs text-text-muted">
                                           · {addon.account_label}
                                         </span>
                                       )}
                                     </div>
                                     {addon.notes && (
-                                      <p className="mt-0.5 text-[10px] text-text-muted">
+                                      <p className="mt-0.5 text-xs text-text-muted">
                                         {addon.notes}
                                       </p>
                                     )}
@@ -228,7 +228,7 @@ export default function SharedViewClient({
 
                     {showFull && entries.length > 0 && (
                       <div>
-                        <h4 className="mb-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+                        <h4 className="mb-2 font-mono text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
                           Progress log ({entries.length})
                         </h4>
                         <div className="space-y-3">
@@ -243,14 +243,14 @@ export default function SharedViewClient({
                                     {MOOD_EMOJI[entry.mood]}
                                   </span>
                                 )}
-                                <span className="text-[10px] font-medium text-text-muted">
+                                <span className="text-xs font-medium text-text-muted">
                                   {new Date(entry.created_at).toLocaleDateString(
                                     undefined,
                                     { month: "long", day: "numeric" }
                                   )}
                                 </span>
                                 {entry.action_taken && (
-                                  <span className="ml-auto rounded-md bg-surface-2 px-2 py-0.5 text-[10px] font-medium text-text-secondary">
+                                  <span className="ml-auto rounded-md bg-surface-2 px-2 py-0.5 text-xs font-medium text-text-secondary">
                                     {entry.action_taken}
                                   </span>
                                 )}

@@ -85,7 +85,7 @@ export function IdeasIndexClient({
   return (
     <div className="space-y-6">
       <div className="space-y-1">
-        <p className="font-mono text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-text-muted">All ideas</p>
+        <p className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-text-muted">All ideas</p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text">Ideas</h1>
       </div>
 
@@ -182,12 +182,12 @@ export function IdeasIndexClient({
             {filtered.length} of {initialIdeas.length} ideas
           </span>
           <div className="flex items-center gap-2">
-            <div className="inline-flex items-center gap-1 text-[11px]">
+            <div className="inline-flex items-center gap-1 text-xs">
               <SlidersHorizontal size={12} />
               Filters active: {(stage !== "all" ? 1 : 0) + (type !== "all" ? 1 : 0) + (q ? 1 : 0) + (selectedTags.length > 0 ? 1 : 0)}
             </div>
             <button
-              className="inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[11px] text-text-secondary hover:border-border-strong"
+              className="inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs text-text-secondary hover:border-border-strong"
               onClick={clearFilters}
             >
               <X size={12} /> Clear filters
@@ -204,7 +204,7 @@ export function IdeasIndexClient({
               <button
                 key={t}
                 onClick={() => toggleTag(t)}
-                className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition-colors ${
+                className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
                   active
                     ? "border border-accent bg-accent/5 text-accent"
                     : "border border-border bg-surface text-text-secondary hover:border-border-strong"
@@ -240,19 +240,19 @@ function GridView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<s
             href={`/ideas/${idea.id}`}
             className="group rounded-xl border border-border bg-surface p-4 shadow-card transition-all hover:-translate-y-px hover:border-border-strong hover:shadow-card-hover"
           >
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2 text-sm font-medium text-text">
-                {/* type icon removed for professional tone */}
-                {idea.title}
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 text-base font-medium text-text">
+                  {/* type icon removed for professional tone */}
+                  {idea.title}
+                </div>
+                <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-2 py-0.5 text-xs font-medium text-text-muted">
+                  <span className={`h-1.5 w-1.5 rounded-full ${stageDef?.color}`} />
+                  {stageDef?.label}
+                </span>
               </div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-text-muted">
-                <span className={`h-1.5 w-1.5 rounded-full ${stageDef?.color}`} />
-                {stageDef?.label}
-              </span>
-            </div>
 
             {idea.one_liner && (
-              <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-text-secondary">{idea.one_liner}</p>
+              <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-text-secondary">{idea.one_liner}</p>
             )}
 
             <div className="mt-3 space-y-2">
@@ -262,13 +262,13 @@ function GridView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<s
                   style={{ width: `${idea.conviction * 10}%` }}
                 />
               </div>
-              <div className="flex items-center justify-between text-[11px] text-text-muted">
+              <div className="flex items-center justify-between text-xs text-text-muted">
                 <span>Conviction {idea.conviction}/10</span>
                 <span className="tabular-nums">{new Date(idea.updated_at).toLocaleDateString()}</span>
               </div>
             </div>
 
-            <div className="mt-3 flex items-center justify-between text-[11px] text-text-muted">
+            <div className="mt-3 flex items-center justify-between text-xs text-text-muted">
               <span>{addons} add-ons</span>
               {idea.tags?.length ? (
                 <span className="truncate">{idea.tags.slice(0, 2).join(", ")}{idea.tags.length > 2 ? "…" : ""}</span>
@@ -309,12 +309,12 @@ function TableView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<
                     {i.title}
                   </Link>
                   {i.one_liner && (
-                    <div className="text-[11px] text-text-muted line-clamp-1">{i.one_liner}</div>
+                    <div className="text-xs text-text-muted line-clamp-1">{i.one_liner}</div>
                   )}
                 </td>
                 <td className="p-3">{typeDef?.label}</td>
                 <td className="p-3">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-text-muted">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-2 py-0.5 text-xs font-medium text-text-muted">
                     <span className={`h-1.5 w-1.5 rounded-full ${stageDef?.color}`} />
                     {stageDef?.label}
                   </span>

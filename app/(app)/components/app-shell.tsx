@@ -1,18 +1,48 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu, LayoutGrid, Lightbulb, Share2, Plus } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, LayoutGrid, Lightbulb, Share2, Plus, LogOut } from "lucide-react";
 import clsx from "clsx";
 import { useState } from "react";
 import { ThemeToggle } from "../../components/theme-toggle";
+import { createClientSupabase } from "@/lib/supabase-client";
+
+interface AppUser {
+  id: string;
+  email?: string;
+  user_metadata?: {
+    avatar_url?: string;
+    full_name?: string;
+    name?: string;
+  };
+}
 
 interface AppShellProps {
   children: React.ReactNode;
+  user: AppUser | null;
 }
 
-export function AppShell({ children }: AppShellProps) {
+export function AppShell({ children, user }: AppShellProps) {
+  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  async function handleSignOut() {
+    const supabase = createClientSupabase();
+    await supabase.auth.signOut();
+    setUserMenuOpen(false);
+    router.push("/login");
+    router.refresh();
+  }
+
+  const avatarUrl = user?.user_metadata?.avatar_url;
+  const displayName =
+    user?.user_metadata?.full_name ||
+    user?.user_metadata?.name ||
+    user?.email ||
+    "You";
+  const initials = displayName.slice(0, 2).toUpperCase();
 
   return (
     <div className="min-h-screen bg-bg text-text">
@@ -48,6 +78,53 @@ export function AppShell({ children }: AppShellProps) {
               <Plus size={14} />
               New idea
             </Link>
+            {user && (
+              <div className="relative">
+                <button
+                  aria-label="Account menu"
+                  onClick={() => setUserMenuOpen((v) => !v)}
+                  className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-accent text-xs font-semibold text-white shadow-card transition-transform active:scale-[0.96]"
+                >
+                  {avatarUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={avatarUrl}
+                      alt={displayName}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    initials
+                  )}
+                </button>
+                {userMenuOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setUserMenuOpen(false)}
+                    />
+                    <div className="absolute right-0 top-10 z-50 w-56 rounded-xl border border-border bg-surface p-2 shadow-card-hover">
+                      <div className="px-2 py-1.5">
+                        <p className="truncate text-sm font-medium text-text">
+                          {displayName}
+                        </p>
+                        {user.email && (
+                          <p className="truncate text-xs text-text-muted">
+                            {user.email}
+                          </p>
+                        )}
+                      </div>
+                      <button
+                        onClick={handleSignOut}
+                        className="mt-1 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm text-text-secondary transition-colors hover:bg-surface-2 hover:text-text"
+                      >
+                        <LogOut size={14} />
+                        Sign out
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </header>
