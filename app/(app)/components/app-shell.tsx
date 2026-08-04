@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, LayoutGrid, Lightbulb, Share2, Plus, LogOut } from "lucide-react";
+import { Menu, LayoutGrid, Lightbulb, Share2, Plus, LogOut, Sparkles } from "lucide-react";
 import clsx from "clsx";
 import { useState } from "react";
 import { ThemeToggle } from "../../components/theme-toggle";
@@ -46,15 +46,14 @@ export function AppShell({ children, user }: AppShellProps) {
 
   return (
     <div className="min-h-screen bg-bg text-text">
-      {/* subtle gradient background */}
-      <div className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-72 bg-gradient-to-b from-accent/[0.05] to-transparent" />
+      <div className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-80 bg-gradient-to-b from-accent/[0.04] to-transparent" />
 
       {/* Top bar */}
-      <header className="sticky top-0 z-20 border-b border-border/80 bg-bg/85 backdrop-blur-sm">
+      <header className="sticky top-0 z-20 glass_panel shadow-glass-sm border-b border-border/30">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <button
-              className="md:hidden inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary hover:border-border-strong"
+              className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-surface/80 text-text-secondary hover:border-border-strong transition-colors"
               aria-label="Open navigation"
               onClick={() => setMobileOpen(true)}
             >
@@ -74,16 +73,19 @@ export function AppShell({ children, user }: AppShellProps) {
 
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Link href="/ideas/new" className="btn-primary px-3.5 py-1.5 text-xs">
-              <Plus size={14} />
-              New idea
+            <Link
+              href="/ideas/new"
+              className="group btn-primary px-3.5 py-1.5 text-xs font-semibold"
+            >
+              <Plus size={14} className="transition-transform duration-300 group-hover:rotate-90" />
+              <span className="hidden sm:inline ml-0.5">New idea</span>
             </Link>
             {user && (
               <div className="relative">
                 <button
                   aria-label="Account menu"
                   onClick={() => setUserMenuOpen((v) => !v)}
-                  className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-accent text-xs font-semibold text-white shadow-card transition-transform active:scale-[0.96]"
+                  className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-accent text-xs font-bold text-white shadow-card transition-transform active:scale-[0.96]"
                 >
                   {avatarUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -102,22 +104,22 @@ export function AppShell({ children, user }: AppShellProps) {
                       className="fixed inset-0 z-40"
                       onClick={() => setUserMenuOpen(false)}
                     />
-                    <div className="absolute right-0 top-10 z-50 w-56 rounded-xl border border-border bg-surface p-2 shadow-card-hover">
-                      <div className="px-2 py-1.5">
-                        <p className="truncate text-sm font-medium text-text">
+                    <div className="absolute right-0 top-12 z-50 w-60 rounded-xl border border-border/60 bg-surface p-2.5 shadow-card-hover backdrop-blur-sm">
+                      <div className="px-3 py-2.5 border-b border-border/40 mb-1">
+                        <p className="truncate text-base font-semibold text-text">
                           {displayName}
                         </p>
                         {user.email && (
-                          <p className="truncate text-xs text-text-muted">
+                          <p className="truncate text-sm text-text-muted mt-0.5">
                             {user.email}
                           </p>
                         )}
                       </div>
                       <button
                         onClick={handleSignOut}
-                        className="mt-1 flex w-full items-center gap-2 rounded-lg px-2 py-2 text-sm text-text-secondary transition-colors hover:bg-surface-2 hover:text-text"
+                        className="mt-1 flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-text-secondary transition-colors hover:bg-surface-2 hover:text-text"
                       >
-                        <LogOut size={14} />
+                        <LogOut size={16} />
                         Sign out
                       </button>
                     </div>
@@ -133,15 +135,38 @@ export function AppShell({ children, user }: AppShellProps) {
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-0 px-4 sm:px-6 md:grid-cols-[220px_1fr]">
         {/* Sidebar (desktop) */}
         <aside className="sticky top-14 hidden h-[calc(100dvh-56px)] md:block">
-          <nav className="mt-4 space-y-1 pr-4">
-            <NavLink href="/dashboard" icon={<LayoutGrid size={16} />}>Dashboard</NavLink>
-            <NavLink href="/ideas" icon={<Lightbulb size={16} />}>Ideas</NavLink>
-            <NavLink href="/share-manage" icon={<Share2 size={16} />}>Share</NavLink>
+          <nav className="mt-5 space-y-1 pr-3">
+            <NavLink href="/dashboard" icon={<LayoutGrid size={15} />}>Dashboard</NavLink>
+            <NavLink href="/ideas" icon={<Lightbulb size={15} />}>Ideas</NavLink>
+            <NavLink href="/share-manage" icon={<Share2 size={15} />}>Share</NavLink>
+
+            <div className="mt-6 border-t border-border pt-3">
+              <p className="mb-2 px-2.5 font-mono text-[0.68rem] font-bold uppercase tracking-[0.16em] text-text-muted">Quick actions</p>
+              <Link
+                href="/ideas/new"
+                className="sidebar-link"
+              >
+                <Plus size={14} />
+                New idea
+              </Link>
+            </div>
+
+            <div className="mt-5">
+              <div className="mx-2.5 rounded-lg border border-accent/20 bg-accent-subtle p-3 shadow-sm">
+                <div className="mb-1.5 flex items-center gap-1.5">
+                  <Sparkles size={13} className="text-accent" />
+                  <span className="text-xs font-medium text-accent">Building momentum</span>
+                </div>
+                <p className="text-[11px] leading-relaxed text-text-secondary">
+                  Log a quick entry on your top idea to keep the streak alive.
+                </p>
+              </div>
+            </div>
           </nav>
         </aside>
 
         {/* Main */}
-        <main className="py-6 md:py-8">
+        <main className="py-7 md:py-8 min-h-[calc(100dvh-56px)]">
           {children}
         </main>
       </div>
@@ -150,11 +175,11 @@ export function AppShell({ children, user }: AppShellProps) {
       {mobileOpen && (
         <div className="fixed inset-0 z-30 md:hidden" role="dialog" aria-modal="true">
           <div
-            className="absolute inset-0 bg-black/20"
+            className="absolute inset-0 bg-black/25 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)}
           />
-          <div className="absolute inset-y-0 left-0 w-72 max-w-[85%] border-r border-border bg-bg shadow-xl">
-            <div className="px-4 pb-4 pt-3">
+          <div className="absolute inset-y-0 left-0 w-72 max-w-[85%] border-r border-border/50 bg-bg shadow-2xl">
+            <div className="px-4 pb-4 pt-3.5 border-b border-border/40">
               <Link href="/dashboard" className="group flex items-center gap-2.5" onClick={() => setMobileOpen(false)}>
                 <img
                   src="/image/iconalone.png"
@@ -166,16 +191,22 @@ export function AppShell({ children, user }: AppShellProps) {
                 </span>
               </Link>
             </div>
-            <nav className="px-2 pb-4">
-              <NavLink href="/dashboard" icon={<LayoutGrid size={16} />} onNavigate={() => setMobileOpen(false)}>
+            <nav className="px-2.5 pb-4 pt-3 space-y-1">
+              <NavLink href="/dashboard" icon={<LayoutGrid size={15} />} onNavigate={() => setMobileOpen(false)}>
                 Dashboard
               </NavLink>
-              <NavLink href="/ideas" icon={<Lightbulb size={16} />} onNavigate={() => setMobileOpen(false)}>
+              <NavLink href="/ideas" icon={<Lightbulb size={15} />} onNavigate={() => setMobileOpen(false)}>
                 Ideas
               </NavLink>
-              <NavLink href="/share-manage" icon={<Share2 size={16} />} onNavigate={() => setMobileOpen(false)}>
+              <NavLink href="/share-manage" icon={<Share2 size={15} />} onNavigate={() => setMobileOpen(false)}>
                 Share
               </NavLink>
+              <div className="mt-3 border-t border-border pt-3">
+                <p className="mb-2 px-2.5 font-mono text-[0.68rem] font-bold uppercase tracking-[0.16em] text-text-muted">Quick actions</p>
+                <Link href="/ideas/new" className="sidebar-link" onClick={() => setMobileOpen(false)}>
+                  <Plus size={14} /> New idea
+                </Link>
+              </div>
             </nav>
           </div>
         </div>
@@ -202,14 +233,15 @@ function NavLink({
       href={href}
       onClick={onNavigate}
       className={clsx(
-        "flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm transition-colors",
-        active
-          ? "bg-accent/10 text-accent"
-          : "text-text-secondary hover:bg-surface hover:text-text"
+        "sidebar-link relative",
+        active && "sidebar-link-active"
       )}
     >
-      <span className="inline-flex h-5 w-5 items-center justify-center text-current">{icon}</span>
-      <span className="font-medium">{children}</span>
+      <span className="inline-flex h-4 w-4 items-center justify-center text-current">{icon}</span>
+      <span className="font-medium text-xs">{children}</span>
+      {active && (
+        <span className="absolute left-0 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-accent" />
+      )}
     </Link>
   );
 }

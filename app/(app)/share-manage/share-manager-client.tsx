@@ -12,6 +12,7 @@ import {
   Copy,
   Pencil,
   X,
+  Share2,
 } from "lucide-react";
 import {
   createShareProfile,
@@ -86,23 +87,23 @@ export default function ShareManagerClient({
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-8">
+    <div className="mx-auto max-w-3xl space-y-8">
       <Link
         href="/dashboard"
-        className="inline-flex items-center gap-1 text-xs font-medium text-text-secondary transition-colors hover:text-text"
+        className="inline-flex items-center gap-1 text-xs font-medium text-text-secondary transition-colors hover:text-text mb-5"
       >
         <ArrowLeft size={14} />
         Dashboard
       </Link>
 
-      <section className="space-y-1">
-        <p className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-text-muted">
+      <section className="space-y-2">
+        <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.18em] text-text-muted">
           Share profiles
         </p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text">
           Curate what you share
         </h1>
-        <p className="max-w-xl text-sm text-text-secondary">
+        <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-text-secondary">
           Create a share profile, pick the ideas to include, and send the link.
           Each idea respects its visibility settings — you control what the
           reviewer sees.
@@ -112,7 +113,7 @@ export default function ShareManagerClient({
       <div className="flex items-center gap-2">
         <button
           onClick={() => setCreating(true)}
-          className="btn-primary px-3 py-1.5 text-xs"
+          className="btn-primary px-4 py-2 text-xs font-semibold"
         >
           <Plus size={14} />
           New profile
@@ -126,16 +127,16 @@ export default function ShareManagerClient({
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder="Profile name (e.g. Client pitch, Mentor review)"
-            className="input flex-1 py-2 text-xs"
+            className="input flex-1 text-sm py-2"
             autoFocus
           />
-          <button type="submit" className="btn-primary px-3 py-1.5 text-xs">
+          <button type="submit" className="btn-primary px-3 py-1.5 text-xs font-semibold">
             Create
           </button>
           <button
             type="button"
             onClick={() => setCreating(false)}
-            className="btn-secondary px-2.5 py-1 text-xs"
+            className="btn-secondary px-2 py-1 text-xs"
           >
             <X size={12} />
           </button>
@@ -143,39 +144,45 @@ export default function ShareManagerClient({
       )}
 
       {profiles.length === 0 ? (
-        <div className="card flex flex-col items-center gap-2 px-6 py-12 text-center">
-          <p className="text-sm text-text-secondary">
+        <div className="card flex flex-col items-center gap-2.5 px-6 py-12 text-center">
+          <Share2 size={20} className="text-text-muted/30" />
+          <p className="mt-1.5 text-sm text-text-secondary">
             No share profiles yet. Create one above.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-4">
-          <div className="space-y-1.5 sm:col-span-1">
+        <div className="grid grid-cols-[200px_1fr] gap-4">
+          {/* Profile list */}
+          <div className="space-y-1.5">
             {profiles.map((profile) => (
               <button
                 key={profile.id}
                 onClick={() => setSelectedProfileId(profile.id)}
-                className={`w-full rounded-lg px-3 py-2 text-left text-xs font-medium transition-colors ${
+                className={`relative w-full rounded-lg px-3 py-2.5 text-left text-xs font-medium transition-colors ${
                   profile.id === selectedProfileId
-                    ? "bg-accent/10 text-accent"
-                    : "text-text-secondary hover:bg-surface-2 hover:text-text"
+                    ? "bg-accent/10 text-accent shadow-sm"
+                    : "text-text-secondary hover:bg-surface-2/60 hover:text-text"
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <span className="truncate">{profile.name}</span>
-                  <span className="shrink-0 text-xs text-text-muted">
-                    {new Date(profile.updated_at).toLocaleDateString(undefined, {
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </span>
-                </div>
+                {profile.id === selectedProfileId && (
+                  <span className="absolute left-1 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-accent" />
+                )}
+                <span className={`block truncate ${profile.id === selectedProfileId ? "pl-2.5" : ""}`}>
+                  {profile.name}
+                </span>
+                <span className="block text-[11px] text-text-muted mt-0.5">
+                  {new Date(profile.updated_at).toLocaleDateString(undefined, {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </span>
               </button>
             ))}
           </div>
 
+          {/* Detail panel */}
           {selectedProfile && (
-            <div className="card space-y-4 p-4 sm:col-span-3">
+            <div className="card space-y-4 p-5">
               <div className="flex items-center justify-between">
                 {editingId === selectedProfile.id ? (
                   <RenameForm
@@ -184,15 +191,15 @@ export default function ShareManagerClient({
                     onCancel={() => setEditingId(null)}
                   />
                 ) : (
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-sm font-semibold text-text">
+                  <div className="flex items-center gap-1.5">
+                    <h3 className="text-[15px] font-semibold text-text">
                       {selectedProfile.name}
                     </h3>
                     <button
                       onClick={() => setEditingId(selectedProfile.id)}
-                      className="rounded p-0.5 text-text-muted hover:text-text"
+                      className="rounded p-1 text-text-muted hover:text-text hover:bg-surface-2 transition-colors"
                     >
-                      <Pencil size={12} />
+                      <Pencil size={13} />
                     </button>
                   </div>
                 )}
@@ -205,30 +212,30 @@ export default function ShareManagerClient({
                 </button>
               </div>
 
+              {/* URL bar */}
               <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-2/50 p-2">
-                <code className="flex-1 truncate text-xs text-text-secondary">
+                <code className="flex-1 truncate text-xs text-text-secondary break-all">
                   {shareUrl}
                 </code>
                 <button
                   onClick={copyUrl}
-                  className="btn-secondary px-2 py-1 text-xs"
+                  className="btn-secondary px-2.5 py-1.5 text-xs"
                 >
-                  <Copy size={12} />
-                  Copy
+                  <Copy size={13} /> Copy
                 </button>
                 <a
                   href={shareUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-primary px-2 py-1 text-xs"
+                  className="btn-primary px-2.5 py-1.5 text-xs"
                 >
-                  <ExternalLink size={12} />
-                  Open
+                  <ExternalLink size={13} /> Open
                 </a>
               </div>
 
+              {/* Checkbox list for idea selection */}
               <div>
-                <h4 className="mb-2 font-mono text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-text-secondary">
+                <h4 className="mb-2.5 font-mono text-[0.75rem] font-bold uppercase tracking-[0.18em] text-text-secondary">
                   Select ideas to share
                 </h4>
                 {shareableIdeas.length === 0 ? (
@@ -241,7 +248,6 @@ export default function ShareManagerClient({
                   <div className="space-y-1.5">
                     {shareableIdeas.map((idea) => {
                       const stage = STAGES.find((s) => s.key === idea.stage)!;
-                      const typeDef = IDEA_TYPES.find((t) => t.key === (idea.idea_type ?? "app"))!;
                       const vis = VISIBILITY_LEVELS.find(
                         (v) => v.key === idea.visibility
                       )!;
@@ -251,7 +257,7 @@ export default function ShareManagerClient({
                       return (
                         <label
                           key={idea.id}
-                          className={`flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${
+                          className={`group flex cursor-pointer items-start gap-3 rounded-lg border p-3 transition-colors ${
                             checked
                               ? "border-accent bg-accent/5"
                               : "border-border hover:border-border-strong"
@@ -263,20 +269,18 @@ export default function ShareManagerClient({
                             onChange={() =>
                               handleToggleIdea(selectedProfile.id, idea.id)
                             }
-                            className="mt-0.5 accent-accent"
+                            className="mt-0.5 h-4 w-4 shrink-0 rounded border-border accent-accent checked:bg-accent checked:focus:ring-accent/30 focus:ring-accent/30"
                           />
                           <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs font-medium text-text truncate">
-                                {typeDef.icon} {idea.title}
-                              </span>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-xs font-medium text-text truncate">{idea.title}</span>
                               <span
-                                className={`shrink-0 rounded-full px-1.5 py-0.5 text-xs font-medium ${stage.color} text-white`}
+                                className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold ${stage.color} text-white`}
                               >
                                 {stage.label}
                               </span>
                             </div>
-                            <div className="mt-0.5 flex items-center gap-2 text-xs text-text-muted">
+                            <div className="mt-0.5 flex items-center gap-1.5 text-xs text-text-muted">
                               <span>{vis?.label}</span>
                               {idea.links?.repo && <span>· Repo</span>}
                               {idea.links?.deploy && <span>· Deploy</span>}
@@ -319,21 +323,21 @@ function RenameForm({
         type="text"
         value={val}
         onChange={(e) => setVal(e.target.value)}
-        className="input py-1.5 text-xs"
+        className="input py-1.5 text-sm"
         autoFocus
       />
       <button
         type="submit"
-        className="rounded p-1 text-emerald-600 hover:bg-emerald-500/10"
+        className="rounded p-1.5 text-emerald-600 hover:bg-emerald-500/10"
       >
         <Check size={14} />
       </button>
       <button
         type="button"
         onClick={onCancel}
-        className="rounded p-1 text-text-muted hover:bg-surface-2"
+        className="rounded p-1.5 text-text-muted hover:bg-surface-2"
       >
-        <X size={14} />
+        <X size={13} />
       </button>
     </form>
   );

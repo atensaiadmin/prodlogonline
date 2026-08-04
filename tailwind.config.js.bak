@@ -5,6 +5,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Use CSS variables so themes can switch without changing classes
         bg: "rgb(var(--bg) / <alpha-value>)",
         surface: "rgb(var(--surface) / <alpha-value>)",
         "surface-2": "rgb(var(--surface-2) / <alpha-value>)",
@@ -37,38 +38,20 @@ module.exports = {
           "0 2px 4px rgba(20,18,15,0.05), 0 8px 24px rgba(20,18,15,0.08)",
         focus: "0 0 0 1px rgba(79,70,229,0.25)",
         glow: "0 8px 30px -8px rgba(79,70,229,0.45)",
-        "glow-lg": "0 16px 56px -12px rgba(79,70,229,0.55)",
-        glass: "0 8px 32px rgba(0,0,0,0.08)",
-        "glass-sm": "0 2px 8px rgba(0,0,0,0.04)",
       },
       keyframes: {
         "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(16px)" },
+          "0%": { opacity: "0", transform: "translateY(12px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
         pop: {
           "0%": { transform: "scale(0.96)" },
           "100%": { transform: "scale(1)" },
         },
-        float: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-8px)" },
-        },
-        shimmer: {
-          "0%": { backgroundPosition: "-200% 0" },
-          "100%": { backgroundPosition: "200% 0" },
-        },
-        gradient_x: {
-          "0%, 100%": { backgroundPosition: "0% 50%" },
-          "50%": { backgroundPosition: "100% 50%" },
-        },
       },
       animation: {
-        "fade-up": "fade-up 0.6s cubic-bezier(0.22,1,0.36,1) both",
+        "fade-up": "fade-up 0.5s cubic-bezier(0.22,1,0.36,1) both",
         pop: "pop 0.12s ease-out both",
-        float: "float 6s ease-in-out infinite",
-        shimmer: "shimmer 2.5s linear infinite",
-        "gradient-x": "gradient_x 8s ease infinite",
       },
     },
   },

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Check, X, Cloud, FileText, Zap, Users, Plus } from "lucide-react";
+import { ArrowRight, Check, X, Cloud, FileText, Zap, Users, Plus, Sparkles, TrendingUp, Clock, Eye, BarChart3, Quote } from "lucide-react";
 import MarketingHeader from "./components/marketing-header";
 import Reveal from "./components/reveal";
 
@@ -8,6 +8,8 @@ export default function LandingPage() {
     <div>
       <MarketingHeader />
       <Hero />
+      <SocialProof />
+      <BentoFeatures />
       <HowItWorks />
       <WhatItIsnt />
       <UseCases />
@@ -22,6 +24,7 @@ function Hero() {
   return (
     <section className="grain relative overflow-hidden border-b border-border">
       <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 mesh_bg" />
         <div className="absolute inset-0 dotgrid" />
         <div className="glow-layer -top-40 left-1/2 h-[520px] w-[820px] -translate-x-1/2" />
         <div className="glow-layer right-[5%] top-[45%] h-72 w-72 opacity-70" />
@@ -42,7 +45,7 @@ function Hero() {
             <h1 className="font-display text-5xl font-semibold leading-[1.05] tracking-[-0.02em] text-text sm:text-6xl lg:text-[4.75rem]">
               Track it. Build it.
               <br />
-              <em className="font-medium italic text-accent">Share it.</em>
+              <span className="gradient_text">Share it.</span>
             </h1>
           </Reveal>
 
@@ -77,6 +80,74 @@ function Hero() {
               No credit card required · 30 seconds to your first idea
             </p>
           </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StatCard({ value, label, icon }: { value: string; label: string; icon: React.ReactNode }) {
+  return (
+    <div className="stat_card group flex flex-col gap-2.5 p-5 text-center">
+      <div className="mx-auto mb-2 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-accent transition-all duration-300 group-hover:scale-110 group-hover:bg-accent/15">
+        {icon}
+      </div>
+      <p className="font-display text-2xl font-semibold tabular-nums tracking-tight text-text">{value}</p>
+      <p className="mt-0.5 text-xs text-text-secondary">{label}</p>
+    </div>
+  );
+}
+
+function SocialProof() {
+  return (
+    <section className="border-b border-border bg-bg">
+      <div className="section_container py-14 sm:py-18">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <StatCard value="10s" label="to capture an idea" icon={<Zap size={18} />} />
+          <StatCard value="5" label="stages from inbox to launched" icon={<TrendingUp size={18} />} />
+          <StatCard value="∞" label="share profiles" icon={<Users size={18} />} />
+          <StatCard value="0" label="sprint planning required" icon={<X size={18} />} />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BentoCard({ title, desc, icon, className = "" }: { title: string; desc: string; icon: React.ReactNode; className?: string }) {
+  return (
+    <div className={`group relative flex flex-col overflow-hidden rounded-2xl border border-border/70 bg-surface/80 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-glow ${className}`}>
+      <span className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent transition-all duration-300 group-hover:scale-110 group-hover:bg-accent group-hover:text-white">
+        {icon}
+      </span>
+      <h3 className="mb-2 font-display text-lg font-semibold tracking-tight text-text">{title}</h3>
+      <p className="text-sm leading-relaxed text-text-secondary">{desc}</p>
+    </div>
+  );
+}
+
+function BentoFeatures() {
+  const features = [
+    { title: "Capture in seconds", desc: "Drop any idea into your inbox in under 10 seconds. Title, one-liner, done.", icon: <Zap size={22} /> },
+    { title: "Track conviction", desc: "Rate how strongly you believe in each idea. Watch it grow or fade over time.", icon: <BarChart3 size={22} /> },
+    { title: "Log progress", desc: "Track mood, note what you shipped, keep momentum visible at a glance.", icon: <FileText size={22} /> },
+    { title: "Document stack", desc: "Which Supabase account? Which free tier? Never forget where your projects live.", icon: <Cloud size={22} /> },
+    { title: "Share portfolios", desc: "Pick which ideas to show. Control what's visible. Send one link to anyone.", icon: <Users size={22} /> },
+  ];
+
+  return (
+    <section className="border-b border-border bg-surface-2/30">
+      <div className="section_container py-16 sm:py-22">
+        <div className="mb-10 text-center">
+          <Reveal><p className="eyebrow justify-center">Features</p></Reveal>
+          <Reveal className="mt-4"><h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-text sm:text-4xl">Everything you need, nothing you don&apos;t</h2></Reveal>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <Reveal><BentoCard {...features[0]} /></Reveal>
+          <Reveal><BentoCard {...features[1]} /></Reveal>
+          <Reveal><BentoCard {...features[2]} className="sm:col-span-2 lg:col-span-1" /></Reveal>
+          <Reveal><BentoCard {...features[3]} className="sm:col-span-2" /></Reveal>
+          <Reveal><BentoCard {...features[4]} className="sm:col-span-2 lg:col-span-1" /></Reveal>
         </div>
       </div>
     </section>
@@ -256,32 +327,30 @@ function WhatItIsnt() {
   );
 }
 
+function UseCaseCard({ emoji, title, desc }: { emoji: string; title: string; desc: string }) {
+  return (
+    <Reveal className="h-full">
+      <div className="group flex h-full flex-col rounded-2xl border border-border bg-surface p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow">
+        <div className="mb-4 flex items-center justify-between">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10 text-base transition-colors group-hover:bg-accent group-hover:text-white">
+            {emoji}
+          </span>
+        </div>
+        <h3 className="mb-2 font-display text-lg font-semibold tracking-tight text-text">{title}</h3>
+        <p className="text-sm leading-relaxed text-text-secondary">{desc}</p>
+      </div>
+    </Reveal>
+  );
+}
+
 function UseCases() {
   const useCases = [
-    {
-      title: "Solo founders",
-      desc: "Track 5 ideas in parallel. Document which free tiers you're burning through. Share progress with mentors.",
-    },
-    {
-      title: "Researchers",
-      desc: "Log experiments, document datasets, track preprints. Link DOIs and journal submissions.",
-    },
-    {
-      title: "Writers",
-      desc: "Track essays, drafts, and publications. Note submission status and where each piece lives.",
-    },
-    {
-      title: "Grant applicants",
-      desc: "Curate a portfolio showing only shipped projects. Control what reviewers see.",
-    },
-    {
-      title: "Indie hackers",
-      desc: "Document your SaaS stack, track conviction over time, share your build-in-public journey.",
-    },
-    {
-      title: "Portfolio builders",
-      desc: "One shareable link with 3 best projects. Hide the rest. Perfect for client pitches.",
-    },
+    { emoji: "🚀", title: "Solo founders", desc: "Track 5 ideas in parallel. Document which free tiers you're burning through. Share progress with mentors." },
+    { emoji: "🔬", title: "Researchers", desc: "Log experiments, document datasets, track preprints. Link DOIs and journal submissions." },
+    { emoji: "✍️", title: "Writers", desc: "Track essays, drafts, and publications. Note submission status and where each piece lives." },
+    { emoji: "📋", title: "Grant applicants", desc: "Curate a portfolio showing only shipped projects. Control what reviewers see." },
+    { emoji: "💡", title: "Indie hackers", desc: "Document your SaaS stack, track conviction over time, share your build-in-public journey." },
+    { emoji: "🎨", title: "Portfolio builders", desc: "One shareable link with 3 best projects. Hide the rest. Perfect for client pitches." },
   ];
 
   return (
@@ -299,20 +368,8 @@ function UseCases() {
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {useCases.map((use, i) => (
-            <Reveal key={use.title} className="h-full">
-              <div className="group flex h-full flex-col rounded-2xl border border-border bg-surface p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:shadow-glow">
-                <div className="mb-4 flex items-center justify-between">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10 font-mono text-xs font-semibold text-accent transition-colors group-hover:bg-accent group-hover:text-white">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </div>
-                <h3 className="mb-2 font-display text-lg font-semibold tracking-tight text-text">
-                  {use.title}
-                </h3>
-                <p className="text-sm leading-relaxed text-text-secondary">{use.desc}</p>
-              </div>
-            </Reveal>
+          {useCases.map((use) => (
+            <UseCaseCard key={use.title} {...use} />
           ))}
         </div>
       </div>
@@ -377,7 +434,7 @@ function BottomCTA() {
       </div>
       <div className="relative z-10 mx-auto max-w-4xl px-4 py-24 text-center sm:px-6 sm:py-32">
         <Reveal>
-          <div className="mx-auto mb-8 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/10 shadow-glow">
+          <div className="mx-auto mb-8 inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-surface shadow-glow">
             <img
               src="/image/iconalone.png"
               alt="ProdLog"

@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Idea, IdeaType, Stage } from "@/lib/schema";
 import { IDEA_TYPES, STAGES } from "@/lib/schema";
-import { Grid3X3, Rows, SlidersHorizontal, X } from "lucide-react";
+import { Grid3X3, Rows, SlidersHorizontal, X, Search, Plus } from "lucide-react";
 
 export function IdeasIndexClient({
   initialIdeas,
@@ -47,14 +47,12 @@ export function IdeasIndexClient({
     });
   }, [initialIdeas, q, stage, type, selectedTags]);
 
-  // Build tag cloud from all ideas
   const allTags = useMemo(() => {
     const s = new Set<string>();
     for (const i of initialIdeas) for (const t of i.tags ?? []) if (t) s.add(t);
     return Array.from(s).sort((a, b) => a.localeCompare(b));
   }, [initialIdeas]);
 
-  // Sync state -> URL (debounced for search)
   useEffect(() => {
     const handle = setTimeout(() => {
       const sp = new URLSearchParams();
@@ -82,120 +80,116 @@ export function IdeasIndexClient({
     setSelectedTags([]);
   }
 
+  const filterCount = (stage !== "all" ? 1 : 0) + (type !== "all" ? 1 : 0) + (q ? 1 : 0) + (selectedTags.length > 0 ? 1 : 0);
+
   return (
     <div className="space-y-6">
-      <div className="space-y-1">
-        <p className="font-mono text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-text-muted">All ideas</p>
+      {/* Page header */}
+      <div className="space-y-1.5">
+        <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.18em] text-text-muted">All ideas</p>
         <h1 className="font-display text-3xl font-medium tracking-tight text-text">Ideas</h1>
       </div>
 
       {/* Controls */}
-      <div className="card divide-y divide-border overflow-hidden">
-        <div className="grid items-center gap-3 p-3 sm:grid-cols-[1fr_auto_auto] sm:p-4">
-          <div className="flex items-center gap-2">
+      <div className="card divide-y divide-border/60 overflow-hidden">
+        <div className="grid items-center gap-3 p-3 sm:grid-cols-[1fr_auto_auto_auto] sm:p-4">
+          <div className="relative">
+            <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search title, one-liner, tags…"
-              className="input"
+              className="input h-10 pl-11 text-sm"
             />
             {q && (
               <button
                 aria-label="Clear search"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary hover:border-border-strong"
+                className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-surface text-text-secondary hover:border-border-strong transition-colors"
                 onClick={() => setQ("")}
               >
-                <X size={16} />
+                <X size={14} />
               </button>
             )}
           </div>
 
           <div className="flex items-center gap-2">
-            <label className="hidden text-xs font-medium text-text-secondary sm:block">
-              Stage
-            </label>
+            <label className="hidden text-xs font-medium text-text-secondary sm:block">Stage</label>
             <select
-              className="input"
+              className="input h-10 text-xs"
               value={stage}
               onChange={(e) => setStage(e.target.value as any)}
             >
               <option value="all">All</option>
               {STAGES.map((s) => (
-                <option key={s.key} value={s.key}>
-                  {s.label}
-                </option>
+                <option key={s.key} value={s.key}>{s.label}</option>
               ))}
             </select>
           </div>
 
-          <div className="flex items-center justify-between gap-2 sm:justify-end">
-            <div className="flex items-center gap-2">
-              <label className="hidden text-xs font-medium text-text-secondary sm:block">
-                Type
-              </label>
-              <select
-                className="input"
-                value={type}
-                onChange={(e) => setType(e.target.value as any)}
-              >
-                <option value="all">All</option>
-                {IDEA_TYPES.map((t) => (
-                  <option key={t.key} value={t.key}>
-                    {t.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="hidden items-center gap-1 sm:flex">
-              <span className="text-xs font-medium text-text-muted">View</span>
-              <button
-                className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs ${
-                  view === "grid"
-                    ? "border-accent bg-accent/5 text-accent"
-                    : "border-border text-text-secondary hover:border-border-strong"
-                }`}
-                onClick={() => setView("grid")}
-              >
-                <Grid3X3 size={14} /> Grid
-              </button>
-              <button
-                className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs ${
-                  view === "table"
-                    ? "border-accent bg-accent/5 text-accent"
-                    : "border-border text-text-secondary hover:border-border-strong"
-                }`}
-                onClick={() => setView("table")}
-              >
-                <Rows size={14} /> Table
-              </button>
-            </div>
-
-            <Link href="/ideas/new" className="btn-primary">
-              New idea
-            </Link>
+          <div className="flex items-center gap-2">
+            <label className="hidden text-xs font-medium text-text-secondary sm:block">Type</label>
+            <select
+              className="input h-10 text-xs"
+              value={type}
+              onChange={(e) => setType(e.target.value as any)}
+            >
+              <option value="all">All</option>
+              {IDEA_TYPES.map((t) => (
+                <option key={t.key} value={t.key}>{t.label}</option>
+              ))}
+            </select>
           </div>
+
+          <div className="flex items-center gap-2 sm:hidden lg:flex">
+            <span className="text-xs font-medium text-text-muted mr-0.5">View</span>
+            <button
+              className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-all ${
+                view === "grid"
+                  ? "border-accent bg-accent/5 text-accent shadow-sm"
+                  : "border-border text-text-secondary hover:border-border-strong"
+              }`}
+              onClick={() => setView("grid")}
+            >
+              <Grid3X3 size={14} /> Grid
+            </button>
+            <button
+              className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-all ${
+                view === "table"
+                  ? "border-accent bg-accent/5 text-accent shadow-sm"
+                  : "border-border text-text-secondary hover:border-border-strong"
+              }`}
+              onClick={() => setView("table")}
+            >
+              <Rows size={14} /> Table
+            </button>
+          </div>
+
+          <Link href="/ideas/new" className="btn-primary px-4 py-2 text-xs font-semibold">
+            <Plus size={14} />
+            New idea
+          </Link>
         </div>
 
-        <div className="flex flex-col gap-2 px-4 py-2 text-xs text-text-muted sm:flex-row sm:items-center sm:justify-between">
-          <span>
-            {filtered.length} of {initialIdeas.length} ideas
-          </span>
-          <div className="flex items-center gap-2">
-            <div className="inline-flex items-center gap-1 text-xs">
+        <div className="flex flex-col gap-2 px-4 py-2.5 text-xs text-text-muted sm:flex-row sm:items-center sm:justify-between bg-surface-2/30">
+          <span className="font-medium">{filtered.length} of {initialIdeas.length} ideas</span>
+          <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-1 text-text-muted">
               <SlidersHorizontal size={12} />
-              Filters active: {(stage !== "all" ? 1 : 0) + (type !== "all" ? 1 : 0) + (q ? 1 : 0) + (selectedTags.length > 0 ? 1 : 0)}
+              Filters active: <span className="font-medium text-text">{filterCount}</span>
             </div>
-            <button
-              className="inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs text-text-secondary hover:border-border-strong"
-              onClick={clearFilters}
-            >
-              <X size={12} /> Clear filters
-            </button>
+            {filterCount > 0 && (
+              <button
+                className="inline-flex items-center gap-1 rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium text-text-secondary hover:border-border-strong transition-colors"
+                onClick={clearFilters}
+              >
+                <X size={12} /> Clear all
+              </button>
+            )}
           </div>
         </div>
       </div>
 
+      {/* Tag cloud */}
       {allTags.length > 0 && (
         <div className="-mt-2 flex flex-wrap gap-1.5">
           {allTags.map((t) => {
@@ -204,25 +198,26 @@ export function IdeasIndexClient({
               <button
                 key={t}
                 onClick={() => toggleTag(t)}
-                className={`rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
+                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-all ${
                   active
-                    ? "border border-accent bg-accent/5 text-accent"
-                    : "border border-border bg-surface text-text-secondary hover:border-border-strong"
+                    ? "border border-accent bg-accent text-white shadow-sm"
+                    : "border border-border bg-surface/80 text-text-secondary hover:border-border-strong"
                 }`}
-                title={active ? "Remove tag filter" : "Filter by tag"}
               >
                 {t}
+                {active && <X size={10} />}
               </button>
             );
           })}
         </div>
       )}
 
+      {/* Grid or Table */}
       {view === "grid" ? (
         <GridView ideas={filtered} addonCounts={addonCounts} />
       ) : (
-        <TableView ideas={filtered} addonCounts={addonCounts} />)
-      }
+        <TableView ideas={filtered} addonCounts={addonCounts} />
+      )}
     </div>
   );
 }
@@ -238,42 +233,39 @@ function GridView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<s
           <Link
             key={idea.id}
             href={`/ideas/${idea.id}`}
-            className="group rounded-xl border border-border bg-surface p-4 shadow-card transition-all hover:-translate-y-px hover:border-border-strong hover:shadow-card-hover"
+            className="group block overflow-hidden rounded-xl border border-border/70 bg-surface/80 backdrop-blur-sm p-4 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-card-hover"
           >
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 text-base font-medium text-text">
-                  {/* type icon removed for professional tone */}
-                  {idea.title}
-                </div>
-                <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-2 py-0.5 text-xs font-medium text-text-muted">
-                  <span className={`h-1.5 w-1.5 rounded-full ${stageDef?.color}`} />
-                  {stageDef?.label}
-                </span>
-              </div>
+            <div className="flex items-center justify-between gap-2 mb-1.5">
+              <span className="text-[15px] font-semibold text-text truncate">{idea.title}</span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-surface-2/80 px-2 py-0.5 text-xs font-medium text-text-muted">
+                <span className={`h-1.5 w-1.5 rounded-full ${stageDef?.color}`} />
+                {stageDef?.label}
+              </span>
+            </div>
 
             {idea.one_liner && (
-              <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-text-secondary">{idea.one_liner}</p>
+              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-text-secondary">{idea.one_liner}</p>
             )}
 
             <div className="mt-3 space-y-2">
-              <div className="h-1 w-full overflow-hidden rounded-full bg-surface-2">
+              <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
                 <div
-                  className="h-full rounded-full bg-accent/70 transition-all"
+                  className="h-full rounded-full bg-gradient-to-r from-accent/60 to-accent transition-all duration-500"
                   style={{ width: `${idea.conviction * 10}%` }}
                 />
               </div>
               <div className="flex items-center justify-between text-xs text-text-muted">
-                <span>Conviction {idea.conviction}/10</span>
+                <span>Conviction <span className="font-medium text-text">{idea.conviction}/10</span></span>
                 <span className="tabular-nums">{new Date(idea.updated_at).toLocaleDateString()}</span>
               </div>
             </div>
 
-            <div className="mt-3 flex items-center justify-between text-xs text-text-muted">
-              <span>{addons} add-ons</span>
+            <div className="mt-3 flex items-center justify-between text-xs text-text-muted pt-2 border-t border-border/40">
+              <span>{addons} add-on{addons !== 1 ? 's' : ''}</span>
               {idea.tags?.length ? (
-                <span className="truncate">{idea.tags.slice(0, 2).join(", ")}{idea.tags.length > 2 ? "…" : ""}</span>
+                <span className="truncate max-w-[50%]">{idea.tags.slice(0, 2).join(", ")}{idea.tags.length > 2 ? '…' : ""}</span>
               ) : (
-                <span className="opacity-60">No tags</span>
+                <span className="opacity-60 italic">No tags</span>
               )}
             </div>
           </Link>
@@ -285,17 +277,17 @@ function GridView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<s
 
 function TableView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<string, number> }) {
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-[720px] w-full border-collapse rounded-xl border border-border bg-surface text-sm shadow-card">
-        <thead className="bg-surface-2/50 text-left text-xs text-text-secondary">
-          <tr>
-            <th className="p-3 font-medium">Title</th>
+    <div className="overflow-x-auto rounded-xl border border-border/70 bg-surface/80 backdrop-blur-sm shadow-card">
+      <table className="min-w-[720px] w-full border-collapse text-sm">
+        <thead>
+          <tr className="bg-surface-2/50 text-left text-xs text-text-secondary">
+            <th className="rounded-tl-xl p-3 font-medium">Title</th>
             <th className="p-3 font-medium">Type</th>
             <th className="p-3 font-medium">Stage</th>
             <th className="p-3 font-medium">Conviction</th>
             <th className="p-3 font-medium">Tags</th>
             <th className="p-3 font-medium">Add-ons</th>
-            <th className="p-3 font-medium">Updated</th>
+            <th className="rounded-tr-xl p-3 font-medium">Updated</th>
           </tr>
         </thead>
         <tbody>
@@ -303,26 +295,26 @@ function TableView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<
             const typeDef = IDEA_TYPES.find((t) => t.key === (i.idea_type ?? "app"));
             const stageDef = STAGES.find((s) => s.key === i.stage);
             return (
-              <tr key={i.id} className="border-t border-border/80 hover:bg-surface-2/40">
+              <tr key={i.id} className="group border-t border-border/50 transition-colors hover:bg-surface-2/40">
                 <td className="p-3">
-                  <Link href={`/ideas/${i.id}`} className="font-medium text-text hover:underline">
+                  <Link href={`/ideas/${i.id}`} className="font-medium text-text group-hover:text-accent transition-colors">
                     {i.title}
                   </Link>
                   {i.one_liner && (
-                    <div className="text-xs text-text-muted line-clamp-1">{i.one_liner}</div>
+                    <div className="mt-0.5 text-xs text-text-muted line-clamp-1">{i.one_liner}</div>
                   )}
                 </td>
-                <td className="p-3">{typeDef?.label}</td>
+                <td className="p-3 text-text-secondary">{typeDef?.label}</td>
                 <td className="p-3">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-surface-2 px-2 py-0.5 text-xs font-medium text-text-muted">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-surface-2/80 px-2 py-0.5 text-xs font-medium text-text-muted">
                     <span className={`h-1.5 w-1.5 rounded-full ${stageDef?.color}`} />
                     {stageDef?.label}
                   </span>
                 </td>
-                <td className="p-3 tabular-nums">{i.conviction}/10</td>
-                <td className="p-3 text-text-muted">{i.tags?.join(", ") || <span className="opacity-60">—</span>}</td>
+                <td className="p-3 tabular-nums"><span className="font-medium text-text">{i.conviction}</span>/10</td>
+                <td className="p-3 text-text-muted max-w-[180px] truncate">{i.tags?.join(", ") || <span className="opacity-50">—</span>}</td>
                 <td className="p-3 tabular-nums">{addonCounts[i.id] ?? 0}</td>
-                <td className="p-3 text-text-muted">{new Date(i.updated_at).toLocaleDateString()}</td>
+                <td className="p-3 text-text-muted whitespace-nowrap">{new Date(i.updated_at).toLocaleDateString()}</td>
               </tr>
             );
           })}

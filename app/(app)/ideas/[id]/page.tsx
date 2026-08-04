@@ -14,5 +14,5 @@ export default async function IdeaPage({
   const entries = await getEntries(id);
   const addons = await getAddons(id);
 
-  return <IdeaDetailPage idea={idea} entries={entries} addons={addons} />;
+  return <IdeaDetailPage idea={idea} entries={entries} />;
 }

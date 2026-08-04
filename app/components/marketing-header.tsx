@@ -8,6 +8,13 @@ import { ThemeToggle } from "./theme-toggle";
 export function MarketingHeader() {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 12);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Scrollspy for landing sections
   useEffect(() => {
@@ -18,7 +25,6 @@ export function MarketingHeader() {
     if (sections.length === 0) return;
     const io = new IntersectionObserver(
       (entries) => {
-        // Pick the entry with the largest intersection ratio
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
@@ -34,8 +40,9 @@ export function MarketingHeader() {
     `text-sm font-medium transition-colors ${
       active === id ? "text-text" : "text-text-secondary hover:text-text"
     }`;
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-bg/95 backdrop-blur-md">
+    <header className={`sticky top-0 z-50 border-b border-border/60 transition-all duration-300 ${scrolled ? "glass_panel shadow-glass-sm" : "bg-bg/95 backdrop-blur-md"}`}>
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-3">
           <button
@@ -46,11 +53,13 @@ export function MarketingHeader() {
             <Menu size={16} />
           </button>
           <Link href="/" className="group flex items-center gap-2.5">
-            <img
-              src="/image/iconalone.png"
-              alt="ProdLog"
-              className="h-7 w-7 object-contain transition-transform group-hover:-rotate-3"
-            />
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10 transition-transform duration-300 group-hover:rotate-6">
+              <img
+                src="/image/iconalone.png"
+                alt="ProdLog"
+                className="h-6 w-6 object-contain"
+              />
+            </span>
             <span className="font-display text-lg font-medium tracking-tight text-text">
               prodlog
             </span>
@@ -75,15 +84,17 @@ export function MarketingHeader() {
 
       {open && (
         <div className="sm:hidden fixed inset-0 z-50" role="dialog" aria-modal="true">
-          <div className="absolute inset-0 bg-black/20" onClick={() => setOpen(false)} />
+          <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={() => setOpen(false)} />
           <div className="absolute inset-y-0 left-0 w-72 max-w-[85%] border-r border-border bg-bg shadow-xl">
             <div className="px-4 pb-4 pt-3">
               <Link href="/" className="group flex items-center gap-2.5" onClick={() => setOpen(false)}>
-                <img
-                  src="/image/iconalone.png"
-                  alt="ProdLog"
-                  className="h-7 w-7 object-contain"
-                />
+                <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
+                  <img
+                    src="/image/iconalone.png"
+                    alt="ProdLog"
+                    className="h-5 w-5 object-contain"
+                  />
+                </span>
                 <span className="font-display text-lg font-medium tracking-tight text-text">
                   prodlog
                 </span>
