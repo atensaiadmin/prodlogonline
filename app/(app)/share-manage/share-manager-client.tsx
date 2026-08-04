@@ -19,6 +19,7 @@ import {
   setProfileIdeas,
   renameShareProfile,
   deleteShareProfile,
+  updateShareProfileDescription,
 } from "@/lib/actions";
 import { STAGES, VISIBILITY_LEVELS, IDEA_TYPES } from "@/lib/schema";
 import type { ShareProfile, Idea } from "@/lib/schema";
@@ -63,6 +64,11 @@ export default function ShareManagerClient({
   async function handleRename(id: string, name: string) {
     await renameShareProfile(id, name);
     setEditingId(null);
+    router.refresh();
+  }
+
+  async function handleSaveDescription(id: string, description: string) {
+    await updateShareProfileDescription(id, description);
     router.refresh();
   }
 
@@ -233,6 +239,13 @@ export default function ShareManagerClient({
                 </a>
               </div>
 
+              {/* Profile description */}
+              <DescriptionEditor
+                key={selectedProfile.id}
+                initial={selectedProfile.description ?? ""}
+                onSave={(d) => handleSaveDescription(selectedProfile.id, d)}
+              />
+
               {/* Checkbox list for idea selection */}
               <div>
                 <h4 className="mb-2.5 font-mono text-[0.75rem] font-bold uppercase tracking-[0.18em] text-text-secondary">
@@ -340,5 +353,48 @@ function RenameForm({
         <X size={13} />
       </button>
     </form>
+  );
+}
+
+function DescriptionEditor({
+  initial,
+  onSave,
+}: {
+  initial: string;
+  onSave: (description: string) => void;
+}) {
+  const [val, setVal] = useState(initial);
+  const [dirty, setDirty] = useState(false);
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center justify-between">
+        <h4 className="font-mono text-[0.75rem] font-bold uppercase tracking-[0.18em] text-text-secondary">
+          Description
+        </h4>
+        {dirty && (
+          <button
+            onClick={() => onSave(val.trim())}
+            className="btn-primary px-2.5 py-1 text-xs font-semibold"
+          >
+            <Check size={12} /> Save
+          </button>
+        )}
+      </div>
+      <textarea
+        value={val}
+        onChange={(e) => {
+          setVal(e.target.value);
+          setDirty(true);
+        }}
+        rows={2}
+        maxLength={220}
+        placeholder="Short description shown at the top of your share page — e.g. Building in public: web apps, tools, and side projects."
+        className="input w-full resize-none text-sm py-2"
+      />
+      <div className="flex items-center justify-between text-[11px] text-text-muted">
+        <span>Optional — appears under your profile name for anyone viewing the link.</span>
+        <span className="tabular-nums">{val.length}/220</span>
+      </div>
+    </div>
   );
 }

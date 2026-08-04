@@ -90,27 +90,59 @@ export async function addEntry(formData: FormData): Promise<string> {
   return entry.id;
 }
 
+export async function editEntry(formData: FormData): Promise<void> {
+  const id = formData.get("id") as string;
+  const body = (formData.get("body") as string)?.trim() ?? "";
+  const mood = (formData.get("mood") as Mood) || null;
+  const actionTaken = (formData.get("action_taken") as string)?.trim() ?? "";
+
+  if (!body && !actionTaken) throw new Error("Entry must have body or action");
+
+  await store.updateEntry(id, { body, mood, action_taken: actionTaken });
+}
+
+export async function deleteEntry(id: string) {
+  await store.deleteEntry(id);
+}
+
 export async function editIdea(formData: FormData): Promise<void> {
   const id = formData.get("id") as string;
   const title = (formData.get("title") as string)?.trim();
   if (!title) throw new Error("Title is required");
 
-  await store.updateIdea(id, {
-    title,
-    one_liner: (formData.get("one_liner") as string)?.trim() ?? "",
-    idea_type: (formData.get("idea_type") as IdeaType) || "app",
-    conviction: Math.min(
-      10,
-      Math.max(1, parseInt(formData.get("conviction") as string) || 5)
-    ),
-    tags: parseTags(formData.get("tags") as string),
-    links: {
-      repo: (formData.get("link_repo") as string)?.trim() || undefined,
-      deploy: (formData.get("link_deploy") as string)?.trim() || undefined,
-      docs: (formData.get("link_docs") as string)?.trim() || undefined,
-    },
-    visibility: (formData.get("visibility") as VisibilityLevel) || "private",
-  });
+  // Partial update: only touch fields that are present in the form so
+  // editing just the header never clobbers conviction/links/visibility.
+  const updates: Partial<Omit<Idea, "id" | "created_at">> = { title };
+
+  const oneLiner = formData.get("one_liner");
+  if (oneLiner !== null) updates.one_liner = (oneLiner as string).trim();
+
+  const ideaType = formData.get("idea_type");
+  if (ideaType) updates.idea_type = ideaType as IdeaType;
+
+  const conviction = parseInt(formData.get("conviction") as string);
+  if (!Number.isNaN(conviction)) {
+    updates.conviction = Math.min(10, Math.max(1, conviction));
+  }
+
+  const tags = formData.get("tags");
+  if (tags !== null) updates.tags = parseTags(tags as string);
+
+  const linkRepo = formData.get("link_repo");
+  const linkDeploy = formData.get("link_deploy");
+  const linkDocs = formData.get("link_docs");
+  if (linkRepo !== null || linkDeploy !== null || linkDocs !== null) {
+    updates.links = {
+      repo: (linkRepo as string)?.trim() || undefined,
+      deploy: (linkDeploy as string)?.trim() || undefined,
+      docs: (linkDocs as string)?.trim() || undefined,
+    };
+  }
+
+  const visibility = formData.get("visibility");
+  if (visibility) updates.visibility = visibility as VisibilityLevel;
+
+  await store.updateIdea(id, updates);
 }
 
 export async function deleteIdea(id: string) {
@@ -188,6 +220,10 @@ export async function getAllProfileIdeaIds(): Promise<Record<string, string[]>> 
 
 export async function renameShareProfile(id: string, name: string) {
   await store.updateShareProfile(id, { name });
+}
+
+export async function updateShareProfileDescription(id: string, description: string) {
+  await store.updateShareProfile(id, { description });
 }
 
 export async function deleteShareProfile(id: string) {

@@ -47,12 +47,16 @@ create table if not exists public.addons (
 
 -- Share profiles
 create table if not exists public.share_profiles (
-  id         uuid primary key default gen_random_uuid(),
-  name       text not null,
-  slug       text not null unique,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  id          uuid primary key default gen_random_uuid(),
+  name        text not null,
+  slug        text not null unique,
+  description text not null default '',
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now()
 );
+
+-- Backfill description for existing rows (idempotent)
+alter table public.share_profiles add column if not exists description text not null default '';
 
 -- Share profile <-> idea join
 create table if not exists public.share_profile_ideas (

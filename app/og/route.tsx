@@ -11,6 +11,7 @@ const OG_SIZE = {
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const title = searchParams.get("title") || "prodlog — the progress log for solo founders";
+  const description = searchParams.get("description") || "";
 
   return new ImageResponse(
     (
@@ -68,20 +69,43 @@ export async function GET(request: Request) {
           <div style={{ fontSize: 28, fontWeight: 700 }}>prodlog</div>
         </div>
 
-        {/* title */}
+        {/* title + description */}
         <div
           style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 28,
             maxWidth: 960,
             padding: "0 40px",
             textAlign: "center",
-            fontSize: 64,
-            lineHeight: 1.15,
-            fontWeight: 800,
-            letterSpacing: -1,
-            textShadow: "0 2px 16px rgba(0,0,0,0.2)",
           }}
         >
-          {title}
+          <div
+            style={{
+              fontSize: 64,
+              lineHeight: 1.15,
+              fontWeight: 800,
+              letterSpacing: -1,
+              textShadow: "0 2px 16px rgba(0,0,0,0.2)",
+            }}
+          >
+            {title}
+          </div>
+          {description && (
+            <div
+              style={{
+                fontSize: 30,
+                lineHeight: 1.4,
+                fontWeight: 500,
+                opacity: 0.95,
+                maxWidth: 760,
+                textShadow: "0 1px 8px rgba(0,0,0,0.15)",
+              }}
+            >
+              {description}
+            </div>
+          )}
         </div>
 
         {/* tagline */}

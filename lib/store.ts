@@ -87,6 +87,21 @@ export async function insertEntry(entry: Entry) {
   if (error) throw new Error(error.message);
 }
 
+export async function updateEntry(
+  id: string,
+  updates: Partial<Omit<Entry, "id" | "idea_id" | "created_at">>
+) {
+  const supabase = await createServerSupabase();
+  const { error } = await supabase.from("entries").update(updates).eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteEntry(id: string) {
+  const supabase = await createServerSupabase();
+  const { error } = await supabase.from("entries").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
 // ---- Addons ----
 
 export async function getAddons(ideaId?: string): Promise<Addon[]> {
@@ -200,7 +215,7 @@ export async function insertShareProfile(name: string): Promise<ShareProfile> {
     slug = `${base}-${i++}`;
   }
   const now = new Date().toISOString();
-  const profile: ShareProfile = { id: crypto.randomUUID(), name: name.trim(), slug, created_at: now, updated_at: now };
+  const profile: ShareProfile = { id: crypto.randomUUID(), name: name.trim(), slug, description: "", created_at: now, updated_at: now };
   const { error } = await supabase.from("share_profiles").insert(profile);
   if (error) throw new Error(error.message);
   return profile;

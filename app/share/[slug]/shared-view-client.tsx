@@ -48,9 +48,15 @@ export default function SharedViewClient({
         <h1 className="font-display text-3xl font-medium tracking-tight text-text sm:text-4xl">
           {profile.name}
         </h1>
-        <p className="mt-1.5 text-sm leading-relaxed text-text-secondary max-w-xl">
-          A curated collection of projects in progress.
-        </p>
+        {profile.description ? (
+          <p className="mt-1.5 text-sm leading-relaxed text-text-secondary max-w-xl">
+            {profile.description}
+          </p>
+        ) : (
+          <p className="mt-1.5 text-sm leading-relaxed text-text-secondary max-w-xl">
+            A curated collection of projects in progress.
+          </p>
+        )}
       </section>
 
       {ideas.length === 0 ? (
