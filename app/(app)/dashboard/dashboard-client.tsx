@@ -135,7 +135,7 @@ export function DashboardClient({
                         href={`/ideas/${idea.id}`}
                         className="group relative block overflow-hidden rounded-xl border border-border/70 bg-surface/80 backdrop-blur-sm p-3.5 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-card-hover"
                       >
-                        <p className="text-[15px] font-semibold leading-snug text-text">
+                        <p className="text-sm font-semibold leading-snug text-text line-clamp-2">
                           {idea.title}
                         </p>
                         {idea.one_liner && (

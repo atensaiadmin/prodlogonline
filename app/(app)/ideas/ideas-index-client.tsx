@@ -244,7 +244,7 @@ function GridView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<s
             className="group block overflow-hidden rounded-xl border border-border/70 bg-surface/80 backdrop-blur-sm p-4 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-card-hover"
           >
             <div className="flex items-center justify-between gap-2 mb-1.5">
-              <span className="text-[15px] font-semibold text-text truncate">{idea.title}</span>
+              <span className="text-sm font-semibold text-text truncate">{idea.title}</span>
               <span className="inline-flex items-center gap-1 rounded-full bg-surface-2/80 px-2 py-0.5 text-xs font-medium text-text-muted">
                 <span className={`h-1.5 w-1.5 rounded-full ${stageDef?.color}`} />
                 {stageDef?.label}
