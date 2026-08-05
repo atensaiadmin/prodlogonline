@@ -3,6 +3,7 @@ import { STAGES } from "@/lib/schema";
 import type { Idea } from "@/lib/schema";
 import { DashboardClient } from "./dashboard-client";
 
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 function groupByStage(ideas: Idea[]) {

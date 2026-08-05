@@ -1,6 +1,7 @@
 import { getShareProfiles, getIdeas, getAllProfileIdeaIds } from "@/lib/actions";
 import ShareManagerClient from "./share-manager-client";
 
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 export default async function ShareManagePage() {

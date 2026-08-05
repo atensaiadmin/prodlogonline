@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getSharedProfileData, getShareProfileBySlug } from "@/lib/actions";
 import SharedViewClient from "./shared-view-client";
 
+export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({

@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { getIdea, getEntries, getAddons } from "@/lib/actions";
 import IdeaDetailPage from "./idea-detail-client";
 
+export const runtime = "edge";
+
 export default async function IdeaPage({
   params,
 }: {
