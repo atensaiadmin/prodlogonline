@@ -51,12 +51,14 @@ create table if not exists public.share_profiles (
   name        text not null,
   slug        text not null unique,
   description text not null default '',
+  layer       text not null default 'pitch',
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
 );
 
--- Backfill description for existing rows (idempotent)
+-- Backfill for existing rows (idempotent)
 alter table public.share_profiles add column if not exists description text not null default '';
+alter table public.share_profiles add column if not exists layer text not null default 'pitch';
 
 -- Share profile <-> idea join
 create table if not exists public.share_profile_ideas (

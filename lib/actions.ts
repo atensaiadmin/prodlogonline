@@ -2,7 +2,7 @@
 
 import { v4 as uuidv4 } from "uuid";
 import * as store from "./store";
-import type { Idea, Entry, Addon, Stage, Mood, AddonCategory, VisibilityLevel, Links, ShareProfile, SharedIdea, IdeaType } from "./schema";
+import type { Idea, Entry, Addon, Stage, Mood, AddonCategory, VisibilityLevel, Links, ShareProfile, SharedIdea, IdeaType, ProfileLayer } from "./schema";
 
 export async function getIdeas(): Promise<Idea[]> {
   return store.getIdeas();
@@ -224,6 +224,10 @@ export async function renameShareProfile(id: string, name: string) {
 
 export async function updateShareProfileDescription(id: string, description: string) {
   await store.updateShareProfile(id, { description });
+}
+
+export async function updateShareProfileLayer(id: string, layer: ProfileLayer) {
+  await store.updateShareProfile(id, { layer });
 }
 
 export async function deleteShareProfile(id: string) {

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Github, Globe, BookOpen, ExternalLink, Layers, History, ChevronDown, ChevronRight, Zap, Sparkles, Minus, HelpCircle, AlertTriangle } from "lucide-react";
 import { STAGES, MOODS, ADDON_CATEGORIES, IDEA_TYPES } from "@/lib/schema";
-import type { ShareProfile, SharedIdea, Stage, VisibilityLevel } from "@/lib/schema";
+import type { ShareProfile, SharedIdea, Stage, VisibilityLevel, ProfileLayer } from "@/lib/schema";
 
 const MOOD_ICON: Record<string, React.ReactNode> = {
   excited: <Zap size={12} className="text-amber-500" />,
@@ -13,20 +13,35 @@ const MOOD_ICON: Record<string, React.ReactNode> = {
   frustrated: <AlertTriangle size={12} className="text-rose-500" />,
 };
 
-function shouldShowLinks(visibility: VisibilityLevel) {
-  return visibility === "links" || visibility === "docs" || visibility === "summary" || visibility === "full";
+// What a profile layer allows on the share page.
+function layerFlags(layer: ProfileLayer) {
+  switch (layer) {
+    case "pitch":
+      return { showRepo: false, showDeploy: true, showDocs: true, showAddons: false, showEntries: false };
+    case "tech":
+      return { showRepo: true, showDeploy: true, showDocs: true, showAddons: false, showEntries: false };
+    case "full":
+      return { showRepo: true, showDeploy: true, showDocs: true, showAddons: true, showEntries: true };
+  }
 }
 
-function shouldShowDocs(visibility: VisibilityLevel) {
-  return visibility === "docs" || visibility === "summary" || visibility === "full";
-}
-
-function shouldShowSummary(visibility: VisibilityLevel) {
+// Per-idea caps: an idea's own visibility can still hide more.
+function capOneLiner(visibility: VisibilityLevel) {
   return visibility === "summary" || visibility === "full";
 }
-
-function shouldShowFull(visibility: VisibilityLevel) {
+function capDocs(visibility: VisibilityLevel) {
+  return visibility === "docs" || visibility === "summary" || visibility === "full";
+}
+function capFull(visibility: VisibilityLevel) {
   return visibility === "full";
+}
+
+// Conviction bar changes shade by score: low -> all-in.
+function convictionGradient(conviction: number) {
+  if (conviction <= 3) return "from-rose-500/60 to-rose-500";
+  if (conviction <= 6) return "from-amber-500/60 to-amber-500";
+  if (conviction <= 8) return "from-emerald-500/60 to-emerald-500";
+  return "from-cyan-500/60 to-cyan-500";
 }
 
 export default function SharedViewClient({
@@ -72,10 +87,14 @@ export default function SharedViewClient({
             const stage = STAGES.find((s) => s.key === idea.stage)!;
             const typeDef = IDEA_TYPES.find((t) => t.key === (idea.idea_type ?? "app"))!;
             const expanded = expandedId === idea.id;
-            const showLinks = shouldShowLinks(idea.visibility);
-            const showDocs = shouldShowDocs(idea.visibility);
-            const showSummary = shouldShowSummary(idea.visibility);
-            const showFull = shouldShowFull(idea.visibility);
+            const lf = layerFlags(profile.layer ?? "pitch");
+            const showOneLiner = capOneLiner(idea.visibility);
+            const showRepo = lf.showRepo;
+            const showDeploy = lf.showDeploy;
+            const showDocs = lf.showDocs && capDocs(idea.visibility);
+            const showAddons = lf.showAddons && capFull(idea.visibility);
+            const showEntries = lf.showEntries && capFull(idea.visibility);
+            const showLinks = showRepo || showDeploy || showDocs;
 
             return (
               <div key={idea.id} className="card overflow-hidden rounded-xl">
@@ -105,29 +124,29 @@ export default function SharedViewClient({
                     <h3 className="font-display text-lg font-semibold text-text">
                       {idea.title}
                     </h3>
-                    {showSummary && idea.one_liner && (
+                    {showOneLiner && idea.one_liner && (
                       <p className="mt-1 text-sm leading-relaxed text-text-secondary line-clamp-2">
                         {idea.one_liner}
                       </p>
                     )}
-                    {showSummary && (
+                    {showOneLiner && (
                       <div className="mt-2.5 flex items-center gap-4 text-xs text-text-muted flex-wrap">
                         <span className="flex items-center gap-1.5">
                           <div className="h-1.5 w-16 overflow-hidden rounded-full bg-surface-2">
                             <div
-                              className="h-full rounded-full bg-gradient-to-r from-accent/60 to-accent"
+                              className={`h-full rounded-full bg-gradient-to-r ${convictionGradient(idea.conviction)}`}
                               style={{ width: `${idea.conviction * 10}%` }}
                             />
                           </div>
                           Conviction <span className="font-medium text-text">{idea.conviction}/10</span>
                         </span>
-                        {showFull && entries.length > 0 && (
+                        {showEntries && entries.length > 0 && (
                           <span className="flex items-center gap-1">
                             <History size={13} /> {entries.length}{" "}
                             {entries.length === 1 ? "entry" : "entries"}
                           </span>
                         )}
-                        {addons.filter((a) => a.visible).length > 0 && (
+                        {showAddons && addons.filter((a) => a.visible).length > 0 && (
                           <span className="flex items-center gap-1">
                             <Layers size={13} />{" "}
                             {addons.filter((a) => a.visible).length}{" "}
@@ -146,7 +165,7 @@ export default function SharedViewClient({
                   <div className="border-t border-border/60 px-5 pb-5 pt-4 space-y-5">
                     {showLinks && (idea.links?.repo || idea.links?.deploy || (showDocs && idea.links?.docs)) && (
                       <div className="flex flex-wrap gap-2.5">
-                        {idea.links?.repo && (
+                        {showRepo && idea.links?.repo && (
                           <a
                             href={idea.links.repo}
                             target="_blank"
@@ -156,7 +175,7 @@ export default function SharedViewClient({
                             <Github size={13} /> {typeDef.links.repo} <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                           </a>
                         )}
-                        {idea.links?.deploy && (
+                        {showDeploy && idea.links?.deploy && (
                           <a
                             href={idea.links.deploy}
                             target="_blank"
@@ -179,7 +198,7 @@ export default function SharedViewClient({
                       </div>
                     )}
 
-                    {showFull && addons.filter((a) => a.visible).length > 0 && (
+                    {showAddons && addons.filter((a) => a.visible).length > 0 && (
                       <div>
                         <h4 className="mb-2.5 flex items-center gap-1.5 text-sm font-semibold text-text-secondary">
                           <Package size={14} />
@@ -231,7 +250,7 @@ export default function SharedViewClient({
                       </div>
                     )}
 
-                    {showFull && entries.length > 0 && (
+                    {showEntries && entries.length > 0 && (
                       <div>
                         <h4 className="mb-2.5 flex items-center gap-1.5 text-sm font-semibold text-text-secondary">
                           <History size={14} />

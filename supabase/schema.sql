@@ -51,6 +51,7 @@ create table if not exists public.share_profiles (
   name        text not null,
   slug        text not null unique,
   description text not null default '',
+  layer       text not null default 'pitch',
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
 );

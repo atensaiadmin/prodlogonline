@@ -7,6 +7,14 @@ import type { Idea, IdeaType, Stage } from "@/lib/schema";
 import { IDEA_TYPES, STAGES } from "@/lib/schema";
 import { Grid3X3, Rows, SlidersHorizontal, X, Search, Plus } from "lucide-react";
 
+// Conviction bar changes shade by score: low -> all-in.
+function convictionGradient(conviction: number) {
+  if (conviction <= 3) return "from-rose-500/60 to-rose-500";
+  if (conviction <= 6) return "from-amber-500/60 to-amber-500";
+  if (conviction <= 8) return "from-emerald-500/60 to-emerald-500";
+  return "from-cyan-500/60 to-cyan-500";
+}
+
 export function IdeasIndexClient({
   initialIdeas,
   addonCounts,
@@ -250,7 +258,7 @@ function GridView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<s
             <div className="mt-3 space-y-2">
               <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-accent/60 to-accent transition-all duration-500"
+                  className={`h-full rounded-full bg-gradient-to-r ${convictionGradient(idea.conviction)} transition-all duration-500`}
                   style={{ width: `${idea.conviction * 10}%` }}
                 />
               </div>

@@ -20,9 +20,10 @@ import {
   renameShareProfile,
   deleteShareProfile,
   updateShareProfileDescription,
+  updateShareProfileLayer,
 } from "@/lib/actions";
-import { STAGES, VISIBILITY_LEVELS, IDEA_TYPES } from "@/lib/schema";
-import type { ShareProfile, Idea } from "@/lib/schema";
+import { STAGES, VISIBILITY_LEVELS, IDEA_TYPES, PROFILE_LAYERS } from "@/lib/schema";
+import type { ShareProfile, Idea, ProfileLayer } from "@/lib/schema";
 
 export default function ShareManagerClient({
   profiles,
@@ -69,6 +70,11 @@ export default function ShareManagerClient({
 
   async function handleSaveDescription(id: string, description: string) {
     await updateShareProfileDescription(id, description);
+    router.refresh();
+  }
+
+  async function handleLayerChange(id: string, layer: ProfileLayer) {
+    await updateShareProfileLayer(id, layer);
     router.refresh();
   }
 
@@ -246,6 +252,13 @@ export default function ShareManagerClient({
                 onSave={(d) => handleSaveDescription(selectedProfile.id, d)}
               />
 
+              {/* What this profile shows (Pitch / Tech / Full) */}
+              <LayerSelector
+                key={`layer-${selectedProfile.id}`}
+                current={selectedProfile.layer ?? "pitch"}
+                onSelect={(l) => handleLayerChange(selectedProfile.id, l)}
+              />
+
               {/* Checkbox list for idea selection */}
               <div>
                 <h4 className="mb-2.5 font-mono text-[0.75rem] font-bold uppercase tracking-[0.18em] text-text-secondary">
@@ -395,6 +408,40 @@ function DescriptionEditor({
         <span>Optional — appears under your profile name for anyone viewing the link.</span>
         <span className="tabular-nums">{val.length}/220</span>
       </div>
+    </div>
+  );
+}
+
+function LayerSelector({
+  current,
+  onSelect,
+}: {
+  current: ProfileLayer;
+  onSelect: (layer: ProfileLayer) => void;
+}) {
+  const active = PROFILE_LAYERS.find((l) => l.key === current)!;
+  return (
+    <div className="space-y-1.5">
+      <h4 className="font-mono text-[0.75rem] font-bold uppercase tracking-[0.18em] text-text-secondary">
+        What this profile shows
+      </h4>
+      <div className="flex flex-wrap gap-1.5">
+        {PROFILE_LAYERS.map((l) => (
+          <button
+            key={l.key}
+            type="button"
+            onClick={() => onSelect(l.key)}
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all active:scale-95 ${
+              current === l.key
+                ? "bg-accent text-white shadow-card"
+                : "border border-border bg-surface/80 text-text-secondary hover:border-border-strong"
+            }`}
+          >
+            {l.label}
+          </button>
+        ))}
+      </div>
+      <p className="text-[11px] text-text-muted">{active.description}</p>
     </div>
   );
 }

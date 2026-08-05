@@ -19,6 +19,7 @@ alter table public.entries add column if not exists user_id uuid references auth
 alter table public.addons add column if not exists user_id uuid references auth.users(id) on delete cascade;
 alter table public.share_profiles add column if not exists user_id uuid references auth.users(id) on delete cascade;
 alter table public.share_profiles add column if not exists description text not null default '';
+alter table public.share_profiles add column if not exists layer text not null default 'pitch';
 
 -- 2) Backfill existing rows to the first user (the current owner)
 do $$

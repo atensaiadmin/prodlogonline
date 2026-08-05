@@ -33,6 +33,14 @@ const MOOD_DOT: Record<string, string> = {
   frustrated: "bg-rose-400",
 };
 
+// Conviction bar changes shade by score: low -> all-in.
+function convictionGradient(conviction: number) {
+  if (conviction <= 3) return "from-rose-500/70 to-rose-500";
+  if (conviction <= 6) return "from-amber-500/70 to-amber-500";
+  if (conviction <= 8) return "from-emerald-500/70 to-emerald-500";
+  return "from-cyan-500/70 to-cyan-500";
+}
+
 export default function IdeaDetailPage({
   idea,
   entries,
@@ -166,7 +174,7 @@ export default function IdeaDetailPage({
                   </span>
                 ))}
               </div>
-              <h1 className="font-display text-3xl font-medium tracking-tight text-text sm:text-4xl">
+              <h1 className="text-2xl font-semibold tracking-tight text-text">
                 {idea.title}
               </h1>
               {idea.one_liner && (
@@ -212,7 +220,7 @@ export default function IdeaDetailPage({
           </label>
           <div className="h-2 w-full overflow-hidden rounded-full bg-surface-2">
             <span
-              className="block h-full rounded-full bg-gradient-to-r from-accent/70 to-accent transition-all duration-700"
+              className={`block h-full rounded-full bg-gradient-to-r ${convictionGradient(idea.conviction)} transition-all duration-700`}
               style={{ width: `${idea.conviction * 10}%` }}
             />
           </div>

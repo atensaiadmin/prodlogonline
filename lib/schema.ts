@@ -2,6 +2,7 @@ export type Stage = "inbox" | "validating" | "building" | "launched" | "dead";
 export type Mood = "excited" | "unsure" | "frustrated" | "neutral" | "hopeful";
 export type VisibilityLevel = "private" | "links" | "docs" | "summary" | "full";
 export type IdeaType = "app" | "paper" | "research" | "writing" | "other";
+export type ProfileLayer = "pitch" | "tech" | "full";
 
 export type AddonCategory =
   | "hosting"
@@ -63,6 +64,7 @@ export interface ShareProfile {
   name: string;
   slug: string;
   description: string;
+  layer: ProfileLayer;
   created_at: string;
   updated_at: string;
 }
@@ -125,6 +127,16 @@ export const VISIBILITY_LEVELS: {
   { key: "docs", label: "Docs only", description: "Only the docs link" },
   { key: "summary", label: "Summary", description: "Title, one-liner, stage, tags" },
   { key: "full", label: "Full", description: "Everything including entries & addons" },
+];
+
+export const PROFILE_LAYERS: {
+  key: ProfileLayer;
+  label: string;
+  description: string;
+}[] = [
+  { key: "pitch", label: "Pitch", description: "Title, one-liner & main links only" },
+  { key: "tech", label: "Tech review", description: "Also show repo, deploy & docs links" },
+  { key: "full", label: "Full", description: "Everything — links, add-ons & progress log" },
 ];
 
 export interface IdeaTypeDef {
