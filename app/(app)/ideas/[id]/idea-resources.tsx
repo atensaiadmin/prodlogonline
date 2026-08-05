@@ -42,18 +42,31 @@ export default function IdeaResources({ idea, addons }: { idea: Idea; addons: Ad
 function LinksSection({ idea, router }: { idea: Idea; router: ReturnType<typeof useRouter> }) {
   const [editing, setEditing] = useState(false);
   const [links, setLinks] = useState<Links>({ ...idea.links });
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const typeDef = IDEA_TYPES.find((t) => t.key === idea.idea_type)!;
 
   const hasLinks = links.repo || links.deploy || links.docs;
 
   async function save() {
-    await updateLinks(idea.id, links);
-    setEditing(false);
-    router.refresh();
+    setSaving(true);
+    setSaveError(null);
+    try {
+      await updateLinks(idea.id, links);
+      setEditing(false);
+      router.refresh();
+    } catch (err) {
+      setSaveError(
+        err instanceof Error ? err.message : "Couldn't save links. Please try again."
+      );
+    } finally {
+      setSaving(false);
+    }
   }
 
   function cancel() {
     setLinks({ ...idea.links });
+    setSaveError(null);
     setEditing(false);
   }
 
@@ -66,8 +79,12 @@ function LinksSection({ idea, router }: { idea: Idea; router: ReturnType<typeof 
             Links
           </h3>
           <div className="flex gap-1.5">
-            <button onClick={save} className="btn-primary px-3 py-1.5 text-xs font-semibold">
-              <Check size={13} /> Save
+            <button
+              onClick={save}
+              disabled={saving}
+              className="btn-primary px-3 py-1.5 text-xs font-semibold disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <Check size={13} /> {saving ? "Saving…" : "Save"}
             </button>
             <button onClick={cancel} className="btn-secondary px-3 py-1.5 text-xs font-semibold">
               <X size={13} />
@@ -112,6 +129,9 @@ function LinksSection({ idea, router }: { idea: Idea; router: ReturnType<typeof 
             />
           </div>
         </div>
+        {saveError && (
+          <p className="text-xs font-medium text-rose-500">{saveError}</p>
+        )}
       </div>
     );
   }
@@ -190,10 +210,12 @@ function AddonsSection({
   const [accountLabel, setAccountLabel] = useState("");
   const [url, setUrl] = useState("");
   const [notes, setNotes] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim()) return;
+    setError(null);
     const fd = new FormData();
     fd.set("idea_id", ideaId);
     fd.set("name", name);
@@ -201,24 +223,36 @@ function AddonsSection({
     fd.set("account_label", accountLabel);
     fd.set("url", url);
     fd.set("notes", notes);
-    await createAddon(fd);
-    setName("");
-    setCategory("other");
-    setAccountLabel("");
-    setUrl("");
-    setNotes("");
-    setAdding(false);
-    router.refresh();
+    try {
+      await createAddon(fd);
+      setName("");
+      setCategory("other");
+      setAccountLabel("");
+      setUrl("");
+      setNotes("");
+      setAdding(false);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't add the add-on. Please try again.");
+    }
   }
 
   async function handleToggle(id: string) {
-    await toggleAddonVisibility(id);
-    router.refresh();
+    try {
+      await toggleAddonVisibility(id);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't update the add-on. Please try again.");
+    }
   }
 
   async function handleDelete(id: string) {
-    await deleteAddon(id);
-    router.refresh();
+    try {
+      await deleteAddon(id);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't remove the add-on. Please try again.");
+    }
   }
 
   return (
@@ -301,6 +335,10 @@ function AddonsSection({
             </button>
           </div>
         </form>
+      )}
+
+      {error && (
+        <p className="text-xs font-medium text-rose-500">{error}</p>
       )}
 
       {addons.length === 0 && !adding ? (

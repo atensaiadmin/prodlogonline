@@ -15,15 +15,19 @@ export default function EditIdeaForm({
 }) {
   const [ideaType, setIdeaType] = useState<IdeaType>(idea.idea_type);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSaving(true);
+    setError(null);
     try {
       const fd = new FormData(e.currentTarget);
       fd.set("idea_type", ideaType);
       await editIdea(fd);
       onDone();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't save changes. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -106,6 +110,10 @@ export default function EditIdeaForm({
           placeholder="e.g. saas, b2b, ai"
         />
       </div>
+
+      {error && (
+        <p className="text-xs font-medium text-rose-500">{error}</p>
+      )}
 
       <div className="flex gap-2 border-t border-border pt-4">
         <button
