@@ -2,6 +2,14 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
+  // Let Server Action requests pass straight through. Redirecting an action
+  // POST (e.g. to /login) makes the client throw
+  // "An unexpected response was received from the server." The actions
+  // themselves + Postgres RLS still enforce auth and row ownership.
+  if (request.headers.get("next-action")) {
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({ request });
 
   const supabase = createServerClient(
