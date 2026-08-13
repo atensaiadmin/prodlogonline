@@ -2,7 +2,7 @@
 
 import { v4 as uuidv4 } from "uuid";
 import * as store from "./store";
-import type { Idea, Entry, Addon, Stage, Mood, AddonCategory, VisibilityLevel, Links, ShareProfile, SharedIdea, IdeaType, ProfileLayer } from "./schema";
+import type { Idea, Entry, Addon, Bug, Stage, Mood, AddonCategory, VisibilityLevel, Links, ShareProfile, SharedIdea, IdeaType, ProfileLayer, BugStatus, BugSeverity } from "./schema";
 
 export async function getIdeas(): Promise<Idea[]> {
   return store.getIdeas();
@@ -185,6 +185,54 @@ export async function toggleAddonVisibility(id: string) {
 
 export async function deleteAddon(id: string) {
   await store.deleteAddon(id);
+}
+
+// ---- Bugs / issues to fix ----
+
+export async function getBugs(ideaId: string): Promise<Bug[]> {
+  return store.getBugs(ideaId);
+}
+
+export async function getAllBugs(): Promise<Bug[]> {
+  return store.getBugs();
+}
+
+export async function addBug(formData: FormData): Promise<string> {
+  const ideaId = formData.get("idea_id") as string;
+  const title = (formData.get("title") as string)?.trim();
+  if (!title) throw new Error("Bug title is required");
+
+  const bug: Bug = {
+    id: uuidv4(),
+    idea_id: ideaId,
+    title,
+    status: (formData.get("status") as BugStatus) || "open",
+    severity: (formData.get("severity") as BugSeverity) || "medium",
+    created_at: new Date().toISOString(),
+  };
+
+  await store.insertBug(bug);
+  return bug.id;
+}
+
+export async function editBug(formData: FormData): Promise<void> {
+  const id = formData.get("id") as string;
+  const title = (formData.get("title") as string)?.trim();
+  if (!title) throw new Error("Bug title is required");
+
+  await store.updateBug(id, {
+    title,
+    status: (formData.get("status") as BugStatus) || "open",
+    severity: (formData.get("severity") as BugSeverity) || "medium",
+  });
+}
+
+export async function updateBugStatus(id: string, status: BugStatus) {
+  await store.updateBug(id, { status });
+}
+
+export async function deleteBug(id: string) {
+  await store.deleteBug(id);
 }
 
 export async function getShareProfiles(): Promise<ShareProfile[]> {

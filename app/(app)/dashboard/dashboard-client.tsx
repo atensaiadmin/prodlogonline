@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Inbox, Sparkles, ArrowRight, Github, Globe, BookOpen, Package, Search } from "lucide-react";
+import { Plus, Inbox, Sparkles, ArrowRight, Github, Globe, BookOpen, Package, Search, Bug } from "lucide-react";
 import { createIdea } from "@/lib/actions";
 import { IDEA_TYPES } from "@/lib/schema";
 import type { Idea, Stage } from "@/lib/schema";
@@ -35,12 +35,14 @@ export function DashboardClient({
   total,
   active,
   addonCounts,
+  bugCounts,
 }: {
   initialGroups: Record<string, Idea[]>;
   stages: StageDef[];
   total: number;
   active: number;
   addonCounts: Record<string, number>;
+  bugCounts: Record<string, number>;
 }) {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
@@ -129,6 +131,7 @@ export function DashboardClient({
                   {items.map((idea) => {
                     const linkIcons = iconForLinks(idea);
                     const addonCount = addonCounts[idea.id] ?? 0;
+                    const bugCount = bugCounts[idea.id] ?? 0;
                     return (
                       <a
                         key={idea.id}
@@ -143,7 +146,7 @@ export function DashboardClient({
                             {idea.one_liner}
                           </p>
                         )}
-                        {(linkIcons.length > 0 || addonCount > 0) && (
+                        {(linkIcons.length > 0 || addonCount > 0 || bugCount > 0) && (
                           <div className="mt-2 flex items-center gap-1.5">
                             {linkIcons.map(({ key, icon }) => (
                               <span
@@ -157,6 +160,12 @@ export function DashboardClient({
                               <span className="inline-flex items-center gap-0.5 rounded-md border border-border/50 bg-surface-2/80 px-2 py-0.5 text-xs font-medium text-text-muted">
                                 <Package size={10} />
                                 {addonCount}
+                              </span>
+                            )}
+                            {bugCount > 0 && (
+                              <span className="inline-flex items-center gap-0.5 rounded-md border border-rose-500/25 bg-rose-500/10 px-2 py-0.5 text-xs font-medium text-rose-600 dark:text-rose-400">
+                                <Bug size={10} />
+                                {bugCount}
                               </span>
                             )}
                           </div>

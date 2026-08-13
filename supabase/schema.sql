@@ -45,6 +45,18 @@ create table if not exists public.addons (
   created_at    timestamptz not null default now()
 );
 
+-- Bugs / issues to fix (one-line Jira-style issue per idea)
+create table if not exists public.bugs (
+  id         uuid primary key default gen_random_uuid(),
+  idea_id    uuid not null references public.ideas(id) on delete cascade,
+  title      text not null,
+  status     text not null default 'open'
+             check (status in ('open','in_progress','fixed','wontfix')),
+  severity   text not null default 'medium'
+             check (severity in ('low','medium','high','critical')),
+  created_at timestamptz not null default now()
+);
+
 -- Share profiles
 create table if not exists public.share_profiles (
   id          uuid primary key default gen_random_uuid(),
@@ -86,11 +98,13 @@ for each row execute function public.touch_updated_at();
 alter table public.ideas enable row level security;
 alter table public.entries enable row level security;
 alter table public.addons enable row level security;
+alter table public.bugs enable row level security;
 alter table public.share_profiles enable row level security;
 alter table public.share_profile_ideas enable row level security;
 
 create policy "preview allow all on ideas" on public.ideas for all using (true) with check (true);
 create policy "preview allow all on entries" on public.entries for all using (true) with check (true);
 create policy "preview allow all on addons" on public.addons for all using (true) with check (true);
+create policy "preview allow all on bugs" on public.bugs for all using (true) with check (true);
 create policy "preview allow all on share_profiles" on public.share_profiles for all using (true) with check (true);
 create policy "preview allow all on share_profile_ideas" on public.share_profile_ideas for all using (true) with check (true);

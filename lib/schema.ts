@@ -59,6 +59,18 @@ export interface Addon {
   created_at: string;
 }
 
+export type BugStatus = "open" | "in_progress" | "fixed" | "wontfix";
+export type BugSeverity = "low" | "medium" | "high" | "critical";
+
+export interface Bug {
+  id: string;
+  idea_id: string;
+  title: string;
+  status: BugStatus;
+  severity: BugSeverity;
+  created_at: string;
+}
+
 export interface ShareProfile {
   id: string;
   name: string;
@@ -115,6 +127,24 @@ export const ADDON_CATEGORIES: { key: AddonCategory; label: string; icon: string
   { key: "domains", label: "Domains", icon: "" },
   { key: "ai", label: "AI / LLM", icon: "" },
   { key: "other", label: "Other", icon: "" },
+];
+
+export const BUG_STATUSES: {
+  key: BugStatus;
+  label: string;
+  dot: string;
+}[] = [
+  { key: "open", label: "Open", dot: "bg-rose-500" },
+  { key: "in_progress", label: "In progress", dot: "bg-amber-500" },
+  { key: "fixed", label: "Fixed", dot: "bg-emerald-500" },
+  { key: "wontfix", label: "Won't fix", dot: "bg-stone-400 dark:bg-stone-500" },
+];
+
+export const BUG_SEVERITIES: { key: BugSeverity; label: string; dot: string }[] = [
+  { key: "critical", label: "Critical", dot: "bg-rose-500" },
+  { key: "high", label: "High", dot: "bg-orange-500" },
+  { key: "medium", label: "Medium", dot: "bg-amber-400" },
+  { key: "low", label: "Low", dot: "bg-sky-400" },
 ];
 
 export const VISIBILITY_LEVELS: {

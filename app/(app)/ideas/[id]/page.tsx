@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getIdea, getEntries, getAddons } from "@/lib/actions";
+import { getIdea, getEntries, getAddons, getBugs } from "@/lib/actions";
 import IdeaDetailPage from "./idea-detail-client";
 
 export const runtime = "edge";
@@ -15,6 +15,7 @@ export default async function IdeaPage({
 
   const entries = await getEntries(id);
   const addons = await getAddons(id);
+  const bugs = await getBugs(id);
 
-  return <IdeaDetailPage idea={idea} entries={entries} addons={addons} />;
+  return <IdeaDetailPage idea={idea} entries={entries} addons={addons} bugs={bugs} />;
 }

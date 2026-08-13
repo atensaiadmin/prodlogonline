@@ -1,5 +1,5 @@
 import { createServerSupabase } from "./supabase-server";
-import type { Idea, Entry, Addon, ShareProfile, ShareProfileIdea } from "./schema";
+import type { Idea, Entry, Addon, Bug, ShareProfile, ShareProfileIdea } from "./schema";
 
 // ---- Ideas ----
 
@@ -155,6 +155,59 @@ export async function updateAddon(
 export async function deleteAddon(id: string) {
   const supabase = await createServerSupabase();
   const { error } = await supabase.from("addons").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+// ---- Bugs ----
+
+export async function getBugs(ideaId?: string): Promise<Bug[]> {
+  const supabase = await createServerSupabase();
+  let query = supabase
+    .from("bugs")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (ideaId) query = query.eq("idea_id", ideaId);
+  const { data, error } = await query;
+  if (error) throw new Error(error.message);
+  return data ?? [];
+}
+
+export async function getBug(id: string): Promise<Bug | null> {
+  const supabase = await createServerSupabase();
+  const { data, error } = await supabase
+    .from("bugs")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return data ?? null;
+}
+
+export async function insertBug(bug: Bug) {
+  const supabase = await createServerSupabase();
+  const { error } = await supabase.from("bugs").insert({
+    id: bug.id,
+    idea_id: bug.idea_id,
+    title: bug.title,
+    status: bug.status,
+    severity: bug.severity,
+    created_at: bug.created_at,
+  });
+  if (error) throw new Error(error.message);
+}
+
+export async function updateBug(
+  id: string,
+  updates: Partial<Omit<Bug, "id" | "idea_id" | "created_at">>
+) {
+  const supabase = await createServerSupabase();
+  const { error } = await supabase.from("bugs").update(updates).eq("id", id);
+  if (error) throw new Error(error.message);
+}
+
+export async function deleteBug(id: string) {
+  const supabase = await createServerSupabase();
+  const { error } = await supabase.from("bugs").delete().eq("id", id);
   if (error) throw new Error(error.message);
 }
 

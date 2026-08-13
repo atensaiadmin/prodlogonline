@@ -1,4 +1,4 @@
-import { getIdeas, getAddons } from "@/lib/actions";
+import { getIdeas, getAddons, getAllBugs } from "@/lib/actions";
 import { STAGES } from "@/lib/schema";
 import type { Idea } from "@/lib/schema";
 import { DashboardClient } from "./dashboard-client";
@@ -24,6 +24,14 @@ export default async function DashboardPage() {
     addonCounts[a.idea_id] = (addonCounts[a.idea_id] ?? 0) + 1;
   }
 
+  const bugs = await getAllBugs();
+  const bugCounts: Record<string, number> = {};
+  for (const b of bugs) {
+    if (b.status === "open" || b.status === "in_progress") {
+      bugCounts[b.idea_id] = (bugCounts[b.idea_id] ?? 0) + 1;
+    }
+  }
+
   const grouped = groupByStage(ideas);
 
   const active = ideas.filter(
@@ -37,6 +45,7 @@ export default async function DashboardPage() {
       total={ideas.length}
       active={active}
       addonCounts={addonCounts}
+      bugCounts={bugCounts}
     />
   );
 }

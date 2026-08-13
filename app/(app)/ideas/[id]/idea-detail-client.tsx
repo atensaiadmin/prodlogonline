@@ -13,8 +13,9 @@ import {
   deleteIdea,
 } from "@/lib/actions";
 import { STAGES, MOODS, IDEA_TYPES } from "@/lib/schema";
-import type { Idea, Entry, Addon, Stage, Mood } from "@/lib/schema";
+import type { Idea, Entry, Addon, Bug, Stage, Mood } from "@/lib/schema";
 import IdeaResources from "./idea-resources";
+import IdeaBugs from "./idea-bugs";
 import EditIdeaForm from "./edit-idea-form";
 
 const MOOD_ICON: Record<string, React.ReactNode> = {
@@ -45,10 +46,12 @@ export default function IdeaDetailPage({
   idea,
   entries,
   addons,
+  bugs,
 }: {
   idea: Idea;
   entries: Entry[];
   addons: Addon[];
+  bugs: Bug[];
 }) {
   const router = useRouter();
   const [editing, setEditing] = useState(false);
@@ -246,6 +249,8 @@ export default function IdeaDetailPage({
       </section>
 
       <IdeaResources idea={idea} addons={addons} />
+
+      <IdeaBugs ideaId={idea.id} bugs={bugs} />
 
       {/* Log entry form */}
       <section className="card p-5 space-y-3.5">

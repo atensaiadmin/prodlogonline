@@ -45,6 +45,18 @@ create table if not exists public.addons (
   created_at    timestamptz not null default now()
 );
 
+-- Bugs / issues to fix (one-line Jira-style issue per idea)
+create table if not exists public.bugs (
+  id         uuid primary key default gen_random_uuid(),
+  idea_id    uuid not null references public.ideas(id) on delete cascade,
+  title      text not null,
+  status     text not null default 'open'
+             check (status in ('open','in_progress','fixed','wontfix')),
+  severity   text not null default 'medium'
+             check (severity in ('low','medium','high','critical')),
+  created_at timestamptz not null default now()
+);
+
 -- Share profiles
 create table if not exists public.share_profiles (
   id          uuid primary key default gen_random_uuid(),
