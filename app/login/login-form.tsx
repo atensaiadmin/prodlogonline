@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { createClientSupabase } from "@/lib/supabase-client";
+import { createClientPB } from "@/lib/pocketbase-client";
 
 export function LoginForm({
   next,
@@ -18,18 +18,19 @@ export function LoginForm({
     setLoading(true);
     setError(null);
     try {
-      const supabase = createClientSupabase();
-      const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: { redirectTo },
+      const pb = createClientPB();
+      // Opens Google in a popup and exchanges the code (server-side on PB).
+      await pb.collection("users").authWithOAuth2({ provider: "google" });
+      // Persist the auth token as a cookie so the server sees us logged in.
+      document.cookie = pb.authStore.exportToCookie({
+        httpOnly: false,
+        sameSite: "lax",
+        secure: true,
+        path: "/",
       });
-      if (error) {
-        setError(error.message);
-        setLoading(false);
-      }
+      window.location.href = next.startsWith("/") ? next : "/dashboard";
     } catch {
-      setError("Could not start Google sign-in. Try again.");
+      setError("Google sign-in didn't complete. Please try again.");
       setLoading(false);
     }
   }

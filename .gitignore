@@ -3,3 +3,10 @@ node_modules
 .env.local
 *.tsbuildinfo
 next-env.d.ts
+# migration secrets / local data
+migration/.env.migrate
+# pnpm cache / editor junk (accidentally committed in the migration commit)
+.pnpm-store/
+.DS_Store
+Untitled.base
+Untitled.md

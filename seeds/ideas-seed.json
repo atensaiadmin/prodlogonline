@@ -193,5 +193,18 @@
     "visibility": "private",
     "created_at": "2026-08-04T00:00:00.000Z",
     "updated_at": "2026-08-04T00:00:00.000Z"
+  },
+  {
+    "id": "00000000-0000-4000-8000-000000000010",
+    "title": "Teleparty — collaborative listening parties",
+    "one_liner": "Real-time listening party rooms where everyone queues songs but one controller/DJ approves — powered by members' existing premium subscriptions.",
+    "stage": "validating",
+    "idea_type": "app",
+    "conviction": 7,
+    "tags": ["music", "social", "realtime", "spotify", "listening-party"],
+    "links": { "repo": "", "deploy": "", "docs": "" },
+    "visibility": "private",
+    "created_at": "2026-08-07T00:00:00.000Z",
+    "updated_at": "2026-08-07T00:00:00.000Z"
   }
 ]

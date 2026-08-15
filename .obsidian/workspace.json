@@ -11,14 +11,13 @@
             "id": "46adca40906d5b0f",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "bases",
               "state": {
-                "file": "docs/ARCHITECTURE.md",
-                "mode": "source",
-                "source": false
+                "file": "Untitled.base",
+                "viewName": "Table"
               },
-              "icon": "lucide-file",
-              "title": "ARCHITECTURE"
+              "icon": "lucide-table",
+              "title": "Untitled"
             }
           }
         ]
@@ -185,6 +184,9 @@
   },
   "active": "46adca40906d5b0f",
   "lastOpenFiles": [
+    "docs/ARCHITECTURE.md",
+    "Untitled.base",
+    "Untitled.md",
     "prodlog.json",
     "lib/store.ts",
     "types/sql.js.d.ts",
@@ -194,10 +196,7 @@
     "pnpm-lock.yaml.2915375837",
     "prodlog.db",
     "lib/seed.ts",
-    "app/ideas/[id]/page.tsx",
-    "app/ideas/[id]/idea-detail-client.tsx",
     "README.md",
-    "docs/ARCHITECTURE.md",
     "docs/DATA_MODEL.md",
     "docs/CONCEPT.md"
   ]

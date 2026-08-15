@@ -6,16 +6,13 @@ import { Menu, LayoutGrid, Lightbulb, Share2, Plus, LogOut, Sparkles } from "luc
 import clsx from "clsx";
 import { useState } from "react";
 import { ThemeToggle } from "../../components/theme-toggle";
-import { createClientSupabase } from "@/lib/supabase-client";
+import { createClientPB } from "@/lib/pocketbase-client";
 
 interface AppUser {
   id: string;
   email?: string;
-  user_metadata?: {
-    avatar_url?: string;
-    full_name?: string;
-    name?: string;
-  };
+  name?: string;
+  avatarUrl?: string | null;
 }
 
 interface AppShellProps {
@@ -29,19 +26,17 @@ export function AppShell({ children, user }: AppShellProps) {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   async function handleSignOut() {
-    const supabase = createClientSupabase();
-    await supabase.auth.signOut();
+    const pb = createClientPB();
+    pb.authStore.clear();
+    // Clear the auth cookie so the server sees us logged out too.
+    document.cookie = "pb_auth=; Path=/; Max-Age=0";
     setUserMenuOpen(false);
     router.push("/login");
     router.refresh();
   }
 
-  const avatarUrl = user?.user_metadata?.avatar_url;
-  const displayName =
-    user?.user_metadata?.full_name ||
-    user?.user_metadata?.name ||
-    user?.email ||
-    "You";
+  const avatarUrl = user?.avatarUrl;
+  const displayName = user?.name || user?.email || "You";
   const initials = displayName.slice(0, 2).toUpperCase();
 
   return (

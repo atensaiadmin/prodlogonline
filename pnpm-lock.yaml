@@ -12,6 +12,7 @@ specifiers:
   clsx: ^2.1.1
   lucide-react: ^0.476.0
   next: ^15.2.0
+  pocketbase: ^0.27.3
   postcss: ^8.5.23
   react: ^19.0.0
   react-dom: ^19.0.0
@@ -27,6 +28,7 @@ dependencies:
   clsx: 2.1.1
   lucide-react: 0.476.0_react@19.2.8
   next: 15.5.21_46xqiwy5bvilv63qu3buxg2uwm
+  pocketbase: 0.27.3
   react: 19.2.8
   react-dom: 19.2.8_react@19.2.8
   uuid: 11.1.1
@@ -1305,6 +1307,10 @@ packages:
     resolution: {integrity: sha512-TfySrs/5nm8fQJDcBDuUng3VOUKsd7S+zqvbOTiGXHfxX4wK31ard+hoNuvkicM/2YFzlpDgABOevKSsB4G/FA==}
     engines: {node: '>= 6'}
     dev: true
+
+  /pocketbase/0.27.3:
+    resolution: {integrity: sha512-n2rtQrg3kTF44066B+2eVvQdiYRGZ+RI7isIZqmAptfElLCSDIZrEKLhSrIQA2k5pvQM29Gx5JqGv5n+gtm6dg==}
+    dev: false
 
   /postcss-import/15.1.0_postcss@8.5.23:
     resolution: {integrity: sha512-hpr+J05B2FVYUAXHeK1YyI267J/dDDhMU6B6civm8hSY1jYJnBXxzKDKDswzJmtLHryrjhnDjqqp/49t8FALew==}

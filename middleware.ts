@@ -1,41 +1,30 @@
-import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import PocketBase from "pocketbase";
 
 export async function middleware(request: NextRequest) {
   // Let Server Action requests pass straight through. Redirecting an action
   // POST (e.g. to /login) makes the client throw
   // "An unexpected response was received from the server." The actions
-  // themselves + Postgres RLS still enforce auth and row ownership.
+  // themselves + the PocketBase collection rules still enforce auth.
   if (request.headers.get("next-action")) {
     return NextResponse.next({ request });
   }
 
-  let supabaseResponse = NextResponse.next({ request });
-
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          );
-          supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
+  const pb = new PocketBase(
+    process.env.NEXT_PUBLIC_PB_URL ?? "https://prodlogonline.atensai.com"
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const token = request.cookies.get("pb_auth")?.value;
+  if (token) {
+    pb.authStore.loadFromCookie(`pb_auth=${token}`, "pb_auth");
+    try {
+      await pb.collection("users").authRefresh();
+    } catch {
+      pb.authStore.clear();
+    }
+  }
+
+  const authed = pb.authStore.isValid;
 
   const path = request.nextUrl.pathname;
   const isProtected =
@@ -44,21 +33,21 @@ export async function middleware(request: NextRequest) {
     path.startsWith("/share-manage");
   const isLogin = path === "/login";
 
-  if (!user && isProtected) {
+  if (!authed && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.searchParams.set("next", path);
     return NextResponse.redirect(url);
   }
 
-  if (user && isLogin) {
+  if (authed && isLogin) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
     url.search = "";
     return NextResponse.redirect(url);
   }
 
-  return supabaseResponse;
+  return NextResponse.next({ request });
 }
 
 export const config = {

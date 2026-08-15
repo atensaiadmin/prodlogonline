@@ -47,8 +47,8 @@ export async function createIdea(formData: FormData): Promise<string> {
     updated_at: now,
   };
 
-  await store.insertIdea(idea);
-  return idea.id;
+  const created = await store.insertIdea(idea);
+  return created.id;
 }
 
 export async function updateStage(ideaId: string, stage: Stage) {
@@ -86,8 +86,8 @@ export async function addEntry(formData: FormData): Promise<string> {
     created_at: new Date().toISOString(),
   };
 
-  await store.insertEntry(entry);
-  return entry.id;
+  const created = await store.insertEntry(entry);
+  return created.id;
 }
 
 export async function editEntry(formData: FormData): Promise<void> {
@@ -166,8 +166,8 @@ export async function createAddon(formData: FormData): Promise<string> {
     created_at: new Date().toISOString(),
   };
 
-  await store.insertAddon(addon);
-  return addon.id;
+  const created = await store.insertAddon(addon);
+  return created.id;
 }
 
 export async function updateAddon(
@@ -211,8 +211,8 @@ export async function addBug(formData: FormData): Promise<string> {
     created_at: new Date().toISOString(),
   };
 
-  await store.insertBug(bug);
-  return bug.id;
+  const created = await store.insertBug(bug);
+  return created.id;
 }
 
 export async function editBug(formData: FormData): Promise<void> {
