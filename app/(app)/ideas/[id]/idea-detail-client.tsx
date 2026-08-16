@@ -50,6 +50,7 @@ export default function IdeaDetailPage({
   const [entryBody, setEntryBody] = useState("");
   const [entryMood, setEntryMood] = useState<Mood | "">("");
   const [entryAction, setEntryAction] = useState("");
+  const [entryError, setEntryError] = useState<string | null>(null);
   const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
   const [editEntryBody, setEditEntryBody] = useState("");
   const [editEntryMood, setEditEntryMood] = useState<Mood | "">("");
@@ -63,6 +64,7 @@ export default function IdeaDetailPage({
   async function handleEntrySubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!entryBody.trim() && !entryAction.trim()) return;
+    setEntryError(null);
 
     const fd = new FormData();
     fd.set("idea_id", idea.id);
@@ -70,11 +72,17 @@ export default function IdeaDetailPage({
     fd.set("mood", entryMood || "");
     fd.set("action_taken", entryAction);
 
-    await addEntry(fd);
-    setEntryBody("");
-    setEntryMood("");
-    setEntryAction("");
-    router.refresh();
+    try {
+      await addEntry(fd);
+      setEntryBody("");
+      setEntryMood("");
+      setEntryAction("");
+      router.refresh();
+    } catch (err) {
+      setEntryError(
+        err instanceof Error ? err.message : "Couldn't log the entry. Please try again."
+      );
+    }
   }
 
   function startEditEntry(entry: Entry) {
@@ -88,6 +96,7 @@ export default function IdeaDetailPage({
     e.preventDefault();
     if (!editingEntryId) return;
     if (!editEntryBody.trim() && !editEntryAction.trim()) return;
+    setEntryError(null);
 
     const fd = new FormData();
     fd.set("id", editingEntryId);
@@ -95,15 +104,28 @@ export default function IdeaDetailPage({
     fd.set("mood", editEntryMood || "");
     fd.set("action_taken", editEntryAction);
 
-    await editEntry(fd);
-    setEditingEntryId(null);
-    router.refresh();
+    try {
+      await editEntry(fd);
+      setEditingEntryId(null);
+      router.refresh();
+    } catch (err) {
+      setEntryError(
+        err instanceof Error ? err.message : "Couldn't save the entry. Please try again."
+      );
+    }
   }
 
   async function handleDeleteEntry(id: string) {
     if (!confirm("Delete this log entry?")) return;
-    await deleteEntry(id);
-    router.refresh();
+    setEntryError(null);
+    try {
+      await deleteEntry(id);
+      router.refresh();
+    } catch (err) {
+      setEntryError(
+        err instanceof Error ? err.message : "Couldn't delete the entry. Please try again."
+      );
+    }
   }
 
   async function handleDelete() {
@@ -216,6 +238,11 @@ export default function IdeaDetailPage({
           <PenLine size={15} className="text-accent" />
           Log progress
         </h2>
+        {entryError && (
+          <p className="rounded-lg border border-rose-500/25 bg-rose-500/10 px-3 py-2 text-xs font-medium text-rose-600 dark:text-rose-400">
+            {entryError}
+          </p>
+        )}
         <form onSubmit={handleEntrySubmit} className="space-y-3">
           <textarea
             value={entryBody}

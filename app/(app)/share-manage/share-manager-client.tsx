@@ -25,6 +25,11 @@ import {
 import { STAGES, VISIBILITY_LEVELS, IDEA_TYPES, PROFILE_LAYERS } from "@/lib/schema";
 import type { ShareProfile, Idea, ProfileLayer } from "@/lib/schema";
 
+function describeError(err: unknown): string {
+  if (err instanceof Error && err.message) return err.message;
+  return "Something went wrong. Please try again.";
+}
+
 export default function ShareManagerClient({
   profiles,
   ideas,
@@ -37,6 +42,7 @@ export default function ShareManagerClient({
   const router = useRouter();
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
     profiles[0]?.id ?? null
@@ -48,34 +54,59 @@ export default function ShareManagerClient({
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
     if (!newName.trim()) return;
-    const profile = await createShareProfile(newName);
-    setNewName("");
-    setCreating(false);
-    setSelectedProfileId(profile.id);
-    router.refresh();
+    setError(null);
+    try {
+      const profile = await createShareProfile(newName);
+      setNewName("");
+      setCreating(false);
+      setSelectedProfileId(profile.id);
+      router.refresh();
+    } catch (err) {
+      setError(describeError(err));
+    }
   }
 
   async function handleDelete(id: string) {
     if (!confirm("Delete this share profile?")) return;
-    await deleteShareProfile(id);
-    if (selectedProfileId === id) setSelectedProfileId(null);
-    router.refresh();
+    setError(null);
+    try {
+      await deleteShareProfile(id);
+      if (selectedProfileId === id) setSelectedProfileId(null);
+      router.refresh();
+    } catch (err) {
+      setError(describeError(err));
+    }
   }
 
   async function handleRename(id: string, name: string) {
-    await renameShareProfile(id, name);
-    setEditingId(null);
-    router.refresh();
+    setError(null);
+    try {
+      await renameShareProfile(id, name);
+      setEditingId(null);
+      router.refresh();
+    } catch (err) {
+      setError(describeError(err));
+    }
   }
 
   async function handleSaveDescription(id: string, description: string) {
-    await updateShareProfileDescription(id, description);
-    router.refresh();
+    setError(null);
+    try {
+      await updateShareProfileDescription(id, description);
+      router.refresh();
+    } catch (err) {
+      setError(describeError(err));
+    }
   }
 
   async function handleLayerChange(id: string, layer: ProfileLayer) {
-    await updateShareProfileLayer(id, layer);
-    router.refresh();
+    setError(null);
+    try {
+      await updateShareProfileLayer(id, layer);
+      router.refresh();
+    } catch (err) {
+      setError(describeError(err));
+    }
   }
 
   async function handleToggleIdea(profileId: string, ideaId: string) {
@@ -84,8 +115,13 @@ export default function ShareManagerClient({
       ? current.filter((id) => id !== ideaId)
       : [...current, ideaId];
     setLocalSelections((prev) => ({ ...prev, [profileId]: next }));
-    await setProfileIdeas(profileId, next);
-    router.refresh();
+    setError(null);
+    try {
+      await setProfileIdeas(profileId, next);
+      router.refresh();
+    } catch (err) {
+      setError(describeError(err));
+    }
   }
 
   const selectedProfile = profiles.find((p) => p.id === selectedProfileId);
@@ -131,6 +167,12 @@ export default function ShareManagerClient({
           New profile
         </button>
       </div>
+
+      {error && (
+        <div className="rounded-lg border border-rose-500/25 bg-rose-500/10 px-3.5 py-2.5 text-xs font-medium text-rose-600 dark:text-rose-400">
+          {error}
+        </div>
+      )}
 
       {creating && (
         <form onSubmit={handleCreate} className="card flex gap-2 p-3">
@@ -399,14 +441,14 @@ function DescriptionEditor({
           setVal(e.target.value);
           setDirty(true);
         }}
-        rows={2}
-        maxLength={220}
+        rows={5}
+        maxLength={2000}
         placeholder="Short description shown at the top of your share page — e.g. Building in public: web apps, tools, and side projects."
-        className="input w-full resize-none text-sm py-2"
+        className="input w-full resize-y text-sm py-2"
       />
       <div className="flex items-center justify-between text-[11px] text-text-muted">
         <span>Optional — appears under your profile name for anyone viewing the link.</span>
-        <span className="tabular-nums">{val.length}/220</span>
+        <span className="tabular-nums">{val.length}/2000</span>
       </div>
     </div>
   );

@@ -65,9 +65,9 @@ export default function EditIdeaForm({
         <textarea
           id="edit-one-liner"
           name="one_liner"
-          rows={2}
+          rows={3}
           defaultValue={idea.one_liner}
-          className="input resize-none text-sm leading-relaxed"
+          className="input resize-y text-sm leading-relaxed"
           placeholder="Briefly describe the idea..."
         />
       </div>
