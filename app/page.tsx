@@ -436,7 +436,7 @@ function BottomCTA() {
         <Reveal>
           <div className="mx-auto mb-8 inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-surface shadow-glow">
             <img
-              src="/image/iconalone.png"
+              src="/image/prodlog_icon.svg"
               alt="ProdLog"
               className="h-10 w-10 object-contain"
             />
@@ -486,7 +486,7 @@ function Footer() {
           <div className="space-y-3 sm:col-span-2">
             <div className="flex items-center gap-2">
               <img
-                src="/image/iconalone.png"
+                src="/image/prodlog_icon.svg"
                 alt="ProdLog"
                 className="h-8 w-8 object-contain"
               />

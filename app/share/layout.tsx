@@ -14,7 +14,7 @@ export default function ShareLayout({ children }: { children: React.ReactNode })
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
           <div className="flex items-center gap-2.5">
             <img
-              src="/image/iconalone.png"
+              src="/image/prodlog_icon.svg"
               alt="ProdLog"
               className="h-7 w-7 object-contain"
             />

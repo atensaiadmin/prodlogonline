@@ -55,7 +55,7 @@ export function MarketingHeader() {
           <Link href="/" className="group flex items-center gap-2.5">
             <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10 transition-transform duration-300 group-hover:rotate-6">
               <img
-                src="/image/iconalone.png"
+                src="/image/prodlog_icon.svg"
                 alt="ProdLog"
                 className="h-6 w-6 object-contain"
               />
@@ -90,7 +90,7 @@ export function MarketingHeader() {
               <Link href="/" className="group flex items-center gap-2.5" onClick={() => setOpen(false)}>
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
                   <img
-                    src="/image/iconalone.png"
+                    src="/image/prodlog_icon.svg"
                     alt="ProdLog"
                     className="h-5 w-5 object-contain"
                   />

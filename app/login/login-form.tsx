@@ -50,7 +50,7 @@ export function LoginForm({
         <div className="mb-8 flex flex-col items-center text-center">
           <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-border bg-surface shadow-glow">
             <img
-              src="/image/iconalone.png"
+              src="/image/prodlog_icon.svg"
               alt="ProdLog"
               className="h-10 w-10 object-contain"
             />

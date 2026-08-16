@@ -56,7 +56,7 @@ export function AppShell({ children, user }: AppShellProps) {
             </button>
             <Link href="/dashboard" className="group flex items-center gap-2.5">
               <img
-                src="/image/iconalone.png"
+                src="/image/prodlog_icon.svg"
                 alt="ProdLog"
                 className="h-7 w-7 object-contain transition-transform group-hover:-rotate-3"
               />
@@ -166,7 +166,7 @@ export function AppShell({ children, user }: AppShellProps) {
             <div className="px-4 pb-4 pt-3.5 border-b border-border/40">
               <Link href="/dashboard" className="group flex items-center gap-2.5" onClick={() => setMobileOpen(false)}>
                 <img
-                  src="/image/iconalone.png"
+                  src="/image/prodlog_icon.svg"
                   alt="ProdLog"
                   className="h-7 w-7 object-contain"
                 />
