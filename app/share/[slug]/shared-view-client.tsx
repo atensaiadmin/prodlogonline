@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Github, Globe, BookOpen, ExternalLink, Layers, History, ChevronDown, ChevronRight, Zap, Sparkles, Minus, HelpCircle, AlertTriangle } from "lucide-react";
+import { Github, Globe, BookOpen, ExternalLink, Layers, History, Package, ChevronDown, ChevronRight, Zap, Sparkles, Minus, HelpCircle, AlertTriangle } from "lucide-react";
 import { STAGES, MOODS, ADDON_CATEGORIES, IDEA_TYPES } from "@/lib/schema";
+import { convictionGradient } from "@/app/(app)/components/conviction-slider";
 import type { ShareProfile, SharedIdea, Stage, VisibilityLevel, ProfileLayer } from "@/lib/schema";
 
 const MOOD_ICON: Record<string, React.ReactNode> = {
@@ -36,14 +37,6 @@ function capFull(visibility: VisibilityLevel) {
   return visibility === "full";
 }
 
-// Conviction bar changes shade by score: low -> all-in.
-function convictionGradient(conviction: number) {
-  if (conviction <= 3) return "from-rose-500/60 to-rose-500";
-  if (conviction <= 6) return "from-amber-500/60 to-amber-500";
-  if (conviction <= 8) return "from-emerald-500/60 to-emerald-500";
-  return "from-cyan-500/60 to-cyan-500";
-}
-
 export default function SharedViewClient({
   profile,
   ideas,
@@ -56,22 +49,16 @@ export default function SharedViewClient({
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       {/* Header */}
-      <section className="space-y-2.5">
+      <section className="space-y-1.5">
         <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.18em] text-text-muted">
           Shared portfolio
         </p>
-        <h1 className="font-display text-3xl font-medium tracking-tight text-text sm:text-4xl">
+        <h1 className="font-display text-2xl font-medium tracking-tight text-text sm:text-3xl">
           {profile.name}
         </h1>
-        {profile.description ? (
-          <p className="mt-1.5 text-sm leading-relaxed text-text-secondary max-w-xl">
-            {profile.description}
-          </p>
-        ) : (
-          <p className="mt-1.5 text-sm leading-relaxed text-text-secondary max-w-xl">
-            A curated collection of projects in progress.
-          </p>
-        )}
+        <p className="max-w-xl text-sm leading-relaxed text-text-secondary">
+          {profile.description || "A curated collection of projects in progress."}
+        </p>
       </section>
 
       {ideas.length === 0 ? (
@@ -300,6 +287,3 @@ export default function SharedViewClient({
     </div>
   );
 }
-
-// Add missing import for Package used in shared view
-import { Package } from "lucide-react";
