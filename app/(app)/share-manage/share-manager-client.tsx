@@ -108,24 +108,24 @@ export default function ShareManagerClient({
         Dashboard
       </Link>
 
-      <section className="space-y-2">
-        <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.18em] text-text-muted">
-          Share profiles
-        </p>
-        <h1 className="font-display text-3xl font-medium tracking-tight text-text">
-          Curate what you share
-        </h1>
-        <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-text-secondary">
-          Create a share profile, pick the ideas to include, and send the link.
-          Each idea respects its visibility settings — you control what the
-          reviewer sees.
-        </p>
-      </section>
+      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+        <section className="space-y-1">
+          <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.18em] text-text-muted">
+            Share profiles
+          </p>
+          <h1 className="font-display text-2xl font-medium tracking-tight text-text sm:text-3xl">
+            Curate what you share
+          </h1>
+          <p className="max-w-xl text-sm leading-relaxed text-text-secondary">
+            Create a share profile, pick the ideas to include, and send the
+            link. Each idea respects its visibility settings — you control what
+            the reviewer sees.
+          </p>
+        </section>
 
-      <div className="flex items-center gap-2">
         <button
           onClick={() => setCreating(true)}
-          className="btn-primary px-4 py-2 text-xs font-semibold"
+          className="btn-primary shrink-0 px-4 py-2 text-xs font-semibold"
         >
           <Plus size={14} />
           New profile

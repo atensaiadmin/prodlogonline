@@ -6,13 +6,13 @@ import Link from "next/link";
 import { ArrowLeft, Trash2, PenLine, Clock, Zap, Sparkles, Minus, HelpCircle, AlertTriangle, Check, X } from "lucide-react";
 import {
   updateStage,
-  updateConviction,
   addEntry,
   editEntry,
   deleteEntry,
   deleteIdea,
 } from "@/lib/actions";
 import { STAGES, MOODS, IDEA_TYPES } from "@/lib/schema";
+import { ConvictionSlider, convictionLabel } from "../../components/conviction-slider";
 import type { Idea, Entry, Addon, Bug, Stage, Mood } from "@/lib/schema";
 import IdeaResources from "./idea-resources";
 import IdeaBugs from "./idea-bugs";
@@ -34,14 +34,6 @@ const MOOD_DOT: Record<string, string> = {
   frustrated: "bg-rose-400",
 };
 
-// Conviction bar changes shade by score: low -> all-in.
-function convictionGradient(conviction: number) {
-  if (conviction <= 3) return "from-rose-500/70 to-rose-500";
-  if (conviction <= 6) return "from-amber-500/70 to-amber-500";
-  if (conviction <= 8) return "from-emerald-500/70 to-emerald-500";
-  return "from-cyan-500/70 to-cyan-500";
-}
-
 export default function IdeaDetailPage({
   idea,
   entries,
@@ -58,9 +50,6 @@ export default function IdeaDetailPage({
   const [entryBody, setEntryBody] = useState("");
   const [entryMood, setEntryMood] = useState<Mood | "">("");
   const [entryAction, setEntryAction] = useState("");
-  const [convictionInput, setConvictionInput] = useState(
-    idea.conviction.toString()
-  );
   const [editingEntryId, setEditingEntryId] = useState<string | null>(null);
   const [editEntryBody, setEditEntryBody] = useState("");
   const [editEntryMood, setEditEntryMood] = useState<Mood | "">("");
@@ -69,16 +58,6 @@ export default function IdeaDetailPage({
   async function handleStageChange(newStage: Stage) {
     await updateStage(idea.id, newStage);
     router.refresh();
-  }
-
-  async function handleConvictionBlur() {
-    const val = parseInt(convictionInput);
-    if (val && val >= 1 && val <= 10) {
-      await updateConviction(idea.id, val);
-      router.refresh();
-    } else {
-      setConvictionInput(idea.conviction.toString());
-    }
   }
 
   async function handleEntrySubmit(e: React.FormEvent) {
@@ -205,29 +184,8 @@ export default function IdeaDetailPage({
           </div>
         )}
 
-        {/* Conviction bar */}
-        <div className="card p-4 space-y-2.5">
-          <label className="flex items-center gap-3 rounded-lg border border-border bg-surface-2/50 px-3.5 py-2.5">
-            <span className="text-xs font-medium text-text-muted">Conviction</span>
-            <input
-              type="number"
-              min={1}
-              max={10}
-              value={convictionInput}
-              onChange={(e) => setConvictionInput(e.target.value)}
-              onBlur={handleConvictionBlur}
-              onKeyDown={(e) => e.key === "Enter" && handleConvictionBlur()}
-              className="w-9 bg-transparent text-center text-base font-semibold tabular-nums outline-none text-text"
-            />
-            <span className="text-xs text-text-muted">/10</span>
-          </label>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-surface-2">
-            <span
-              className={`block h-full rounded-full bg-gradient-to-r ${convictionGradient(idea.conviction)} transition-all duration-700`}
-              style={{ width: `${idea.conviction * 10}%` }}
-            />
-          </div>
-        </div>
+        {/* Conviction slider */}
+        <DetailConviction idea={idea} />
 
         {/* Stage pills */}
         <div className="flex flex-wrap gap-1.5">
@@ -455,6 +413,19 @@ export default function IdeaDetailPage({
           </ol>
         )}
       </section>
+    </div>
+  );
+}
+
+function DetailConviction({ idea }: { idea: Idea }) {
+  const [v, setV] = useState(idea.conviction);
+  return (
+    <div className="card p-4">
+      <div className="mb-2 flex items-center justify-between">
+        <span className="text-xs font-medium text-text-muted">Conviction</span>
+        <span className="text-xs font-medium text-text-secondary">{convictionLabel(v)}</span>
+      </div>
+      <ConvictionSlider ideaId={idea.id} value={v} onLiveChange={setV} />
     </div>
   );
 }

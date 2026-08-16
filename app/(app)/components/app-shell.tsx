@@ -135,17 +135,6 @@ export function AppShell({ children, user }: AppShellProps) {
             <NavLink href="/ideas" icon={<Lightbulb size={15} />}>Ideas</NavLink>
             <NavLink href="/share-manage" icon={<Share2 size={15} />}>Share</NavLink>
 
-            <div className="mt-6 border-t border-border pt-3">
-              <p className="mb-2 px-2.5 font-mono text-[0.68rem] font-bold uppercase tracking-[0.16em] text-text-muted">Quick actions</p>
-              <Link
-                href="/ideas/new"
-                className="sidebar-link"
-              >
-                <Plus size={14} />
-                New idea
-              </Link>
-            </div>
-
             <div className="mt-5">
               <div className="mx-2.5 rounded-lg border border-accent/20 bg-accent-subtle p-3 shadow-sm">
                 <div className="mb-1.5 flex items-center gap-1.5">
@@ -196,12 +185,6 @@ export function AppShell({ children, user }: AppShellProps) {
               <NavLink href="/share-manage" icon={<Share2 size={15} />} onNavigate={() => setMobileOpen(false)}>
                 Share
               </NavLink>
-              <div className="mt-3 border-t border-border pt-3">
-                <p className="mb-2 px-2.5 font-mono text-[0.68rem] font-bold uppercase tracking-[0.16em] text-text-muted">Quick actions</p>
-                <Link href="/ideas/new" className="sidebar-link" onClick={() => setMobileOpen(false)}>
-                  <Plus size={14} /> New idea
-                </Link>
-              </div>
             </nav>
           </div>
         </div>

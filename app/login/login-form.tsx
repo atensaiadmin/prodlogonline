@@ -22,10 +22,13 @@ export function LoginForm({
       // Opens Google in a popup and exchanges the code (server-side on PB).
       await pb.collection("users").authWithOAuth2({ provider: "google" });
       // Persist the auth token as a cookie so the server sees us logged in.
+      // Only mark it `Secure` on https: local dev runs over plain http
+      // (localhost or a LAN IP like 172.20.x.x), and browsers reject
+      // `Secure` cookies there — which silently breaks login in dev.
       document.cookie = pb.authStore.exportToCookie({
         httpOnly: false,
         sameSite: "lax",
-        secure: true,
+        secure: window.location.protocol === "https:",
         path: "/",
       });
       window.location.href = next.startsWith("/") ? next : "/dashboard";

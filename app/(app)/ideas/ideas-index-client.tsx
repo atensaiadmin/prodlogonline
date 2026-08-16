@@ -5,15 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Idea, IdeaType, Stage } from "@/lib/schema";
 import { IDEA_TYPES, STAGES } from "@/lib/schema";
+import { ConvictionSlider, ConvictionCell } from "../components/conviction-slider";
 import { Grid3X3, Rows, SlidersHorizontal, X, Search, Plus } from "lucide-react";
-
-// Conviction bar changes shade by score: low -> all-in.
-function convictionGradient(conviction: number) {
-  if (conviction <= 3) return "from-rose-500/60 to-rose-500";
-  if (conviction <= 6) return "from-amber-500/60 to-amber-500";
-  if (conviction <= 8) return "from-emerald-500/60 to-emerald-500";
-  return "from-cyan-500/60 to-cyan-500";
-}
 
 export function IdeasIndexClient({
   initialIdeas,
@@ -234,47 +227,45 @@ function GridView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<s
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {ideas.map((idea) => {
-        const typeDef = IDEA_TYPES.find((t) => t.key === (idea.idea_type ?? "app"));
         const stageDef = STAGES.find((s) => s.key === idea.stage);
         const addons = addonCounts[idea.id] ?? 0;
         return (
           <Link
             key={idea.id}
             href={`/ideas/${idea.id}`}
-            className="group block overflow-hidden rounded-xl border border-border/70 bg-surface/80 backdrop-blur-sm p-4 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-card-hover"
+            className="group relative flex h-[168px] flex-col overflow-hidden rounded-xl border border-border/70 bg-surface/80 p-4 shadow-card transition-all duration-300 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-card-hover"
           >
-            <div className="flex items-center justify-between gap-2 mb-1.5">
-              <span className="text-sm font-semibold text-text truncate">{idea.title}</span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-surface-2/80 px-2 py-0.5 text-xs font-medium text-text-muted">
+            <div className="flex items-start justify-between gap-2">
+              <h4 className="line-clamp-1 text-sm font-semibold leading-snug text-text">{idea.title}</h4>
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-surface-2/80 px-2 py-0.5 text-[0.68rem] font-medium text-text-muted">
                 <span className={`h-1.5 w-1.5 rounded-full ${stageDef?.color}`} />
                 {stageDef?.label}
               </span>
             </div>
 
-            {idea.one_liner && (
-              <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-text-secondary">{idea.one_liner}</p>
+            {idea.one_liner ? (
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-text-secondary">{idea.one_liner}</p>
+            ) : (
+              <p className="mt-1 text-xs italic text-text-muted/70">No one-liner yet</p>
             )}
 
-            <div className="mt-3 space-y-2">
-              <div className="h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
-                <div
-                  className={`h-full rounded-full bg-gradient-to-r ${convictionGradient(idea.conviction)} transition-all duration-500`}
-                  style={{ width: `${idea.conviction * 10}%` }}
-                />
+            <div className="mt-auto pt-2.5">
+              <ConvictionSlider ideaId={idea.id} value={idea.conviction} />
+              <div className="mt-1 flex items-center justify-between gap-2 text-[0.68rem] text-text-muted">
+                <span className="flex min-w-0 items-center gap-2">
+                  <span className="truncate">
+                    {idea.tags?.length ? (
+                      idea.tags.slice(0, 2).join(", ") + (idea.tags.length > 2 ? "…" : "")
+                    ) : (
+                      <span className="italic opacity-60">No tags</span>
+                    )}
+                  </span>
+                  {addons > 0 && (
+                    <span className="shrink-0 text-text-secondary">{addons} add-on{addons !== 1 ? "s" : ""}</span>
+                  )}
+                </span>
+                <span className="shrink-0 tabular-nums">{new Date(idea.updated_at).toLocaleDateString()}</span>
               </div>
-              <div className="flex items-center justify-between text-xs text-text-muted">
-                <span>Conviction <span className="font-medium text-text">{idea.conviction}/10</span></span>
-                <span className="tabular-nums">{new Date(idea.updated_at).toLocaleDateString()}</span>
-              </div>
-            </div>
-
-            <div className="mt-3 flex items-center justify-between text-xs text-text-muted pt-2 border-t border-border/40">
-              <span>{addons} add-on{addons !== 1 ? 's' : ''}</span>
-              {idea.tags?.length ? (
-                <span className="truncate max-w-[50%]">{idea.tags.slice(0, 2).join(", ")}{idea.tags.length > 2 ? '…' : ""}</span>
-              ) : (
-                <span className="opacity-60 italic">No tags</span>
-              )}
             </div>
           </Link>
         );
@@ -286,14 +277,13 @@ function GridView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<s
 function TableView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<string, number> }) {
   return (
     <div className="overflow-x-auto rounded-xl border border-border/70 bg-surface/80 backdrop-blur-sm shadow-card">
-      <table className="min-w-[720px] w-full border-collapse text-sm">
+      <table className="min-w-[640px] w-full border-collapse text-sm">
         <thead>
           <tr className="bg-surface-2/50 text-left text-xs text-text-secondary">
             <th className="rounded-tl-xl p-3 font-medium">Title</th>
             <th className="p-3 font-medium">Type</th>
             <th className="p-3 font-medium">Stage</th>
             <th className="p-3 font-medium">Conviction</th>
-            <th className="p-3 font-medium">Tags</th>
             <th className="p-3 font-medium">Add-ons</th>
             <th className="rounded-tr-xl p-3 font-medium">Updated</th>
           </tr>
@@ -319,8 +309,9 @@ function TableView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<
                     {stageDef?.label}
                   </span>
                 </td>
-                <td className="p-3 tabular-nums"><span className="font-medium text-text">{i.conviction}</span>/10</td>
-                <td className="p-3 text-text-muted max-w-[180px] truncate">{i.tags?.join(", ") || <span className="opacity-50">—</span>}</td>
+                <td className="p-3">
+                  <ConvictionCell idea={i} />
+                </td>
                 <td className="p-3 tabular-nums">{addonCounts[i.id] ?? 0}</td>
                 <td className="p-3 text-text-muted whitespace-nowrap">{new Date(i.updated_at).toLocaleDateString()}</td>
               </tr>

@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>prodlog - Wireframe Layout</title>
+  <style>
+    /* --------------------------------------------------------------------------
+       1. CORE RESETS & VARIABLES
+       -------------------------------------------------------------------------- */
+    :root {
+      --bg-main: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-muted: #f1f5f9;
+      --border-color: #e2e8f0;
+      
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+
+      --stage-inbox: #6366f1;
+      --stage-validating: #f59e0b;
+      --stage-building: #10b981;
+      --stage-launched: #06b6d4;
+      --stage-dead: #94a3b8;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+      
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    /* --------------------------------------------------------------------------
+       2. APP LAYOUT STRUCTURE
+       -------------------------------------------------------------------------- */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 220px;
+      background-color: var(--bg-surface);
+      border-right: 1px solid var(--border-color);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      font-weight: 700;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .nav-item a {
+      display: block;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .nav-item.active a {
+      background-color: var(--bg-muted);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Main Content Area */
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Global Header */
+    .top-header {
+      height: 60px;
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 2rem;
+      gap: 1rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .view-wrapper {
+      padding: 2rem;
+      max-width: 1400px;
+    }
+
+    /* Compact Hero Area */
+    .hero-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .view-toggle {
+      display: inline-flex;
+      background-color: var(--bg-muted);
+      padding: 0.25rem;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+    }
+
+    .toggle-btn {
+      border: none;
+      background: transparent;
+      padding: 0.35rem 0.85rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+
+    .toggle-btn.active {
+      background-color: var(--bg-surface);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* --------------------------------------------------------------------------
+       3. KANBAN BOARD VIEW
+       -------------------------------------------------------------------------- */
+    .board-view {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(230px, 1fr));
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .column {
+      background-color: var(--bg-muted);
+      border-radius: var(--radius-lg);
+      padding: 0.75rem;
+      min-height: 400px;
+    }
+
+    .column-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      padding: 0 0.25rem;
+    }
+
+    .column-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .column-title::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--text-muted);
+    }
+
+    .column[data-stage="inbox"] .column-title::before { background-color: var(--stage-inbox); }
+    .column[data-stage="validating"] .column-title::before { background-color: var(--stage-validating); }
+    .column[data-stage="building"] .column-title::before { background-color: var(--stage-building); }
+    .column[data-stage="launched"] .column-title::before { background-color: var(--stage-launched); }
+    .column[data-stage="dead"] .column-title::before { background-color: var(--stage-dead); }
+
+    .counter {
+      font-size: 0.75rem;
+      font-weight: 600;
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--text-muted);
+      padding: 0.1rem 0.4rem;
+      border-radius: 10px;
+    }
+
+    /* Fixed Height Cards with Text Truncation */
+    .card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0.85rem;
+      margin-bottom: 0.75rem;
+      height: 105px; /* Fixed height across columns */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: var(--primary);
+    }
+
+    .card-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+      /* Line clamp 1 line */
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      /* Line clamp 2 lines */
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .progress-bar {
+      flex-grow: 1;
+      height: 6px;
+      background-color: var(--bg-muted);
+      border-radius: 3px;
+      overflow: hidden;
+      cursor: ew-resize;
+      touch-action: none;
+    }
+
+    .progress-bar:hover .progress-fill {
+      box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.4);
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: var(--primary);
+      transition: width 0.12s ease;
+    }
+
+    .pct {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+      min-width: 32px;
+      text-align: right;
+    }
+
+    .card-date {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .empty-card-placeholder {
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      background: transparent;
+    }
+
+    /* --------------------------------------------------------------------------
+       4. LIST / TABLE VIEW
+       -------------------------------------------------------------------------- */
+    .list-view {
+      display: none; /* Controlled by Javascript */
+      width: 100%;
+      border-collapse: collapse;
+      background-color: var(--bg-surface);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .list-view th {
+      background-color: var(--bg-muted);
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .list-view td {
+      padding: 0.85rem 1rem;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .list-view tr:last-child td {
+      border-bottom: none;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-inbox { background: #eef2ff; color: var(--stage-inbox); }
+    .badge-validating { background: #fef3c7; color: var(--stage-validating); }
+    .badge-building { background: #d1fae5; color: var(--stage-building); }
+
+    .list-progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .list-progress .progress-bar {
+      flex: 0 0 110px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">❖ prodlog</div>
+      <ul class="nav-list">
+        <li class="nav-item active"><a href="#">Dashboard</a></li>
+        <li class="nav-item"><a href="#">Ideas</a></li>
+        <li class="nav-item"><a href="#">Share</a></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN SECTION -->
+    <main class="main-content">
+      <!-- CONSOLIDATED TOP ACTION HEADER -->
+      <header class="top-header">
+        <button class="btn-primary">+ New Idea</button>
+      </header>
+
+      <div class="view-wrapper">
+        <!-- COMPACT HERO AREA -->
+        <div class="hero-section">
+          <h1 class="hero-title">What are you building?</h1>
+          <p class="hero-subtitle">Track every idea from spark to launch — or a graceful burial.</p>
+        </div>
+
+        <!-- VIEW CONTROLS -->
+        <div class="controls-bar">
+          <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">All Projects (32)</span>
+          <div class="view-toggle">
+            <button id="boardBtn" class="toggle-btn active" onclick="switchView('board')">Board</button>
+            <button id="listBtn" class="toggle-btn" onclick="switchView('list')">List</button>
+          </div>
+        </div>
+
+        <!-- 1. BOARD VIEW -->
+        <div id="boardContainer" class="board-view">
+          <!-- INBOX -->
+          <div class="column" data-stage="inbox">
+            <div class="column-header">
+              <span class="column-title">Inbox</span>
+              <span class="counter">2</span>
+            </div>
+            <div class="card">
+              <div>
+                <h4 class="card-title">jelvintravelandtours</h4>
+                <p class="card-desc">Travel planning platform focusing on domestic trip scheduling.</p>
+              </div>
+              <div class="card-footer">
+                <div class="progress-bar"><div class="progress-fill" style="width: 35%;"></div></div>
+                <span class="card-date">13 Aug</span>
+              </div>
+            </div>
+            <div class="card">
+              <div>
+                <h4 class="card-title">Pan Ocean: SCADA</h4>
+                <p class="card-desc">Gas-plant SCADA & operational dashboard interface redesign.</p>
+              </div>
+              <div class="card-footer">
+                <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
+                <span class="card-date">4 Aug</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- VALIDATING -->
+          <div class="column" data-stage="validating">
+            <div class="column-header">
+              <span class="column-title">Validating</span>
+              <span class="counter">2</span>
+            </div>
+            <div class="card">
+              <div>
+                <h4 class="card-title">Nigerian Digital Travel</h4>
+                <p class="card-desc">Multi-agency digital travel verification flow and compliance check.</p>
+              </div>
+              <div class="card-footer">
+                <div class="progress-bar"><div class="progress-fill" style="width: 80%;"></div></div>
+                <span class="card-date">4 Aug</span>
+              </div>
+            </div>
+            <div class="card">
+              <div>
+                <h4 class="card-title">Atensai — Launch strategy</h4>
+                <p class="card-desc">Company setup, IP filing, taxation structures, and go-to-market.</p>
+              </div>
+              <div class="card-footer">
+                <div class="progress-bar"><div class="progress-fill" style="width: 80%;"></div></div>
+                <span class="card-date">4 Aug</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BUILDING -->
+          <div class="column" data-stage="building">
+            <div class="column-header">
+              <span class="column-title">Building</span>
+              <span class="counter">1</span>
+            </div>
+            <div class="card">
+              <div>
+                <h4 class="card-title">Bauta</h4>
+                <p class="card-desc">Anonymous discussion board tailored for confidential teams.</p>
+              </div>
+              <div class="card-footer">
+                <div class="progress-bar"><div class="progress-fill" style="width: 50%;"></div></div>
+                <span class="card-date">5 Aug</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- LAUNCHED -->
+          <div class="column" data-stage="launched">
+            <div class="column-header">
+              <span class="column-title">Launched</span>
+              <span class="counter">0</span>
+            </div>
+            <div class="empty-card-placeholder">No items</div>
+          </div>
+
+          <!-- DEAD -->
+          <div class="column" data-stage="dead">
+            <div class="column-header">
+              <span class="column-title">Dead</span>
+              <span class="counter">0</span>
+            </div>
+            <div class="empty-card-placeholder">No items</div>
+          </div>
+        </div>
+
+        <!-- 2. LIST VIEW -->
+        <table id="listContainer" class="list-view">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Status</th>
+              <th>Progress</th>
+              <th>Last Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>jelvintravelandtours</strong></td>
+              <td><span class="badge badge-inbox">Inbox</span></td>
+              <td><div class="list-progress"><div class="progress-bar"><div class="progress-fill" style="width: 35%;"></div></div></div></td>
+              <td>13 Aug</td>
+            </tr>
+            <tr>
+              <td><strong>Nigerian Digital Travel Registry</strong></td>
+              <td><span class="badge badge-validating">Validating</span></td>
+              <td><div class="list-progress"><div class="progress-bar"><div class="progress-fill" style="width: 80%;"></div></div></div></td>
+              <td>4 Aug</td>
+            </tr>
+            <tr>
+              <td><strong>Bauta</strong></td>
+              <td><span class="badge badge-building">Building</span></td>
+              <td><div class="list-progress"><div class="progress-bar"><div class="progress-fill" style="width: 50%;"></div></div></div></td>
+              <td>5 Aug</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function switchView(view) {
+      const board = document.getElementById('boardContainer');
+      const list = document.getElementById('listContainer');
+      const boardBtn = document.getElementById('boardBtn');
+      const listBtn = document.getElementById('listBtn');
+
+      if (view === 'board') {
+        board.style.display = 'grid';
+        list.style.display = 'none';
+        boardBtn.classList.add('active');
+        listBtn.classList.remove('active');
+      } else {
+        board.style.display = 'none';
+        list.style.display = 'table';
+        listBtn.classList.add('active');
+        boardBtn.classList.remove('active');
+      }
+    }
+  </script>
+
+  <script>
+    // Draggable / scrollable progress bars
+    // Drag to set, or hover + scroll to nudge up/down.
+    document.querySelectorAll('.progress-bar').forEach((bar) => {
+      const fill = bar.querySelector('.progress-fill');
+      const pct = document.createElement('span');
+      pct.className = 'pct';
+      pct.textContent = Math.round(parseFloat(fill.style.width)) + '%';
+      bar.insertAdjacentElement('afterend', pct);
+      bar.title = 'Drag or scroll to adjust';
+
+      let dragging = false;
+      const setFromX = (clientX) => {
+        const rect = bar.getBoundingClientRect();
+        const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+        const p = Math.round(ratio * 100);
+        fill.style.width = p + '%';
+        pct.textContent = p + '%';
+      };
+
+      bar.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dragging = true;
+        bar.setPointerCapture(e.pointerId);
+        setFromX(e.clientX);
+      });
+      bar.addEventListener('pointermove', (e) => {
+        if (dragging) setFromX(e.clientX);
+      });
+      bar.addEventListener('pointerup', (e) => {
+        dragging = false;
+        setFromX(e.clientX);
+      });
+      bar.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const cur = parseInt(fill.style.width, 10) || 0;
+        const next = Math.max(0, Math.min(100, cur + (e.deltaY < 0 ? 5 : -5)));
+        fill.style.width = next + '%';
+        pct.textContent = next + '%';
+      }, { passive: false });
+    });
+  </script>
+</body>
+</html>
