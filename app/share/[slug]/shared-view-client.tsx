@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Github, Globe, BookOpen, ExternalLink, Layers, History, Package, ChevronDown, ChevronRight, Zap, Sparkles, Minus, HelpCircle, AlertTriangle } from "lucide-react";
+import { Github, Globe, BookOpen, ExternalLink, Layers, History, Package, ChevronDown, ChevronRight, Zap, Sparkles, Minus, HelpCircle, AlertTriangle, Eye, FileText, Smartphone } from "lucide-react";
 import { STAGES, MOODS, ADDON_CATEGORIES, IDEA_TYPES } from "@/lib/schema";
 import { convictionGradient } from "@/app/(app)/components/conviction-slider";
+import { PB_URL } from "@/lib/pb";
 import type { ShareProfile, SharedIdea, Stage, VisibilityLevel, ProfileLayer } from "@/lib/schema";
 
 const MOOD_ICON: Record<string, React.ReactNode> = {
@@ -18,11 +19,11 @@ const MOOD_ICON: Record<string, React.ReactNode> = {
 function layerFlags(layer: ProfileLayer) {
   switch (layer) {
     case "pitch":
-      return { showRepo: false, showDeploy: true, showDocs: true, showAddons: false, showEntries: false };
+      return { showRepo: false, showDeploy: true, showPreview: true, showDocs: true, showAddons: false, showEntries: false };
     case "tech":
-      return { showRepo: true, showDeploy: true, showDocs: true, showAddons: false, showEntries: false };
+      return { showRepo: true, showDeploy: true, showPreview: true, showDocs: true, showAddons: false, showEntries: false };
     case "full":
-      return { showRepo: true, showDeploy: true, showDocs: true, showAddons: true, showEntries: true };
+      return { showRepo: true, showDeploy: true, showPreview: true, showDocs: true, showAddons: true, showEntries: true };
   }
 }
 
@@ -47,15 +48,22 @@ export default function SharedViewClient({
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div className="mx-auto max-w-3xl space-y-6">
       {/* Header */}
       <section className="space-y-1.5">
-        <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.18em] text-text-muted">
-          Shared portfolio
-        </p>
-        <h1 className="font-display text-2xl font-medium tracking-tight text-text sm:text-3xl">
-          {profile.name}
-        </h1>
+        <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-1">
+          <div className="space-y-1">
+            <p className="font-mono text-[0.7rem] font-bold uppercase tracking-[0.18em] text-text-muted">
+              Shared portfolio
+            </p>
+            <h1 className="font-display text-2xl font-medium tracking-tight text-text sm:text-3xl">
+              {profile.name}
+            </h1>
+          </div>
+          <span className="shrink-0 rounded-full border border-border/70 bg-surface-2/50 px-3 py-1 text-xs font-medium tabular-nums text-text-secondary">
+            {ideas.length} project{ideas.length === 1 ? "" : "s"}
+          </span>
+        </div>
         <p className="max-w-xl text-sm leading-relaxed text-text-secondary">
           {profile.description || "A curated collection of projects in progress."}
         </p>
@@ -69,27 +77,29 @@ export default function SharedViewClient({
           </p>
         </div>
       ) : (
-        <div className="space-y-3.5">
+        <div className="space-y-3">
           {ideas.map(({ idea, addons, entries }) => {
             const stage = STAGES.find((s) => s.key === idea.stage)!;
             const typeDef = IDEA_TYPES.find((t) => t.key === (idea.idea_type ?? "app"))!;
             const expanded = expandedId === idea.id;
             const lf = layerFlags(profile.layer ?? "pitch");
             const showOneLiner = capOneLiner(idea.visibility);
-            const showRepo = lf.showRepo;
-            const showDeploy = lf.showDeploy;
-            const showDocs = lf.showDocs && capDocs(idea.visibility);
+            const showRepo = lf.showRepo && !!idea.share_links?.repo;
+            const showDeploy = lf.showDeploy && !!idea.share_links?.deploy;
+            const showPreview = lf.showPreview && !!idea.share_links?.preview;
+            const showDocs = lf.showDocs && capDocs(idea.visibility) && !!idea.share_links?.docs;
             const showAddons = lf.showAddons && capFull(idea.visibility);
             const showEntries = lf.showEntries && capFull(idea.visibility);
-            const showLinks = showRepo || showDeploy || showDocs;
+            const showLinks = showRepo || showDeploy || showPreview || showDocs;
+            const showPaper = !!idea.paper;
 
             return (
               <div key={idea.id} className="card overflow-hidden rounded-xl">
                 <button
                   onClick={() => setExpandedId(expanded ? null : idea.id)}
-                  className="flex w-full items-start justify-between gap-4 p-5 text-left transition-colors hover:bg-surface-2/40"
+                  className="flex w-full items-start justify-between gap-3 px-4 py-3.5 text-left transition-colors hover:bg-surface-2/40"
                 >
-                  <div className="min-w-0 space-y-1.5">
+                  <div className="min-w-0 space-y-1">
                     <div className="flex flex-wrap items-center gap-1.5">
                       <span
                         className={`rounded-full px-2 py-0.5 text-xs font-semibold ${stage.color} text-white shadow-sm`}
@@ -99,6 +109,16 @@ export default function SharedViewClient({
                       <span className="rounded-md border border-border/60 bg-surface px-2 py-0.5 text-xs font-medium text-text-secondary">
                         {typeDef.icon} {typeDef.label}
                       </span>
+                      {idea.mobile && (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-surface-2/60 px-2 py-0.5 text-xs font-medium text-text-secondary">
+                          <Smartphone size={11} /> Mobile
+                        </span>
+                      )}
+                      {idea.paper && (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-surface-2/60 px-2 py-0.5 text-xs font-medium text-text-secondary">
+                          <FileText size={11} /> Paper
+                        </span>
+                      )}
                       {idea.tags.slice(0, 3).map((tag) => (
                         <span
                           key={tag}
@@ -108,7 +128,7 @@ export default function SharedViewClient({
                         </span>
                       ))}
                     </div>
-                    <h3 className="font-display text-lg font-semibold text-text">
+                    <h3 className="font-display text-base font-semibold text-text">
                       {idea.title}
                     </h3>
                     {showOneLiner && idea.one_liner && (
@@ -117,7 +137,7 @@ export default function SharedViewClient({
                       </p>
                     )}
                     {showOneLiner && (
-                      <div className="mt-2.5 flex items-center gap-4 text-xs text-text-muted flex-wrap">
+                      <div className="mt-2 flex items-center gap-3 text-xs text-text-muted flex-wrap">
                         <span className="flex items-center gap-1.5">
                           <div className="h-1.5 w-16 overflow-hidden rounded-full bg-surface-2">
                             <div
@@ -149,8 +169,8 @@ export default function SharedViewClient({
                 </button>
 
                 {expanded && (
-                  <div className="border-t border-border/60 px-5 pb-5 pt-4 space-y-5">
-                    {showLinks && (idea.links?.repo || idea.links?.deploy || (showDocs && idea.links?.docs)) && (
+                  <div className="border-t border-border/60 px-4 pb-4 pt-3.5 space-y-4">
+                    {showLinks && (idea.links?.repo || idea.links?.deploy || idea.links?.preview || (showDocs && idea.links?.docs)) && (
                       <div className="flex flex-wrap gap-2.5">
                         {showRepo && idea.links?.repo && (
                           <a
@@ -172,6 +192,16 @@ export default function SharedViewClient({
                             <Globe size={13} /> {typeDef.links.deploy} <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                           </a>
                         )}
+                        {showPreview && idea.links?.preview && (
+                          <a
+                            href={idea.links.preview}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-2/60 px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:border-border-strong hover:text-text hover:bg-surface-2/80"
+                          >
+                            <Eye size={13} /> Preview <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </a>
+                        )}
                         {showDocs && idea.links?.docs && (
                           <a
                             href={idea.links.docs}
@@ -180,6 +210,16 @@ export default function SharedViewClient({
                             className="group inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-2/60 px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:border-border-strong hover:text-text hover:bg-surface-2/80"
                           >
                             <BookOpen size={13} /> {typeDef.links.docs} <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </a>
+                        )}
+                        {showPaper && (
+                          <a
+                            href={`${PB_URL}/api/files/ideas/${idea.id}/${idea.paper}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-2/60 px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:border-border-strong hover:text-text hover:bg-surface-2/80"
+                          >
+                            <FileText size={13} /> Paper <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                           </a>
                         )}
                       </div>

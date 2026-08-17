@@ -216,6 +216,15 @@ const ideasId = await ensureCollection("ideas", {
     { name: "conviction", type: "number", min: 1, max: 10, onlyInt: true },
     { name: "tags", type: "json" },
     { name: "links", type: "json" },
+    { name: "share_links", type: "json" },
+    { name: "mobile", type: "bool" },
+    {
+      name: "paper",
+      type: "file",
+      maxSelect: 1,
+      maxSize: 20971520,
+      mimeTypes: ["application/pdf"],
+    },
     {
       name: "visibility",
       type: "select",

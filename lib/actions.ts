@@ -2,7 +2,9 @@
 
 import { v4 as uuidv4 } from "uuid";
 import * as store from "./store";
-import type { Idea, Entry, Addon, Bug, Stage, Mood, AddonCategory, VisibilityLevel, Links, ShareProfile, SharedIdea, IdeaType, ProfileLayer, BugStatus, BugSeverity } from "./schema";
+import { createServerPB } from "./pocketbase-server";
+import { DEFAULT_SHARE_LINKS } from "./schema";
+import type { Idea, Entry, Addon, Bug, Stage, Mood, AddonCategory, VisibilityLevel, Links, ShareProfile, SharedIdea, IdeaType, ProfileLayer, BugStatus, BugSeverity, ShareLinkKey } from "./schema";
 
 export async function getIdeas(): Promise<Idea[]> {
   return store.getIdeas();
@@ -40,8 +42,12 @@ export async function createIdea(formData: FormData): Promise<string> {
     links: {
       repo: (formData.get("link_repo") as string)?.trim() || undefined,
       deploy: (formData.get("link_deploy") as string)?.trim() || undefined,
+      preview: (formData.get("link_preview") as string)?.trim() || undefined,
       docs: (formData.get("link_docs") as string)?.trim() || undefined,
     },
+    share_links: { ...DEFAULT_SHARE_LINKS },
+    mobile: formData.get("mobile") === "on",
+    paper: "",
     visibility: (formData.get("visibility") as VisibilityLevel) || "private",
     created_at: now,
     updated_at: now,
@@ -63,6 +69,28 @@ export async function updateConviction(ideaId: string, conviction: number) {
 
 export async function updateLinks(ideaId: string, links: Links) {
   await store.updateIdea(ideaId, { links });
+}
+
+export async function updateLinksAndShare(
+  ideaId: string,
+  links: Links,
+  share_links: Record<ShareLinkKey, boolean>
+) {
+  await store.updateIdea(ideaId, { links, share_links });
+}
+
+export async function uploadPaper(ideaId: string, formData: FormData): Promise<void> {
+  const pb = await createServerPB();
+  const file = formData.get("paper");
+  if (!(file instanceof File) || file.size === 0) {
+    throw new Error("Choose a PDF file to upload.");
+  }
+  await pb.collection("ideas").update(ideaId, { paper: file });
+}
+
+export async function removePaper(ideaId: string): Promise<void> {
+  const pb = await createServerPB();
+  await pb.collection("ideas").update(ideaId, { paper: null });
 }
 
 export async function updateVisibility(ideaId: string, visibility: VisibilityLevel) {
@@ -130,13 +158,28 @@ export async function editIdea(formData: FormData): Promise<void> {
 
   const linkRepo = formData.get("link_repo");
   const linkDeploy = formData.get("link_deploy");
+  const linkPreview = formData.get("link_preview");
   const linkDocs = formData.get("link_docs");
-  if (linkRepo !== null || linkDeploy !== null || linkDocs !== null) {
+  if (linkRepo !== null || linkDeploy !== null || linkPreview !== null || linkDocs !== null) {
     updates.links = {
       repo: (linkRepo as string)?.trim() || undefined,
       deploy: (linkDeploy as string)?.trim() || undefined,
+      preview: (linkPreview as string)?.trim() || undefined,
       docs: (linkDocs as string)?.trim() || undefined,
     };
+  }
+
+  // Checkbox is always present in the edit form; unchecked => not shared.
+  updates.mobile = formData.get("mobile") === "on";
+
+  const shareKeys: ShareLinkKey[] = ["repo", "deploy", "preview", "docs"];
+  const hasShareToggles = shareKeys.some((k) => formData.get(`share_${k}`) !== null);
+  if (hasShareToggles) {
+    const share_links: Record<ShareLinkKey, boolean> = { ...DEFAULT_SHARE_LINKS };
+    for (const k of shareKeys) {
+      share_links[k] = formData.get(`share_${k}`) === "on";
+    }
+    updates.share_links = share_links;
   }
 
   const visibility = formData.get("visibility");

@@ -13,6 +13,7 @@ import {
   Pencil,
   X,
   Share2,
+  Sparkles,
 } from "lucide-react";
 import {
   createShareProfile,
@@ -28,6 +29,18 @@ import type { ShareProfile, Idea, ProfileLayer } from "@/lib/schema";
 function describeError(err: unknown): string {
   if (err instanceof Error && err.message) return err.message;
   return "Something went wrong. Please try again.";
+}
+
+// An idea is share-ready when it has a one-liner plus a link (or paper) and
+// isn't private — enough for a shared profile to look intentional.
+function shareReady(idea: Idea): boolean {
+  if (idea.visibility === "private") return false;
+  const hasLink =
+    !!idea.links?.repo ||
+    !!idea.links?.deploy ||
+    !!idea.links?.preview ||
+    !!idea.links?.docs;
+  return !!idea.one_liner && (hasLink || !!idea.paper);
 }
 
 export default function ShareManagerClient({
@@ -126,6 +139,7 @@ export default function ShareManagerClient({
 
   const selectedProfile = profiles.find((p) => p.id === selectedProfileId);
   const shareableIdeas = ideas.filter((i) => i.visibility !== "private");
+  const readyCount = ideas.filter(shareReady).length;
   const shareUrl = selectedProfile
     ? `${window.location.origin}/share/${selectedProfile.slug}`
     : "";
@@ -171,6 +185,21 @@ export default function ShareManagerClient({
       {error && (
         <div className="rounded-lg border border-rose-500/25 bg-rose-500/10 px-3.5 py-2.5 text-xs font-medium text-rose-600 dark:text-rose-400">
           {error}
+        </div>
+      )}
+
+      {profiles.length > 0 && ideas.length > 0 && (
+        <div className="card flex flex-wrap items-center justify-between gap-3 px-4 py-3.5">
+          <div className="flex items-center gap-2.5">
+            <Sparkles size={15} className="text-accent" />
+            <span className="text-sm text-text-secondary">
+              <span className="font-semibold text-text">{readyCount}</span> of{" "}
+              {ideas.length} ideas ready to share
+            </span>
+          </div>
+          <p className="text-xs text-text-muted">
+            Ready = has a one-liner plus a link or paper, and isn&apos;t private.
+          </p>
         </div>
       )}
 
@@ -352,7 +381,24 @@ export default function ShareManagerClient({
                               <span>{vis?.label}</span>
                               {idea.links?.repo && <span>· Repo</span>}
                               {idea.links?.deploy && <span>· Deploy</span>}
+                              {idea.links?.preview && <span>· Preview</span>}
                               {idea.links?.docs && <span>· Docs</span>}
+                              {idea.paper && <span>· Paper</span>}
+                              <span
+                                className={`ml-auto inline-flex shrink-0 items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-medium ${
+                                  shareReady(idea)
+                                    ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                                    : "bg-surface-2/70 text-text-muted"
+                                }`}
+                              >
+                                {shareReady(idea) ? (
+                                  <>
+                                    <Check size={10} /> Ready
+                                  </>
+                                ) : (
+                                  "Needs more"
+                                )}
+                              </span>
                             </div>
                           </div>
                         </label>

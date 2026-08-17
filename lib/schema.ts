@@ -21,8 +21,20 @@ export type AddonCategory =
 export interface Links {
   repo?: string;
   deploy?: string;
+  preview?: string;
   docs?: string;
 }
+
+export type ShareLinkKey = "repo" | "deploy" | "preview" | "docs";
+
+export const SHARE_LINK_KEYS: ShareLinkKey[] = ["repo", "deploy", "preview", "docs"];
+
+export const DEFAULT_SHARE_LINKS: Record<ShareLinkKey, boolean> = {
+  repo: true,
+  deploy: true,
+  preview: true,
+  docs: true,
+};
 
 export interface Idea {
   id: string;
@@ -33,6 +45,12 @@ export interface Idea {
   conviction: number;
   tags: string[];
   links: Links;
+  /** Per-link sharing toggles — which links appear on the shared profile. */
+  share_links: Record<ShareLinkKey, boolean>;
+  /** Marks the product as mobile-friendly / mobile-first. */
+  mobile: boolean;
+  /** Uploaded paper filename (PocketBase file on the idea record). "" = none. */
+  paper: string;
   visibility: VisibilityLevel;
   created_at: string;
   updated_at: string;

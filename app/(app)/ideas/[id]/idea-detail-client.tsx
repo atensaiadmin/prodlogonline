@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Trash2, PenLine, Clock, Zap, Sparkles, Minus, HelpCircle, AlertTriangle, Check, X } from "lucide-react";
+import { ArrowLeft, Trash2, PenLine, Clock, Zap, Sparkles, Minus, HelpCircle, AlertTriangle, Check, X, Smartphone, FileText } from "lucide-react";
 import {
   updateStage,
   addEntry,
@@ -169,6 +169,16 @@ export default function IdeaDetailPage({
                 <span className="inline-flex items-center gap-1 rounded-md border border-border/60 bg-surface px-2 py-0.5 text-xs font-medium text-text-secondary">
                   {typeDef.label}
                 </span>
+                {idea.mobile && (
+                  <span className="inline-flex items-center gap-1 rounded-md border border-border/60 bg-surface-2/60 px-2 py-0.5 text-xs font-medium text-text-secondary">
+                    <Smartphone size={11} /> Mobile
+                  </span>
+                )}
+                {idea.paper && (
+                  <span className="inline-flex items-center gap-1 rounded-md border border-border/60 bg-surface-2/60 px-2 py-0.5 text-xs font-medium text-text-secondary">
+                    <FileText size={11} /> Paper
+                  </span>
+                )}
                 {idea.tags.slice(0, 3).map((tag) => (
                   <span
                     key={tag}

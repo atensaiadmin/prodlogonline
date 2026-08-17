@@ -94,6 +94,16 @@ export default function EditIdeaForm({
         </div>
       </div>
 
+      <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-text-secondary">
+        <input
+          type="checkbox"
+          name="mobile"
+          defaultChecked={idea.mobile}
+          className="h-4 w-4 rounded border-border accent-accent"
+        />
+        Mobile-friendly / mobile-first
+      </label>
+
       <div>
         <label
           htmlFor="edit-tags"

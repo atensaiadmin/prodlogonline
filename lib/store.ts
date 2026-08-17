@@ -1,6 +1,7 @@
 import { createServerPB } from "./pocketbase-server";
 import type { RecordModel } from "pocketbase";
-import type { Idea, Entry, Addon, Bug, ShareProfile, ShareProfileIdea } from "./schema";
+import { DEFAULT_SHARE_LINKS } from "./schema";
+import type { Idea, Entry, Addon, Bug, ShareProfile, ShareProfileIdea, ShareLinkKey } from "./schema";
 
 // PocketBase record ids (15-char) are returned by the API; Supabase UUIDs are
 // gone. Every read/write goes through the authenticated server client so the
@@ -35,6 +36,9 @@ export async function insertIdea(idea: Idea): Promise<Idea> {
     conviction: idea.conviction,
     tags: idea.tags,
     links: idea.links,
+    share_links: idea.share_links ?? DEFAULT_SHARE_LINKS,
+    mobile: idea.mobile ?? false,
+    paper: idea.paper ?? "",
     visibility: idea.visibility,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
@@ -284,6 +288,16 @@ export async function setProfileIdeas(profileId: string, ideaIds: string[]) {
 
 // ---- mappers (Supabase shape -> PocketBase shape) ----
 
+function normalizeShareLinks(v: unknown): Record<ShareLinkKey, boolean> {
+  const obj = (v && typeof v === "object" ? v : {}) as Record<string, boolean | undefined>;
+  return {
+    repo: obj.repo !== false,
+    deploy: obj.deploy !== false,
+    preview: obj.preview !== false,
+    docs: obj.docs !== false,
+  };
+}
+
 function migrateIdea(r: RecordModel): Idea {
   return {
     id: r.id,
@@ -294,6 +308,9 @@ function migrateIdea(r: RecordModel): Idea {
     conviction: r.conviction,
     tags: r.tags ?? [],
     links: r.links ?? {},
+    share_links: normalizeShareLinks(r.share_links),
+    mobile: !!r.mobile,
+    paper: r.paper ?? "",
     visibility: r.visibility as Idea["visibility"],
     created_at: r.created_at ?? r.created,
     updated_at: r.updated_at ?? r.updated,

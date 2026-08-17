@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Plus, Inbox, Sparkles, ArrowRight, Github, Globe, BookOpen, Package, Search, Bug, LayoutGrid, Rows } from "lucide-react";
+import { Plus, Inbox, Sparkles, ArrowRight, Github, Globe, BookOpen, Package, Search, Bug, LayoutGrid, Rows, Smartphone, FileText } from "lucide-react";
 import { createIdea } from "@/lib/actions";
 import { ConvictionSlider, ConvictionCell, convictionLabel } from "../components/conviction-slider";
 import type { Idea, Stage } from "@/lib/schema";
@@ -251,7 +251,12 @@ function BoardCard({
 }) {
   const [conviction, setConviction] = useState(idea.conviction);
   const linkIcons = iconForLinks(idea);
-  const hasMeta = linkIcons.length > 0 || addonCount > 0 || bugCount > 0;
+  const hasMeta =
+    linkIcons.length > 0 ||
+    addonCount > 0 ||
+    bugCount > 0 ||
+    idea.mobile ||
+    !!idea.paper;
 
   return (
     <a
@@ -296,6 +301,18 @@ function BoardCard({
             <span className="inline-flex h-5 items-center gap-1 rounded-md border border-rose-500/25 bg-rose-500/10 px-1.5 text-[0.7rem] font-medium text-rose-600 dark:text-rose-400">
               <Bug size={10} />
               {bugCount}
+            </span>
+          )}
+          {idea.mobile && (
+            <span className="inline-flex h-5 items-center gap-1 rounded-md border border-border/50 bg-surface-2/80 px-1.5 text-[0.7rem] font-medium text-text-muted">
+              <Smartphone size={10} />
+              Mobile
+            </span>
+          )}
+          {idea.paper && (
+            <span className="inline-flex h-5 items-center gap-1 rounded-md border border-border/50 bg-surface-2/80 px-1.5 text-[0.7rem] font-medium text-text-muted">
+              <FileText size={10} />
+              Paper
             </span>
           )}
         </div>

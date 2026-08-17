@@ -1,4 +1,5 @@
 import { createServerSupabase } from "./supabase-server";
+import { DEFAULT_SHARE_LINKS } from "./schema";
 import type { Idea, Entry, Addon, Bug, ShareProfile, ShareProfileIdea } from "./schema";
 
 // ---- Ideas ----
@@ -323,6 +324,9 @@ function migrateIdea(row: Record<string, unknown>): Idea {
     conviction: row.conviction as number,
     tags: (row.tags as string[]) ?? [],
     links: (row.links as Idea["links"]) ?? {},
+    share_links: { ...DEFAULT_SHARE_LINKS },
+    mobile: !!row.mobile,
+    paper: (row.paper as string) ?? "",
     visibility: row.visibility as Idea["visibility"],
     created_at: row.created_at as string,
     updated_at: row.updated_at as string,

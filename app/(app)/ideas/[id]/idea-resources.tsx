@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
   Globe,
@@ -16,16 +16,28 @@ import {
   Shield,
   Link2,
   Package,
+  FileText,
+  Upload,
 } from "lucide-react";
 import {
-  updateLinks,
+  updateLinksAndShare,
   updateVisibility,
   createAddon,
   toggleAddonVisibility,
   deleteAddon,
+  uploadPaper,
+  removePaper,
 } from "@/lib/actions";
-import { ADDON_CATEGORIES, VISIBILITY_LEVELS, IDEA_TYPES } from "@/lib/schema";
-import type { Idea, Addon, Links, VisibilityLevel, AddonCategory } from "@/lib/schema";
+import { ADDON_CATEGORIES, VISIBILITY_LEVELS, DEFAULT_SHARE_LINKS, SHARE_LINK_KEYS } from "@/lib/schema";
+import { PB_URL } from "@/lib/pb";
+import type { Idea, Addon, Links, VisibilityLevel, AddonCategory, ShareLinkKey } from "@/lib/schema";
+
+const LINK_FIELDS: { key: ShareLinkKey; icon: React.ReactNode; label: string; placeholder: string }[] = [
+  { key: "repo", icon: <Github size={14} />, label: "Repo", placeholder: "GitHub / source URL" },
+  { key: "deploy", icon: <Globe size={14} />, label: "Deploy", placeholder: "Live app URL" },
+  { key: "preview", icon: <Eye size={14} />, label: "Preview", placeholder: "Preview URL (e.g. Cloudflare)" },
+  { key: "docs", icon: <BookOpen size={14} />, label: "Docs", placeholder: "Docs URL" },
+];
 
 export default function IdeaResources({ idea, addons }: { idea: Idea; addons: Addon[] }) {
   const router = useRouter();
@@ -33,6 +45,7 @@ export default function IdeaResources({ idea, addons }: { idea: Idea; addons: Ad
   return (
     <div className="space-y-6">
       <LinksSection idea={idea} router={router} />
+      <PaperSection idea={idea} router={router} />
       <AddonsSection ideaId={idea.id} addons={addons} router={router} />
       <VisibilitySection idea={idea} router={router} />
     </div>
@@ -42,17 +55,20 @@ export default function IdeaResources({ idea, addons }: { idea: Idea; addons: Ad
 function LinksSection({ idea, router }: { idea: Idea; router: ReturnType<typeof useRouter> }) {
   const [editing, setEditing] = useState(false);
   const [links, setLinks] = useState<Links>({ ...idea.links });
+  const [share, setShare] = useState<Record<ShareLinkKey, boolean>>({
+    ...DEFAULT_SHARE_LINKS,
+    ...idea.share_links,
+  });
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const typeDef = IDEA_TYPES.find((t) => t.key === idea.idea_type)!;
 
-  const hasLinks = links.repo || links.deploy || links.docs;
+  const hasLinks = SHARE_LINK_KEYS.some((k) => !!links[k]);
 
   async function save() {
     setSaving(true);
     setSaveError(null);
     try {
-      await updateLinks(idea.id, links);
+      await updateLinksAndShare(idea.id, links, share);
       setEditing(false);
       router.refresh();
     } catch (err) {
@@ -66,6 +82,7 @@ function LinksSection({ idea, router }: { idea: Idea; router: ReturnType<typeof 
 
   function cancel() {
     setLinks({ ...idea.links });
+    setShare({ ...DEFAULT_SHARE_LINKS, ...idea.share_links });
     setSaveError(null);
     setEditing(false);
   }
@@ -91,51 +108,42 @@ function LinksSection({ idea, router }: { idea: Idea; router: ReturnType<typeof 
             </button>
           </div>
         </div>
-        <div className="space-y-2.5">
-          <div className="relative flex items-center gap-2">
-            <Github size={14} className="shrink-0 absolute left-3 text-text-muted" />
-            <input
-              type="url"
-              placeholder={`${typeDef.links.repo} URL`}
-              value={links.repo ?? ""}
-              onChange={(e) =>
-                setLinks((l) => ({ ...l, repo: e.target.value || undefined }))
-              }
-              className="input pl-9 text-xs py-2 flex-1"
-            />
-          </div>
-          <div className="relative flex items-center gap-2">
-            <Globe size={14} className="shrink-0 absolute left-3 text-text-muted" />
-            <input
-              type="url"
-              placeholder={`${typeDef.links.deploy} URL`}
-              value={links.deploy ?? ""}
-              onChange={(e) =>
-                setLinks((l) => ({ ...l, deploy: e.target.value || undefined }))
-              }
-              className="input pl-9 text-xs py-2 flex-1"
-            />
-          </div>
-          <div className="relative flex items-center gap-2">
-            <BookOpen size={14} className="shrink-0 absolute left-3 text-text-muted" />
-            <input
-              type="url"
-              placeholder={`${typeDef.links.docs} URL`}
-              value={links.docs ?? ""}
-              onChange={(e) =>
-                setLinks((l) => ({ ...l, docs: e.target.value || undefined }))
-              }
-              className="input pl-9 text-xs py-2 flex-1"
-            />
-          </div>
+        <div className="space-y-2">
+          {LINK_FIELDS.map((f) => (
+            <div key={f.key}>
+              <div className="relative flex items-center gap-2">
+                <span className="pointer-events-none absolute left-3 text-text-muted">{f.icon}</span>
+                <input
+                  type="url"
+                  placeholder={f.placeholder}
+                  value={links[f.key] ?? ""}
+                  onChange={(e) =>
+                    setLinks((l) => ({ ...l, [f.key]: e.target.value || undefined }))
+                  }
+                  className="input pl-9 text-xs py-2 flex-1"
+                />
+              </div>
+              <label className="mt-1 flex cursor-pointer items-center gap-1.5 px-1 text-[11px] text-text-muted">
+                <input
+                  type="checkbox"
+                  checked={!!share[f.key]}
+                  onChange={(e) => setShare((s) => ({ ...s, [f.key]: e.target.checked }))}
+                  className="h-3.5 w-3.5 rounded border-border accent-accent"
+                />
+                Show on my shared profile
+              </label>
+            </div>
+          ))}
         </div>
-        {saveError && (
-          <p className="text-xs font-medium text-rose-500">{saveError}</p>
-        )}
+        <p className="text-[11px] text-text-muted">
+          Uncheck a link to keep it private on your shared profile.
+        </p>
+        {saveError && <p className="text-xs font-medium text-rose-500">{saveError}</p>}
       </div>
     );
   }
 
+  const present = LINK_FIELDS.filter((f) => !!links[f.key]);
   return (
     <div className="card p-5 space-y-3.5">
       <div className="flex items-center justify-between">
@@ -150,45 +158,27 @@ function LinksSection({ idea, router }: { idea: Idea; router: ReturnType<typeof 
           {hasLinks ? "Edit" : "Add links"}
         </button>
       </div>
-      {hasLinks ? (
+      {present.length > 0 ? (
         <div className="flex flex-wrap gap-2.5">
-          {links.repo && (
+          {present.map((f) => (
             <a
-              href={links.repo}
+              key={f.key}
+              href={links[f.key]!}
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-2/60 px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:border-border-strong hover:text-text hover:bg-surface-2/80"
             >
-              <Github size={13} /> {typeDef.links.repo}
+              {f.icon} {f.label}
+              {!share[f.key] && (
+                <span className="text-[10px] text-text-muted opacity-70 line-through">private</span>
+              )}
               <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
             </a>
-          )}
-          {links.deploy && (
-            <a
-              href={links.deploy}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-2/60 px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:border-border-strong hover:text-text hover:bg-surface-2/80"
-            >
-              <Globe size={13} /> {typeDef.links.deploy}
-              <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-            </a>
-          )}
-          {links.docs && (
-            <a
-              href={links.docs}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface-2/60 px-3 py-2 text-xs font-medium text-text-secondary transition-all hover:border-border-strong hover:text-text hover:bg-surface-2/80"
-            >
-              <BookOpen size={13} /> {typeDef.links.docs}
-              <ExternalLink size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-            </a>
-          )}
+          ))}
         </div>
       ) : (
         <p className="text-xs text-text-muted leading-relaxed">
-          No links yet. Add repo, deploy, or docs URLs.
+          No links yet. Add repo, deploy, preview, or docs URLs.
         </p>
       )}
     </div>
@@ -467,6 +457,109 @@ function VisibilitySection({
           })}
         </div>
       )}
+    </div>
+  );
+}
+
+function PaperSection({ idea, router }: { idea: Idea; router: ReturnType<typeof useRouter> }) {
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const paperUrl = idea.paper
+    ? `${PB_URL}/api/files/ideas/${idea.id}/${idea.paper}`
+    : null;
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+    const fd = new FormData();
+    fd.set("paper", file);
+    try {
+      await uploadPaper(idea.id, fd);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't upload the paper. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  async function handleRemove() {
+    setError(null);
+    try {
+      await removePaper(idea.id);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Couldn't remove the paper. Please try again.");
+    }
+  }
+
+  return (
+    <div className="card p-5 space-y-3.5">
+      <div className="flex items-center justify-between">
+        <h3 className="flex items-center gap-1.5 text-sm font-semibold text-text-secondary">
+          <FileText size={15} className="text-accent" />
+          Paper
+        </h3>
+        {idea.paper ? (
+          <div className="flex items-center gap-1.5">
+            <a
+              href={paperUrl!}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary px-3 py-1.5 text-xs font-semibold"
+            >
+              <ExternalLink size={12} /> Preview
+            </a>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="btn-secondary px-3 py-1.5 text-xs font-semibold"
+            >
+              <Upload size={12} /> Replace
+            </button>
+            <button
+              onClick={handleRemove}
+              className="rounded-lg p-1.5 text-text-muted transition-colors hover:bg-rose-500/10 hover:text-rose-500"
+              title="Remove paper"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="btn-primary px-3 py-1.5 text-xs font-semibold disabled:opacity-60"
+          >
+            <Upload size={12} /> {uploading ? "Uploading…" : "Upload paper"}
+          </button>
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="application/pdf,.pdf"
+          onChange={handleFile}
+          className="hidden"
+        />
+      </div>
+      {idea.paper ? (
+        <div>
+          <p className="truncate text-xs font-medium text-text">{idea.paper}</p>
+          <p className="mt-0.5 text-[11px] text-text-muted">
+            Linked to your shared profile — viewers get a Preview button.
+          </p>
+        </div>
+      ) : (
+        <p className="text-xs text-text-muted leading-relaxed">
+          For an idea that&apos;s still a paper draft, upload the PDF — it becomes
+          viewable on your shared profile.
+        </p>
+      )}
+      {error && <p className="text-xs font-medium text-rose-500">{error}</p>}
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Idea, IdeaType, Stage } from "@/lib/schema";
 import { IDEA_TYPES, STAGES } from "@/lib/schema";
 import { ConvictionSlider, ConvictionCell } from "../components/conviction-slider";
-import { Grid3X3, Rows, SlidersHorizontal, X, Search, Plus } from "lucide-react";
+import { Grid3X3, Rows, SlidersHorizontal, X, Search, Plus, Smartphone, FileText } from "lucide-react";
 
 export function IdeasIndexClient({
   initialIdeas,
@@ -237,10 +237,22 @@ function GridView({ ideas, addonCounts }: { ideas: Idea[]; addonCounts: Record<s
           >
             <div className="flex items-start justify-between gap-2">
               <h4 className="line-clamp-1 text-sm font-semibold leading-snug text-text">{idea.title}</h4>
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-surface-2/80 px-2 py-0.5 text-[0.68rem] font-medium text-text-muted">
-                <span className={`h-1.5 w-1.5 rounded-full ${stageDef?.color}`} />
-                {stageDef?.label}
-              </span>
+              <div className="flex shrink-0 items-center gap-1">
+                {idea.mobile && (
+                  <span title="Mobile-friendly" className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-border/50 bg-surface-2/80 text-text-muted">
+                    <Smartphone size={10} />
+                  </span>
+                )}
+                {idea.paper && (
+                  <span title="Has paper" className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-border/50 bg-surface-2/80 text-text-muted">
+                    <FileText size={10} />
+                  </span>
+                )}
+                <span className="inline-flex items-center gap-1 rounded-full bg-surface-2/80 px-2 py-0.5 text-[0.68rem] font-medium text-text-muted">
+                  <span className={`h-1.5 w-1.5 rounded-full ${stageDef?.color}`} />
+                  {stageDef?.label}
+                </span>
+              </div>
             </div>
 
             {idea.one_liner ? (
