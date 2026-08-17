@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Github, Globe, BookOpen, Sparkles, Link2 } from "lucide-react";
-import { createIdea } from "@/lib/actions";
+import { createIdea } from "@/lib/client-actions";
 import { STAGES, VISIBILITY_LEVELS, IDEA_TYPES } from "@/lib/schema";
 import type { VisibilityLevel, IdeaType } from "@/lib/schema";
 import Link from "next/link";

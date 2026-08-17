@@ -22,7 +22,7 @@ import {
   deleteShareProfile,
   updateShareProfileDescription,
   updateShareProfileLayer,
-} from "@/lib/actions";
+} from "@/lib/client-actions";
 import { STAGES, VISIBILITY_LEVELS, IDEA_TYPES, PROFILE_LAYERS } from "@/lib/schema";
 import type { ShareProfile, Idea, ProfileLayer } from "@/lib/schema";
 

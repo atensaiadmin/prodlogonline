@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Bug, Plus, Trash2, PenLine, Check, X } from "lucide-react";
-import { addBug, editBug, deleteBug, updateBugStatus } from "@/lib/actions";
+import { addBug, editBug, deleteBug, updateBugStatus } from "@/lib/client-actions";
 import { BUG_STATUSES, BUG_SEVERITIES } from "@/lib/schema";
 import type { Bug as BugType, BugStatus, BugSeverity } from "@/lib/schema";
 

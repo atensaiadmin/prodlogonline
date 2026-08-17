@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Check, X, Sparkles } from "lucide-react";
-import { editIdea } from "@/lib/actions";
+import { editIdea } from "@/lib/client-actions";
 import { IDEA_TYPES } from "@/lib/schema";
 import type { Idea, IdeaType } from "@/lib/schema";
 

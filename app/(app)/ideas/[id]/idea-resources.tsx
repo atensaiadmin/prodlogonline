@@ -27,7 +27,7 @@ import {
   deleteAddon,
   uploadPaper,
   removePaper,
-} from "@/lib/actions";
+} from "@/lib/client-actions";
 import { ADDON_CATEGORIES, VISIBILITY_LEVELS, DEFAULT_SHARE_LINKS, SHARE_LINK_KEYS } from "@/lib/schema";
 import { PB_URL } from "@/lib/pb";
 import type { Idea, Addon, Links, VisibilityLevel, AddonCategory, ShareLinkKey } from "@/lib/schema";

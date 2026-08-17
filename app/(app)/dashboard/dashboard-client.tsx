@@ -4,7 +4,7 @@ import { useRef, useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Plus, Inbox, Sparkles, ArrowRight, Github, Globe, BookOpen, Package, Search, Bug, LayoutGrid, Rows, Smartphone, FileText } from "lucide-react";
-import { createIdea } from "@/lib/actions";
+import { createIdea } from "@/lib/client-actions";
 import { ConvictionSlider, ConvictionCell, convictionLabel } from "../components/conviction-slider";
 import type { Idea, Stage } from "@/lib/schema";
 

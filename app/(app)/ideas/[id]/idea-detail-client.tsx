@@ -10,7 +10,7 @@ import {
   editEntry,
   deleteEntry,
   deleteIdea,
-} from "@/lib/actions";
+} from "@/lib/client-actions";
 import { STAGES, MOODS, IDEA_TYPES } from "@/lib/schema";
 import { ConvictionSlider, convictionLabel } from "../../components/conviction-slider";
 import type { Idea, Entry, Addon, Bug, Stage, Mood } from "@/lib/schema";

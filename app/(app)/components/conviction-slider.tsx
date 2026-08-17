@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useEffect, useCallback } from "react";
-import { updateConviction } from "@/lib/actions";
+import { updateConviction } from "@/lib/client-actions";
 import type { Idea } from "@/lib/schema";
 
 /* ------------------------------------------------------------------
